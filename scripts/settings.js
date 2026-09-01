@@ -8,9 +8,9 @@
     }
   }
 
-  async function loadSettings() {
-    const settings = await fetch('/api/settings').then(r => r.json())
-    const settingCheckboxes = getCheckboxes()
+  async function loadSettings () {
+    var settings = await fetch('/api/settings').then(r => r.json())
+    var settingCheckboxes = getCheckboxes()
 
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
       if (el) el.checked = !!settings[key]
@@ -19,14 +19,14 @@
     return settings
   }
 
-  async function saveSettings() {
-    const settingCheckboxes = getCheckboxes()
-    const settings = {}
+  async function saveSettings () {
+    var settingCheckboxes = getCheckboxes()
+    var settings = {}
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
       settings[key] = el ? el.checked : false
     })
 
-    const result = await fetch('/api/settings', {
+    var result = await fetch('/api/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings)
@@ -34,26 +34,33 @@
     return result
   }
 
-  async function initSettingsAdjustment() {
-    const settings = await fetch('/api/settings').then(r => r.json())
-    const showWachabteilung = settings.showWachabteilung
-    const dutyTakeout = settings.showDuty
+  async function initSettingsAdjustment () {
+    var settings = await fetch('/api/settings').then(r => r.json())
+    var showWachabteilung = settings.showWachabteilung
+    var autoLoadTagdienst = settings.autoLoadTagdienst
+    var showArbeitsdienste = settings.showArbeitsdienste
+    var dutyTakeout = settings.showDuty
 
     if (dutyTakeout === true) {
-      const showInnerTeamUsed = document.getElementById('teamUsed')
-      const showteamFree = document.getElementById('teamFree')
+      var showInnerTeamUsed = document.getElementById('teamUsed')
       showInnerTeamUsed.style.display = 'block'
       showteamFree.style.width = 'clamp(300px, 45vw, 1440px)'
     }
     else {
-      const showteamFree = document.getElementById('teamFree')
+      var showteamFree = document.getElementById('teamFree')
       showteamFree.style.maxWidth = 'min(90vw, 2560px)'
     }
     if (showWachabteilung === true) {
-      const showStation = document.getElementById('showStation')
+      var showStation = document.getElementById('showStation')
       showStation.style.display = 'block'
     }
 
+    if (showArbeitsdienste === true) {
+      var workServices = document.getElementById('workServices')
+      var workServicesTitle = document.getElementById('workServicesTitle')
+      workServices.style.display = 'flex'
+      workServicesTitle.style.display = 'block'
+    }
 
     return settings
   }
@@ -61,11 +68,11 @@
   function initSettingsPage() {
     loadSettings()
 
-    const saveBtn = document.getElementById('Save')
+    var saveBtn = document.getElementById('Save')
     if (saveBtn) {
       saveBtn.addEventListener('click', async () => {
-        const p = saveBtn.querySelector('p')
-        const originalText = p ? p.textContent : null
+        var p = saveBtn.querySelector('p')
+        var originalText = p ? p.textContent : null
 
         await saveSettings()
 

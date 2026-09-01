@@ -1,11 +1,11 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
-const path = require("path");
-const fs = require("fs");
-const { runBuild } = require("./scripts/build");
-const SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
+var { app, BrowserWindow, ipcMain, dialog } = require("electron");
+var path = require("path");
+var fs = require("fs");
+var { runBuild } = require("./scripts/build");
+var SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
 
 function createWindow() {
-  const win = new BrowserWindow({
+  var win = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
@@ -22,7 +22,7 @@ ipcMain.handle("run-build", async () => {
 });
 
 // ipcMain.handle("save-json", async (event, jsonString) => {
-//   const { filePath, canceled } = await dialog.showSaveDialog({
+//   var { filePath, canceled } = await dialog.showSaveDialog({
 //     title: "Schicht speichern",
 //     defaultPath: "schicht.json",
 //     filters: [{ name: "JSON", extensions: ["json"] }],
@@ -44,32 +44,32 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-const { extractShiftFromPdf } = require("./scripts/pdfExtractor");
+var { extractShiftFromPdf } = require("./scripts/pdfExtractor");
 
 ipcMain.handle("extract-and-save", async (event, base64) => {
-  const buffer = Buffer.from(base64, "base64");
-  const shiftJson = await extractShiftFromPdf(buffer);
+  var buffer = Buffer.from(base64, "base64");
+  var shiftJson = await extractShiftFromPdf(buffer);
 
-  const outputDir = path.join(__dirname, "structuredSeating");
+  var outputDir = path.join(__dirname, "structuredSeating");
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
   }
 
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, "0");
-  const MM = String(now.getMonth() + 1).padStart(2, "0");
-  const yyyy = now.getFullYear();
-  const baseName = `Einteilung_${dd}${MM}${yyyy}`;
+  var now = new Date();
+  var dd = String(now.getDate()).padStart(2, "0");
+  var MM = String(now.getMonth() + 1).padStart(2, "0");
+  var yyyy = now.getFullYear();
+  var baseName = `Einteilung_${dd}${MM}${yyyy}`;
 
   // Eindeutigen Dateinamen finden
-  let fileName = `${baseName}.json`;
-  let counter = 1;
+  var fileName = `${baseName}.json`;
+  var counter = 1;
   while (fs.existsSync(path.join(outputDir, fileName))) {
     fileName = `${baseName} (${counter}).json`;
     counter++;
   }
 
-  const filePath = path.join(outputDir, fileName);
+  var filePath = path.join(outputDir, fileName);
   fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), "utf-8");
 
   return { success: true, filePath };
@@ -84,6 +84,6 @@ ipcMain.handle("load-settings", async () => {
   if (!fs.existsSync(SETTINGS_PATH)) {
     return {};
   }
-  const raw = fs.readFileSync(SETTINGS_PATH, "utf-8");
+  var raw = fs.readFileSync(SETTINGS_PATH, "utf-8");
   return JSON.parse(raw);
 });

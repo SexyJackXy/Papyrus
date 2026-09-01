@@ -1,4 +1,22 @@
 // server.js
+var express = require("express");
+var path = require("path");
+var fs = require("fs");
+var bcrypt = require("bcrypt");
+var session = require("express-session");
+var SQLiteStore = require("connect-sqlite3")(session);
+var { extractShiftFromPdf } = require("./scripts/pdfExtractor");
+var { getUserByUsername, getNamesForUser } = require("./db");
+
+var app = express();
+var SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
+
+// Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
+var PUBLIC_PATHS = new Set([
+  "/",
+  "/views/dashboard.html",
+  "/views/login.html",
+]);
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
@@ -168,6 +186,9 @@ app.get('/', (req, res) => {
   return res.redirect('/views/dashboard.html')
 })
 
+app.post("/api/login", async (req, res) => {
+
+  var { username, password } = req.body || {};
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body || {}
 
@@ -177,6 +198,7 @@ app.post('/api/login', async (req, res) => {
       .json({ success: false, error: 'Benutzername und Passwort erforderlich' })
   }
 
+  var user = getUserByUsername(username);
   const user = getUserByUsername(username)
   if (!user) {
     return res
@@ -184,6 +206,7 @@ app.post('/api/login', async (req, res) => {
       .json({ success: false, error: 'Benutzername oder Passwort falsch' })
   }
 
+  var ok = await bcrypt.compare(password, user.password_hash);
   const ok = await bcrypt.compare(password, user.password_hash)
   if (!ok) {
     return res
@@ -425,7 +448,7 @@ app.get('/api/latest-schedule', (req, res) => {
       return res.json({ success: true, data: null })
     }
 
-    const files = fs
+    var files = fs
       .readdirSync(dir)
       .filter(f => f.endsWith('.json'))
       .map(f => {
@@ -485,7 +508,7 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
 
     }
 
-    const files = fs
+    var files = fs
       .readdirSync(dir)
       .filter(f => f.endsWith('.json'))
       .map(f => {

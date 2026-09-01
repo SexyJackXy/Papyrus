@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+var { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   runBuild: () => ipcRenderer.invoke("run-build"),

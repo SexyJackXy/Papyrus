@@ -170,8 +170,7 @@
 
       // window.DiensteSettings.initSettingsAdjustment();
 
-      const assignments = await window.Dienste.loadContent();
-
+      var assignments = await window.Dienste.loadContent();
       if (!assignments || !assignments.length) return;
 
       window.Dienste.renderAssignments(assignments);
