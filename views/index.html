@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
-<script type="module" src="core.js"></script>
+  <script type="module" src="../scripts/core.js"></script>
   <script src="../scripts/alternaivPlan.js"></script>
 </head>
 
@@ -229,8 +229,8 @@
       window.DiensteSettings.initSettingsAdjustment();
       window.Dienste.importNotWorkingPeople();
 
-      window.Dienste.initDeleteButtons();
-    });
+    window.initDeleteButtons();
+  });
 
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem(K);

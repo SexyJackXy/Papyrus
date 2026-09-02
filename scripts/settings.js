@@ -7,10 +7,11 @@
       showDuty: document.getElementById('showDuty')
     }
   }
+}
 
-  async function loadSettings () {
-    var settings = await fetch('/api/settings').then(r => r.json())
-    var settingCheckboxes = getCheckboxes()
+async function loadSettings () {
+  var settings = await fetch('/api/settings').then(r => r.json())
+  var settingCheckboxes = getCheckboxes()
 
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
       if (el) el.checked = !!settings[key]
@@ -97,4 +98,53 @@
     saveSettings,
     initSettingsAdjustment
   }
-})()
+  if (showWachabteilung === true) {
+    var showStation = document.getElementById('showStation')
+    showStation.style.display = 'block'
+  }
+
+  if (showArbeitsdienste === true) {
+    var workServices = document.getElementById('workServices')
+    var workServicesTitle = document.getElementById('workServicesTitle')
+    workServices.style.display = 'flex'
+    workServicesTitle.style.display = 'block'
+  }
+
+  return settings
+}
+
+function initSettingsPage () {
+  loadSettings()
+
+  var saveBtn = document.getElementById('Save')
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async () => {
+      var p = saveBtn.querySelector('p')
+      var originalText = p ? p.textContent : null
+
+      await saveSettings()
+
+      if (p) {
+        p.textContent = 'Gespeichert!'
+        setTimeout(() => {
+          p.textContent = originalText
+        }, 2000)
+      }
+    })
+  }
+}
+
+// Nur auf der settings.html ausführen (Button existiert nur dort)
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('Save')) {
+    initSettingsPage()
+  }
+})
+
+// Sofort verfügbar machen, unabhängig von DOMContentLoaded-Reihenfolge
+window.DiensteSettings = {
+  loadSettings,
+  saveSettings,
+}
+
+window.initSettingsAdjustment = initSettingsAdjustment

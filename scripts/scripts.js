@@ -64,42 +64,42 @@
         new TextDecoder('utf-16le').decode(b)
       ]
 
-      let t = candidates[0],
-        best = -1e9
+    let t = candidates[0],
+      best = -1e9
 
-      for (const c of candidates) {
-        let sc = 0
-        if (c.includes('{')) sc += 5
-        if (c.includes(',')) sc += 2
-        if (/[a-zA-Z]{3,}/.test(c)) sc += 5
-        if (c.includes('�')) sc -= 10
-        if (sc > best) (best = sc), (t = c)
-      }
-
-      if (t.charCodeAt(0) === 0xfeff) t = t.slice(1)
-
-      const parsed = parseContent(t)
-
-      localStorage.setItem(cookies, JSON.stringify(parsed))
-    })
-
-    return 'Datei ' + file.name + ' erfolgreich hochgeladen'
-  }
-
-  function parseContent(t) {
-    if (!t) return []
-    try {
-      const data = JSON.parse(t)
-      if (!Array.isArray(data)) return []
-
-      return data
-        .filter(e => e && typeof e.role === 'string')
-        .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }))
-    } catch (e) {
-      console.error('Parse Error:', e)
-      return []
+    for (const c of candidates) {
+      let sc = 0
+      if (c.includes('{')) sc += 5
+      if (c.includes(',')) sc += 2
+      if (/[a-zA-Z]{3,}/.test(c)) sc += 5
+      if (c.includes('�')) sc -= 10
+      if (sc > best) (best = sc), (t = c)
     }
+
+    if (t.charCodeAt(0) === 0xfeff) t = t.slice(1)
+
+    const parsed = parseContent(t)
+
+    localStorage.setItem(cookies, JSON.stringify(parsed))
+  })
+
+  return 'Datei ' + file.name + ' erfolgreich hochgeladen'
+}
+
+function parseContent (t) {
+  if (!t) return []
+  try {
+    const data = JSON.parse(t)
+    if (!Array.isArray(data)) return []
+
+    return data
+      .filter(e => e && typeof e.role === 'string')
+      .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }))
+  } catch (e) {
+    console.error('Parse Error:', e)
+    return []
   }
+}
 
   function getContent() {
     const raw = localStorage.getItem(cookies)
@@ -147,11 +147,11 @@
     localStorage.removeItem(cookies)
     document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
-    return 'Einteilung Zurückgesetzt'
-  }
+  return 'Einteilung Zurückgesetzt'
+}
 
-  function serializeAssignments() {
-    const result = []
+function serializeAssignments () {
+  const result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
       const role = el.dataset.role
@@ -746,51 +746,99 @@
 
   function updatePersonColor(el) {
     const text = el.textContent.trim()
+    const name = reservedNames.includes(text) ? '' : text
+    result.push({ role, name })
+  })
 
-    if (!reservedNames.includes(text)) {
-      el.style.backgroundColor = '#B6D5FB'
-      el.draggable = true
-    } else {
-      el.style.backgroundColor = ''
-      el.draggable = false
-    }
-  }
+  document.querySelectorAll('#teamFree .card').forEach(el => {
+    const name = el.textContent.trim()
+    if (name) result.push({ role: 'Frei', name })
+  })
 
+  return result
+}
 
+let saveTimer = null
 
-  async function logout() {
-    try {
-      const res = await fetch('/api/logout', { method: 'POST' })
-      const data = await res.json()
-      window.location.href = data.redirect || 'login.html'
-    } catch (e) {
-      console.error('Logout fehlgeschlagen:', e)
-      window.location.href = 'login.html'
-    }
-  }
-
-  async function exportNotWorkingPeople(movedEl) {
-    const parent = movedEl.parentElement
-    const departmentShort = parent.parentElement.id
-    const person = movedEl.textContent.trim()
-
-    const data = { name: person, department: departmentShort }
+// Speichert den aktuellen Stand (leicht verzögert, damit bei schnellen
+// Mehrfachänderungen nicht jede einzelne einen eigenen Request auslöst).
+function scheduleSave () {
+  clearTimeout(saveTimer)
+  saveTimer = setTimeout(async () => {
+    const data = serializeAssignments()
+    localStorage.setItem(cookies, JSON.stringify(data))
 
     try {
-      const res = await fetch('/api/export-not-working-person', {
+      await fetch('/api/save-schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ data })
       })
-      const result = await res.json()
     } catch (e) {
-      console.error('Export fehlgeschlagen:', e)
+      console.warn(
+        'Änderung konnte nicht auf dem Server gespeichert werden:',
+        e
+      )
     }
-  }
+  }, 400)
+}
 
-  async function importNotWorkingPeople() {
-    const res = await fetch('/api/import-not-working-persons', {
-      credentials: 'include' // oder 'same-origin'
+function temporaryScheduleSave () {
+  clearTimeout(saveTimer)
+  saveTimer = setTimeout(async () => {
+    const data = serializeAssignments()
+    localStorage.setItem(cookies, JSON.stringify(data))
+
+    try {
+      await fetch('/api/save-temporary-schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data })
+      })
+    } catch (e) {
+      console.warn(
+        'Änderung konnte nicht auf dem Server gespeichert werden:',
+        e
+      )
+    }
+  }, 400)
+}
+
+function updatePersonColor (el) {
+  const text = el.textContent.trim()
+
+  if (!reservedNames.includes(text)) {
+    el.style.backgroundColor = '#B6D5FB'
+    el.draggable = true
+  } else {
+    el.style.backgroundColor = ''
+    el.draggable = false
+  }
+}
+
+async function logout () {
+  try {
+    const res = await fetch('/api/logout', { method: 'POST' })
+    const data = await res.json()
+    window.location.href = data.redirect || 'login.html'
+  } catch (e) {
+    console.error('Logout fehlgeschlagen:', e)
+    window.location.href = 'login.html'
+  }
+}
+
+async function exportNotWorkingPeople (movedEl) {
+  const parent = movedEl.parentElement
+  const departmentShort = parent.parentElement.id
+  const person = movedEl.textContent.trim()
+
+  const data = { name: person, department: departmentShort }
+
+  try {
+    const res = await fetch('/api/export-not-working-person', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     })
     const result = await res.json()
 
@@ -811,12 +859,44 @@
       })
     }
   }
+}
 
-  window.Dienste = {
-    readFromFile,
-    clearCookies,
-    parseContent,
-    logout,
-    importNotWorkingPeople
+async function importNotWorkingPeople () {
+  const res = await fetch('/api/import-not-working-persons', {
+    credentials: 'include' // oder 'same-origin'
+  })
+  const result = await res.json()
+
+  if (result.length > 0) {
+    const poolParent = document.getElementById('teamFree')
+    const freeTeam = poolParent.querySelector('#innerTeam')
+
+    result.forEach(({ department, name }) => {
+      if (!name) return
+
+      const div = document.createElement('div')
+      div.className = 'card'
+      div.setAttribute('draggable', !reservedNames.includes(name))
+      div.innerHTML = name
+      // div.style.backgroundColor = '#ffcdd2'
+      div.setAttribute('id', department)
+      freeTeam.appendChild(div)
+      return
+    })
   }
-})()
+}
+
+window.Dienste = {
+  readFromFile,
+  clearCookies,
+  parseContent,
+  logout,
+  importNotWorkingPeople
+}
+
+// Werden von core.js / dragLogic.js als globale Bezeichner genutzt
+window.reservedNames = reservedNames
+window.updatePersonColor = updatePersonColor
+window.scheduleSave = scheduleSave
+window.temporaryScheduleSave = temporaryScheduleSave
+window.exportNotWorkingPeople = exportNotWorkingPeople

@@ -1,4 +1,4 @@
-export function initDragAndDrop () {
+export default function initDragAndDrop () {
   let dragged = null
   var path = window.location.pathname
   var pageName = path.split('/').pop()

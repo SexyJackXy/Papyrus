@@ -1,10 +1,13 @@
 import initDragAndDrop from './dragLogic.js'
-import initSettingsAdjustment from './settings.js'
+// import initSettingsAdjustment from './settings.js'
+
+var cookies = 'dienste_csv'
 
 async function loadContent () {
   var res
   var path = window.location.pathname
   var pageName = path.split('/').pop()
+  var assignments = []
 
   try {
     if (pageName === 'index.html' || pageName === 'dasboard.html') {
@@ -17,12 +20,12 @@ async function loadContent () {
       if (json.success) {
         if (Array.isArray(json.data)) {
           localStorage.setItem(cookies, JSON.stringify(json.data))
-          return json.data
+          assignments = json.data
+        } else {
+          // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
+          // lokalen Cache leeren statt auf alten Stand zurückzufallen.
+          localStorage.removeItem(cookies)
         }
-        // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
-        // lokalen Cache leeren statt auf alten Stand zurückzufallen.
-        localStorage.removeItem(cookies)
-        return []
       }
     }
   } catch (e) {
@@ -33,15 +36,13 @@ async function loadContent () {
     return getContent()
   }
 
-  var assignments
-
   // lädt den ganzen Restilichen Content oder einstellungen
   initDragAndDrop()
   renderAssignments(assignments)
   initSettingsAdjustment()
   initDeleteButtons()
 
-  return getContent()
+  // return getContent()
 }
 
 function renderAssignments (assignment) {
@@ -81,34 +82,39 @@ function renderAssignments (assignment) {
 
 function getContent () {
   const raw = localStorage.getItem(cookies)
+  console.log(raw)
+
   return raw ? JSON.parse(raw) : []
 }
 
-  function initDeleteButtons() {
-    const deleteBtns = document.querySelectorAll('.close')
-    const poolParent = document.getElementById('teamFree')
-    const pool = poolParent.querySelector('#innerTeam')
+function initDeleteButtons () {
+  const deleteBtns = document.querySelectorAll('.close')
+  const poolParent = document.getElementById('teamFree')
+  const pool = poolParent.querySelector('#innerTeam')
 
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', event => {
-        const parent = event.target.parentElement
-        const persons = parent.querySelectorAll('.person')
+  deleteBtns.forEach(btn => {
+    btn.addEventListener('click', event => {
+      const parent = event.target.parentElement
+      const persons = parent.querySelectorAll('.person')
 
-        persons.forEach(p => {
-          const oldPerson = p.textContent.trim()
-          const c = document.createElement('div')
+      persons.forEach(p => {
+        const oldPerson = p.textContent.trim()
+        const c = document.createElement('div')
 
-          p.style.backgroundColor = '#D1D5DB'
-          c.className = 'card'
-          p.textContent = p.dataset.default || 'Frei'
-          p.draggable = false
-          c.setAttribute('draggable', !reservedNames.includes(oldPerson))
-          c.textContent = oldPerson
+        p.style.backgroundColor = '#D1D5DB'
+        c.className = 'card'
+        p.textContent = p.dataset.default || 'Frei'
+        p.draggable = false
+        c.setAttribute('draggable', !reservedNames.includes(oldPerson))
+        c.textContent = oldPerson
 
-          pool.appendChild(c)
-        })
-
-        scheduleSave()
+        pool.appendChild(c)
       })
+
+      scheduleSave()
     })
-  }
+  })
+}
+
+window.loadContent = loadContent
+window.initDeleteButtons = initDeleteButtons
