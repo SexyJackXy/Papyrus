@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
-  <script src="../scripts/settings.js" defer></script>
+<script type="module" src="core.js"></script>
   <script src="../scripts/alternaivPlan.js"></script>
 </head>
 
@@ -229,11 +229,6 @@
       window.DiensteSettings.initSettingsAdjustment();
       window.Dienste.importNotWorkingPeople();
 
-      var assignments = await window.Dienste.loadContent();
-      if (!assignments || !assignments.length) return;
-
-      window.Dienste.renderAssignments(assignments);
-      window.Dienste.initDragAndDrop();
       window.Dienste.initDeleteButtons();
     });
 

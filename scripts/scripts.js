@@ -756,34 +756,7 @@
     }
   }
 
-  function initDeleteButtons() {
-    const deleteBtns = document.querySelectorAll('.close')
-    const poolParent = document.getElementById('teamFree')
-    const pool = poolParent.querySelector('#innerTeam')
 
-    deleteBtns.forEach(btn => {
-      btn.addEventListener('click', event => {
-        const parent = event.target.parentElement
-        const persons = parent.querySelectorAll('.person')
-
-        persons.forEach(p => {
-          const oldPerson = p.textContent.trim()
-          const c = document.createElement('div')
-
-          p.style.backgroundColor = '#D1D5DB'
-          c.className = 'card'
-          p.textContent = p.dataset.default || 'Frei'
-          p.draggable = false
-          c.setAttribute('draggable', !reservedNames.includes(oldPerson))
-          c.textContent = oldPerson
-
-          pool.appendChild(c)
-        })
-
-        scheduleSave()
-      })
-    })
-  }
 
   async function logout() {
     try {
@@ -841,13 +814,8 @@
 
   window.Dienste = {
     readFromFile,
-    getContent,
-    loadContent,
     clearCookies,
     parseContent,
-    renderAssignments,
-    initDragAndDrop,
-    initDeleteButtons,
     logout,
     importNotWorkingPeople
   }
