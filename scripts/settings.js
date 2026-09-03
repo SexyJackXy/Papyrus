@@ -1,5 +1,5 @@
-;(function () {
-  function getCheckboxes () {
+; (function () {
+  function getCheckboxes() {
     return {
       showWachabteilung: document.getElementById('showWachabteilung'),
       autoLoadTagdienst: document.getElementById('autoLoadTagdienst'),
@@ -8,7 +8,7 @@
     }
   }
 
-  async function loadSettings () {
+  async function loadSettings() {
     const settings = await fetch('/api/settings').then(r => r.json())
     const settingCheckboxes = getCheckboxes()
 
@@ -19,7 +19,7 @@
     return settings
   }
 
-  async function saveSettings () {
+  async function saveSettings() {
     const settingCheckboxes = getCheckboxes()
     const settings = {}
     Object.entries(settingCheckboxes).forEach(([key, el]) => {
@@ -34,17 +34,18 @@
     return result
   }
 
-  async function initSettingsAdjustment () {
+  async function initSettingsAdjustment() {
     const settings = await fetch('/api/settings').then(r => r.json())
     const showWachabteilung = settings.showWachabteilung
-    const autoLoadTagdienst = settings.autoLoadTagdienst
     const showArbeitsdienste = settings.showArbeitsdienste
     const dutyTakeout = settings.showDuty
 
     if (dutyTakeout === true) {
       const showInnerTeamUsed = document.getElementById('teamUsed')
+      const showteamFree = document.getElementById('teamFree')
       showInnerTeamUsed.style.display = 'block'
-    } 
+      showteamFree.style.width = 'clamp(300px, 45vw, 1440px)'
+    }
     else {
       const showteamFree = document.getElementById('teamFree')
       showteamFree.style.maxWidth = 'min(90vw, 2560px)'
@@ -64,7 +65,7 @@
     return settings
   }
 
-  function initSettingsPage () {
+  function initSettingsPage() {
     loadSettings()
 
     const saveBtn = document.getElementById('Save')
