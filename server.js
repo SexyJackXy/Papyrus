@@ -15,7 +15,9 @@ const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
 const PUBLIC_PATHS = new Set([
   '/',
   '/views/dashboard.html',
-  '/views/login.html'
+  '/views/login.html',
+  '/views/alternativPlanes/activityPlan.html',
+  '/views/alternativPlanes/temporaryPlan.html'
 ])
 
 function isPublicRequest(req) {
@@ -314,25 +316,32 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
     if (!fs.existsSync(currentFile)) {
       const fixSchedule = path.join(__dirname, 'dailySchedule')
 
-      const files = fs
-        .readdirSync(fixSchedule)
-        .filter(f => f.endsWith('.json'))
-        .map(f => {
-          const full = path.join(fixSchedule)
-          return { name: f, mtime: fs.statSync(full).mtimeMs }
-        })
-        .sort((a, b) => b.mtime - a.mtime)
+      if (!fs.existsSync(fixSchedule)) {
+        console.warn('There is now File odr directory "', fixSchedule, '"')
+      return res.json({ success: true, data: null })
+      }
+      else {
+        const files = fs
+          .readdirSync(fixSchedule)
+          .filter(f => f.endsWith('.json'))
+          .map(f => {
+            const full = path.join(fixSchedule)
+            return { name: f, mtime: fs.statSync(full).mtimeMs }
+          })
+          .sort((a, b) => b.mtime - a.mtime)
 
-      if (!files.length) {
-        return res.json({ success: true, data: null })
+        if (!files.length) {
+          return res.json({ success: true, data: null })
+        }
+
+        const fixedLatest = files[0]
+        const fixedData = JSON.parse(
+          fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
+        )
+
+        return res.json({ success: true, fileName: fixedLatest.name, fixedData })
       }
 
-      const fixedLatest = files[0]
-      const fixedData = JSON.parse(
-        fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
-      )
-
-      return res.json({ success: true, fileName: fixedLatest.name, fixedData })
     }
 
     const files = fs

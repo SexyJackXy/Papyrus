@@ -106,7 +106,6 @@
       </div>
     </section>
 
-
     <h2>Fahrzeuge</h2>
 
     <section class="middle-duty">
@@ -185,7 +184,7 @@
       </div>
     </section>
 
-    <div class="alternativPlan" onclick="showAlternativePlan()">
+    <div class="temporaryPlan" onclick="showAlternativePlan()">
     </div>
 
     <div class="activityPlan" onclick="showActivityPlan()">
@@ -247,21 +246,19 @@
         </section>
       </div>
     </div>
-
-    <div id="dialog" title="Basic dialog">
-      <div class="temporaryPlan" onclick="closeTemporaryPlan()">
-      </div>
-      <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
-    </div>
-
-    <div id="dialog" title="Basic dialog">
-      <div class="activityPlan" onclick="closeActivityPlan()">
-      </div>
-      <iframe id="iframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-    </div>
-
-
   </main>
+
+  <div id="temporaryDialog" title="Basic dialog">
+    <div class="temporaryPlanClose" onclick="closeTemporaryPlan()">
+    </div>
+    <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+  </div>
+
+  <div id="activityDialog" title="Basic dialog">
+    <div class="activityPlanClose" onclick="closeActivityPlan()">
+    </div>
+    <iframe id="iframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
