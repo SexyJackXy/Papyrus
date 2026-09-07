@@ -157,6 +157,18 @@
   width: 166px;
 }
 
+#ils{
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+}
+
+#ils .person{
+  width: 170px;
+  height: 20px;
+  margin-bottom: 0.6rem;
+}
+
 #trashCan {
   height: 32px;
   position: absolute;
@@ -173,7 +185,7 @@
 }
 
 .activityPlan {
-  background-color: green;
+  background-color: #d1d5db;
   top: 45%;
 }
 
