@@ -155,6 +155,12 @@
       if (name) result.push({ role: 'Frei', name })
     })
 
+    document.querySelectorAll('#teamUsed .card').forEach(el => {
+      const name = el.textContent.trim()
+      if (name) result.push({ role: 'Used', name })
+    })
+
+
     return result
   }
 
@@ -206,9 +212,12 @@
 
   function renderAssignments(assignment) {
     let i = 0
-    const poolParent = document.getElementById('teamFree')
-    const freeTeam = poolParent.querySelector('#innerTeam')
+    const freeTeamParent = document.getElementById('teamFree')
+    const freeTeam = freeTeamParent.querySelector('#innerTeam')
+    const usedTeamParent = document.getElementById('teamUsed')
+    const usedTeam = usedTeamParent.querySelector('#innerTeam')
     if (!freeTeam) return
+        if (!usedTeam) return
 
     assignment.forEach(({ role, name }) => {
       if (!name) return
@@ -221,6 +230,17 @@
         d.setAttribute('draggable', !reservedNames.includes(name))
         d.innerHTML = name
         freeTeam.appendChild(d)
+        return
+      }
+
+      if (role === 'Used') {
+        i++
+
+        const d = document.createElement('div')
+        d.className = 'card'
+        d.setAttribute('draggable', !reservedNames.includes(name))
+        d.innerHTML = name
+        usedTeam.appendChild(d)
         return
       }
 
@@ -390,7 +410,7 @@
           newCard.className = 'card'
           newCard.draggable = true
           newCard.textContent = name
-
+          newCard.setAttribute('data-role', 'used')
           innerUsedPool.appendChild(newCard)
 
           draggedEl.textContent = draggedRole
