@@ -81,3 +81,38 @@ input[type='password'] {
   width: 15vw;
   border-radius: 10px;
 }
+
+.toggleLink {
+  text-align: center;
+  font-size: 1.6ch;
+  margin: 4px 0 0;
+}
+
+.toggleLink a {
+  color: #a81309;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login.registerMode {
+  max-height: none;
+  padding-bottom: 10px;
+}
+
+.nameRow {
+  display: flex;
+  gap: 6px;
+}
+
+.nameRow input {
+  width: auto;
+  flex: 1;
+}
+
+#addNameBtn.btn {
+  min-height: 35px;
+  min-width: auto;
+  font-size: 1.3ch;
+  align-self: center;
+  margin: 4px auto;
+}

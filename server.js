@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const { extractShiftFromPdf } = require('./scripts/pdfExtractor')
-const { getUserByUsername, getNamesForUser } = require('./db')
+const { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 const app = express()
 const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
@@ -15,7 +15,9 @@ const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
 const PUBLIC_PATHS = new Set([
   '/',
   '/views/dashboard.html',
-  '/views/login.html'
+  '/views/login.html',
+  '/views/alternativPlanes/activityPlan.html',
+  '/views/alternativPlanes/temporaryPlan.html'
 ])
 
 function isPublicRequest(req) {
@@ -54,6 +56,7 @@ app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
+    (req.method === 'POST' && req.path === '/api/create-user') ||
     (req.method === 'POST' && req.path === '/api/save-schedule') ||
     (req.method === 'POST' && req.path === '/api/save-temporary-schedule') ||
     (req.method === 'GET' && req.path === '/api/latest-schedule') ||
@@ -126,6 +129,31 @@ app.get('/api/me', (req, res) => {
   }
   const names = getNamesForUser(req.session.userId)
   res.json({ success: true, username: req.session.username, names })
+})
+
+app.post('/api/create-user', async (req, res) => {
+  try {
+    const { username, password, } = req.body || {}
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Benutzername, Passwort sind erforderlich'
+      })
+    }
+
+    if (getUserByUsername(username)) {
+      return res.status(409).json({ success: false, error: 'Benutzername existiert bereits' })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    const userId = createUser(username, passwordHash)
+
+    res.json({ success: true, userId })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
 })
 
 app.post('/api/extract-and-save', async (req, res) => {
@@ -314,25 +342,32 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
     if (!fs.existsSync(currentFile)) {
       const fixSchedule = path.join(__dirname, 'dailySchedule')
 
-      const files = fs
-        .readdirSync(fixSchedule)
-        .filter(f => f.endsWith('.json'))
-        .map(f => {
-          const full = path.join(fixSchedule)
-          return { name: f, mtime: fs.statSync(full).mtimeMs }
-        })
-        .sort((a, b) => b.mtime - a.mtime)
+      if (!fs.existsSync(fixSchedule)) {
+        console.warn('There is now File odr directory "', fixSchedule, '"')
+      return res.json({ success: true, data: null })
+      }
+      else {
+        const files = fs
+          .readdirSync(fixSchedule)
+          .filter(f => f.endsWith('.json'))
+          .map(f => {
+            const full = path.join(fixSchedule)
+            return { name: f, mtime: fs.statSync(full).mtimeMs }
+          })
+          .sort((a, b) => b.mtime - a.mtime)
 
-      if (!files.length) {
-        return res.json({ success: true, data: null })
+        if (!files.length) {
+          return res.json({ success: true, data: null })
+        }
+
+        const fixedLatest = files[0]
+        const fixedData = JSON.parse(
+          fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
+        )
+
+        return res.json({ success: true, fileName: fixedLatest.name, fixedData })
       }
 
-      const fixedLatest = files[0]
-      const fixedData = JSON.parse(
-        fs.readFileSync(path.join(fixSchedule, fixedLatest.name), 'utf-8')
-      )
-
-      return res.json({ success: true, fileName: fixedLatest.name, fixedData })
     }
 
     const files = fs

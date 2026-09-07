@@ -157,6 +157,18 @@
   width: 166px;
 }
 
+#ils{
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+}
+
+#ils .person{
+  width: 170px;
+  height: 20px;
+  margin-bottom: 0.6rem;
+}
+
 #trashCan {
   height: 32px;
   position: absolute;
@@ -166,6 +178,36 @@
 }
 
 /* Styling for the fly outs */
+/* Farben & Größen der Tabs */
+.temporaryPlan {
+  background-color: #d1d5db;
+  top: 50%;
+}
+
+.activityPlan {
+  background-color: #d1d5db;
+  top: 45%;
+}
+
+/* Breiten der Dialoge */
+#temporaryDialog iframe {
+  width: 90vw;
+}
+
+#activityDialog iframe {
+  width: 20vw;
+}
+
+/* Position der Close-Buttons */
+#temporaryDialog .temporaryPlanClose {
+  right: 90vw !important;
+}
+
+#activityDialog .activityPlanClose {
+  right: 20vw !important;
+}
+
+/* Gemeinsamer Tab-Stil */
 .temporaryPlan,
 .activityPlan {
   position: absolute;
@@ -175,20 +217,9 @@
   height: 100px;
   width: 15px;
   right: 0;
-
   border-radius: 10px 0px 0px 10px;
   transition: width 0.3s ease-out;
   box-shadow: -10px 22px 25px -8px #000000;
-}
-
-.temporaryPlan {
-  background-color: #d1d5db;
-  top: 50%;
-}
-
-.activityPlan {
-  background-color: green;
-  top: 45%;
 }
 
 .temporaryPlan:hover,
@@ -198,26 +229,24 @@
   box-shadow: none;
 }
 
+/* Iframes der Dialoge */
 #temporaryDialog iframe,
 #activityDialog iframe {
   display: none;
+  position: absolute;
+  top: 59px;
+  right: 0;
+  height: 94vh;
+  z-index: 2;
+  background-color: #f3f4f6;
   border-top: none;
   border-right: none;
   border-left: solid 3px #ffffff;
   border-bottom: solid 3px #ffffff;
-  height: 94vh;
-  width: 90vw;
-  right: 0;
-  z-index: 2;
-  background-color: #f3f4f6;
-  position: absolute;
-  right: 0;
-  top: 59px;
-  z-index: 2;
   border-radius: 10px 0px 0px 10px;
   box-shadow: -10px 1px 17px 10px rgba(0, 0, 0, 0.7);
   transform: translateX(100%);
-  transition: transform 0.4s ease-out;
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
 
 #temporaryDialog iframe.is-open,
@@ -225,26 +254,28 @@
   transform: translateX(0);
 }
 
-#temporaryDialog .temporaryPlanClose ,
+/* Close-Buttons */
+#temporaryDialog .temporaryPlanClose,
 #activityDialog .activityPlanClose {
+  display: none;
   position: absolute;
+  top: 50%;
+  right: 0;
+  height: 100px;
+  width: 15px;
+  z-index: 3;
   background-color: #f3f4f6;
   border-top: solid 3px #ffffff;
   border-bottom: solid 3px #ffffff;
   border-left: solid 3px #ffffff;
-  height: 100px;
-  width: 15px;
-  right: 0;
-  top: 50%;
   border-radius: 10px 0px 0px 10px;
-  display: none;
-  right: 90vw;
-  z-index: 3;
+  opacity: 0;
   transform: translateX(100%);
-  transition: transform 1s ease-out;
+  transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
 #temporaryDialog .temporaryPlanClose.is-open,
 #activityDialog .activityPlanClose.is-open {
   transform: translateX(0);
+  opacity: 1;
 }

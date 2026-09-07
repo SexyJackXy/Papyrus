@@ -133,5 +133,34 @@ async function showActivityPlan() {
 }
 
 async function closeActivityPlan() {
+  const dialogDiv = document.getElementById('activityDialog')
+  const dialogIframe = dialogDiv.querySelector('#iframe')
+  const dialogButton = dialogDiv.querySelector('.activityPlanClose')
+  const delay = millis =>
+    new Promise((resolve, reject) => {
+      setTimeout(_ => resolve(), millis)
+    })
 
+  dialogButton.classList.remove('is-open')
+
+  dialogButton.addEventListener(
+    'transitionend',
+    () => {
+      dialogButton.style.display = 'none'
+    },
+    { once: true }
+  )
+
+  await delay(1100)
+
+  dialogIframe.classList.remove('is-open')
+
+  dialogIframe.addEventListener(
+    'transitionend',
+    () => {
+      dialogIframe.style.display = 'none'
+      document.body.style.overflow = ''
+    },
+    { once: true }
+  )
 }
