@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 const session = require('express-session')
 const SQLiteStore = require('connect-sqlite3')(session)
 const { extractShiftFromPdf } = require('./scripts/pdfExtractor')
-const { getUserByUsername, getNamesForUser } = require('./db')
+const { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 const app = express()
 const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
@@ -56,6 +56,7 @@ app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
+    (req.method === 'POST' && req.path === '/api/create-user') ||
     (req.method === 'POST' && req.path === '/api/save-schedule') ||
     (req.method === 'POST' && req.path === '/api/save-temporary-schedule') ||
     (req.method === 'GET' && req.path === '/api/latest-schedule') ||
@@ -128,6 +129,31 @@ app.get('/api/me', (req, res) => {
   }
   const names = getNamesForUser(req.session.userId)
   res.json({ success: true, username: req.session.username, names })
+})
+
+app.post('/api/create-user', async (req, res) => {
+  try {
+    const { username, password, } = req.body || {}
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Benutzername, Passwort sind erforderlich'
+      })
+    }
+
+    if (getUserByUsername(username)) {
+      return res.status(409).json({ success: false, error: 'Benutzername existiert bereits' })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12)
+    const userId = createUser(username, passwordHash)
+
+    res.json({ success: true, userId })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
 })
 
 app.post('/api/extract-and-save', async (req, res) => {

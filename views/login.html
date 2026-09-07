@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
     <script src="../scripts/scripts.js"></script>
     <script src="../scripts/settings.js" defer></script>
+    <script src="../scripts/login.js" defer></script>
 </head>
 
 <body>
@@ -39,19 +40,41 @@
 
     <main class="containerFlex">
         <div class="loginContainer">
-            <section class="login">
-                <h1 class="loginText">Login</h1>
-                <div class="inputFields">
-                    <input type="text" id="username" placeholder="Benutzername" autocomplete="username">
+            <section class="login" id="loginCard">
+                <div id="loginView">
+                    <h1 class="loginText">Login</h1>
+                    <div class="inputFields">
+                        <input type="text" id="username" placeholder="Benutzername" autocomplete="username">
 
-                    <input type="password" id="password" placeholder="Passwort" autocomplete="current-password">
+                        <input type="password" id="password" placeholder="Passwort" autocomplete="current-password">
 
+                    </div>
+                    <p id="loginError" style="color:#A81309; display:none; font-size:1.5ch; text-align:center;"></p>
+                    <div class=" btnLogin">
+                        <button id="loginbtn" class="btn" type="button">
+                            <p>Einloggen</p>
+                        </button>
+                    </div>
+                    <p class="toggleLink"><a href="#" id="showRegister">Neuen Nutzer anlegen</a></p>
                 </div>
-                <p id="loginError" style="color:#A81309; display:none; font-size:1.5ch; text-align:center;"></p>
-                <div class=" btnLogin">
-                    <button id="loginbtn" class="btn" type="button">
-                        <p>Einloggen</p>
-                    </button>
+
+                <div id="registerView" style="display:none;">
+                    <h1 class="loginText">Registrieren</h1>
+                    <div class="inputFields">
+                        <input type="text" id="regUsername" placeholder="Benutzername" autocomplete="username">
+                        <input type="password" id="regPassword" placeholder="Passwort" autocomplete="new-password">
+                        <button id="addNameBtn" class="btn" type="button">
+                            <p>+ weiterer Name</p>
+                        </button>
+                    </div>
+                    <p id="registerError" style="color:#A81309; display:none; font-size:1.5ch; text-align:center;"></p>
+                    <p id="registerSuccess" style="color:#1a7f37; display:none; font-size:1.5ch; text-align:center;"></p>
+                    <div class=" btnLogin">
+                        <button id="registerbtn" class="btn" type="button">
+                            <p>Nutzer anlegen</p>
+                        </button>
+                    </div>
+                    <p class="toggleLink"><a href="#" id="showLogin">Zurück zum Login</a></p>
                 </div>
             </section>
 
@@ -60,53 +83,6 @@
             </section>
         </div>
     </main>
-
-
-    <script>
-        const loginBtn = document.getElementById("loginbtn");
-        const usernameInput = document.getElementById("username");
-        const passwordInput = document.getElementById("password");
-        const errorEl = document.getElementById("loginError");
-
-        function showError(msg) {
-            errorEl.textContent = msg;
-            errorEl.style.display = "block";
-        }
-
-        async function doLogin() {
-
-            const username = usernameInput.value.trim();
-            const password = passwordInput.value;
-
-            if (!username || !password) {
-                showError("Bitte Benutzername und Passwort eingeben.");
-                return;
-            }
-
-            try {
-                const res = await fetch("/api/login", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    window.location.href = data.redirect || "index.html";
-                } else {
-                    showError(data.error || "Login fehlgeschlagen.");
-                }
-            } catch (err) {
-                console.error(err);
-                showError("Verbindung zum Server fehlgeschlagen.");
-            }
-        }
-
-        loginBtn.addEventListener("click", doLogin);
-        passwordInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") doLogin();
-        });
-    </script>
 </body>
 
 </html>
