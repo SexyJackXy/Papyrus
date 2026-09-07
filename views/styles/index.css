@@ -145,18 +145,6 @@
   display: none;
 }
 
-#cafeteria {
-  flex-direction: row;
-  width: fit-content;
-}
-
-[data-role='Kantine1'],
-[data-role='Kantine2'],
-#Kantine2 {
-  height: 32px;
-  width: 166px;
-}
-
 #ils{
   flex-direction: row;
   width: fit-content;

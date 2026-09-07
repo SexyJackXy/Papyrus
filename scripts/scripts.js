@@ -429,7 +429,7 @@
         exportNotWorkingPeople(draggedEl)
       }
 
-      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
         scheduleSave()
       } else if (pageName === 'temporaryPlan.html') {
         temporaryScheduleSave()

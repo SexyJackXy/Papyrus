@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+    <script src="../../scripts/alternaivPlan.js"></script>
+    <script src="../../scripts/scripts.js"></script>
 </head>
 
 <body style="height: 100vh;">
@@ -27,7 +29,7 @@
         <div class="vehicle">
             <h3>ZAW</h3>
             <h3 class="close">X</h3>
-            <div class="person" data-role=" ZAW" draggable="false">Frei</div>
+            <div class="person" data-role="ZAW" draggable="false">Frei</div>
         </div>
 
         <div class="vehicle">
@@ -39,7 +41,7 @@
         <div class="vehicle">
             <h3>KFZ</h3>
             <h3 class="close">X</h3>
-            <div class="person" data-role="HLD" draggable="false">Frei</div>
+            <div class="person" data-role="KFZ" draggable="false">Frei</div>
         </div>
 
         <div class="vehicle">
@@ -48,27 +50,31 @@
             <div class="person" data-role="Kleiderkammer" draggable="false">Frei</div>
         </div>
 
-        <div class="vehicle">
+        <div class="vehicle" id="cafeteria">
             <h3>Kantine</h3>
             <h3 class="close">X</h3>
-            <div class="person" data-role="LFüGr" draggable="false">Frei</div>
+            <div class="person" data-role="Kantine1" draggable="false">Frei</div>
+            <div class="person" data-role="Kantine2" draggable="false">Frei</div>
         </div>
 
         <div class="vehicle">
             <h3>Wäsche</h3>
             <h3 class="close">X</h3>
-            <div class="person" data-role="LFüGr" draggable="false">Frei</div>
+            <div class="person" data-role="Wäsche" draggable="false">Frei</div>
         </div>
 
         <div class="vehicle">
             <h3>Getränke</h3>
             <h3 class="close">X</h3>
-            <div class="person" data-role="LFüGr" draggable="false">Frei</div>
+            <div class="person" data-role="Getränke" draggable="false">Frei</div>
         </div>
     </section>
 </body>
 
 <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        activityPlanLoad()
+    })
 </script>
 
 </html>

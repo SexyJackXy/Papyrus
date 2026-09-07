@@ -6,7 +6,7 @@ h3.text {
     margin: 0;
 }
 
-.work-duty{
+.work-duty {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
@@ -14,11 +14,28 @@ h3.text {
     align-items: center;
 }
 
-.work-duty .vehicle{
+.work-duty .vehicle {
     font-size: 15px;
     padding-top: 34.5px;
     height: 44px;
     width: 350px;
+}
+
+#cafeteria {
+    flex-direction: row;
+    width: fit-content;
+    height: 44px;
+    font-size: 15px;
+    padding-top: 34.5px;
+    height: 44px;
+    width: 350px;
+}
+
+[data-role='Kantine1'],
+[data-role='Kantine2'],
+#Kantine2 {
+    height: 26px;
+    width: 166px;
 }
 
 #triggeredSpace {

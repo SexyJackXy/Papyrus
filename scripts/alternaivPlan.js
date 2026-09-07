@@ -30,6 +30,7 @@ async function showAlternativePlan() {
     dialogButton.classList.add('is-open')
   })
 }
+
 async function closeTemporaryPlan() {
   const dialogDiv = document.getElementById('temporaryDialog')
   const dialogIframe = dialogDiv.querySelector('#iframe')
@@ -62,6 +63,7 @@ async function closeTemporaryPlan() {
     { once: true }
   )
 }
+
 async function altertivPlanLoad() {
   let i = 0
   const poolParent = document
@@ -95,8 +97,6 @@ async function altertivPlanLoad() {
     const t = document.querySelector('.freeTeamSpace')
     t.style.display = 'flex'
   }
-
-  // importNotWorkingPeople()
 }
 
 async function showActivityPlan() {
@@ -163,4 +163,19 @@ async function closeActivityPlan() {
     },
     { once: true }
   )
+}
+
+async function activityPlanLoad() {
+  const assignments = await window.Dienste.loadContent()
+
+  assignments.forEach(({ role, name }) => {
+    if (!name) return
+    const activityRole = document.querySelector(`.work-duty .person[data-role="${role}"]`)
+    if (!activityRole) {
+      return
+    }
+    console.log(activityRole)
+    activityRole.textContent = name
+    activityRole.style.backgroundColor = '#B6D5FB'
+  })
 }
