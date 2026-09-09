@@ -37,7 +37,6 @@
   async function initSettingsAdjustment() {
     const settings = await fetch('/api/settings').then(r => r.json())
     const showWachabteilung = settings.showWachabteilung
-    const showArbeitsdienste = settings.showArbeitsdienste
     const dutyTakeout = settings.showDuty
 
     if (dutyTakeout === true) {
@@ -55,12 +54,6 @@
       showStation.style.display = 'block'
     }
 
-    if (showArbeitsdienste === true) {
-      const workServices = document.getElementById('workServices')
-      const workServicesTitle = document.getElementById('workServicesTitle')
-      workServices.style.display = 'flex'
-      workServicesTitle.style.display = 'block'
-    }
 
     return settings
   }

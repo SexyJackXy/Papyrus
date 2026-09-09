@@ -43,7 +43,11 @@
     'Getränke',
     'ZAW',
     'ZSW',
-    'Abrufschicht'
+    'Abrufschicht',
+    'KFZ',
+    'Kleiderkammer',
+    'Kantine1',
+    'Kantine2'
   ]
 
   function readFromFile(file) {
@@ -174,6 +178,8 @@
       const data = serializeAssignments()
       localStorage.setItem(cookies, JSON.stringify(data))
 
+      console.log(localStorage,'\n',data)
+
       try {
         await fetch('/api/save-schedule', {
           method: 'POST',
@@ -210,6 +216,26 @@
     }, 400)
   }
 
+  function activityScheduleSave() {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(async () => {
+      const data = serializeAssignments()
+
+      try {
+        await fetch('/api/save-activity-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn(
+          'Aktivitätsplan konnte nicht auf dem Server gespeichert werden:',
+          e
+        )
+      }
+    }, 400)
+  }
+
   function renderAssignments(assignment) {
     let i = 0
     const freeTeamParent = document.getElementById('teamFree')
@@ -217,7 +243,7 @@
     const usedTeamParent = document.getElementById('teamUsed')
     const usedTeam = usedTeamParent.querySelector('#innerTeam')
     if (!freeTeam) return
-        if (!usedTeam) return
+    if (!usedTeam) return
 
     assignment.forEach(({ role, name }) => {
       if (!name) return
@@ -300,21 +326,31 @@
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
+        console.log('// CARD -> PERSON')
         if (!reservedNames.includes(personTarget.dataset.role)) {
           return
         }
 
-        personTarget.textContent = draggedEl.textContent
-        updatePersonColor(personTarget)
+        console.log(personTarget.textContent, draggedEl.textContent)
 
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = personTarget.textContent
+
+          innerFreePool.appendChild(newCard)
+
+          personTarget.textContent = draggedEl.textContent
+          updatePersonColor(personTarget)
+        }
+        console.log(draggedEl)
         draggedEl.remove()
       }
 
       // PERSON -> PERSON (tauschen)
-      else if (
-        draggedEl.classList.contains('person') &&
-        personTarget &&
-        draggedEl !== personTarget
+      else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget
       ) {
         const draggedText = draggedEl.textContent.trim()
         const targetText = personTarget.textContent.trim()
@@ -433,6 +469,8 @@
         scheduleSave()
       } else if (pageName === 'temporaryPlan.html') {
         temporaryScheduleSave()
+      } else if (pageName === 'activityPlan.html') {
+        activityScheduleSave
       }
     }
 
@@ -447,6 +485,24 @@
 
         dragged = element
         dragged.classList.add('dragging')
+
+        // Für Cross-Frame-Drops (z. B. Dashboard/Index -> Aktivitätsplan-
+        // iFrame) werden die nötigen Infos zusätzlich über dataTransfer
+        // mitgegeben, da dort ein eigenes, separates Dokument läuft.
+        try {
+          e.dataTransfer.effectAllowed = 'copy'
+          e.dataTransfer.setData(
+            'text/papyrus-json',
+            JSON.stringify({
+              kind: dragged.classList.contains('card') ? 'card' : 'person',
+              text: dragged.textContent.trim(),
+              role: dragged.dataset.role || null
+            })
+          )
+          e.dataTransfer.setData('text/plain', dragged.textContent.trim())
+        } catch (err) {
+          // manche Kontexte erlauben setData nicht – Touch-DnD greift dann ohnehin
+        }
       },
       true
     )
@@ -475,12 +531,68 @@
     })
 
     document.addEventListener('drop', e => {
-      if (!dragged) return
-
       e.preventDefault()
+
+      if (dragged) {
+        clearHighlights()
+        performDrop(dragged, e.target)
+        dragged = null
+        return
+      }
+
+      // Kein im selben Dokument gestartetes Drag -> kommt evtl. aus dem
+      // Elternfenster (z. B. Dashboard/Index -> Aktivitätsplan-iFrame)
+      handleCrossFrameDrop(e)
+    })
+
+    // Verarbeitet einen Drop, dessen Drag in einem ANDEREN Dokument
+    // gestartet wurde (z. B. Dashboard/Index -> Aktivitätsplan-iFrame).
+    // Die Person wird nur in den Zielslot KOPIERT, die Quelle bleibt
+    // unverändert bestehen.
+    function handleCrossFrameDrop(e) {
+      let payload
+      try {
+        payload = JSON.parse(e.dataTransfer.getData('text/papyrus-json'))
+      } catch (err) {
+        return
+      }
+      if (!payload) return
+
       clearHighlights()
-      performDrop(dragged, e.target)
-      dragged = null
+
+      const virtualEl = document.createElement('div')
+      virtualEl.className = payload.kind
+      virtualEl.textContent = payload.text
+      if (payload.role) virtualEl.dataset.role = payload.role
+
+      performDrop(virtualEl, e.target)
+    }
+
+    // Reagiert im Elternfenster auf die Aufräum-Nachricht aus dem iFrame
+    window.addEventListener('message', e => {
+      if (e.origin !== window.location.origin) return
+      if (!e.data || e.data.type !== 'papyrus-cross-frame-drop') return
+
+      const el = document.querySelector(`[data-drag-id="${e.data.dragId}"]`)
+      if (!el) return
+
+      if (el.classList.contains('card')) {
+        el.remove()
+      } else if (el.classList.contains('person')) {
+        const role = el.dataset.role
+        el.textContent = role === 'ELW' ? 'LD 1' : role
+        updatePersonColor(el)
+      }
+
+      el.removeAttribute('data-drag-id')
+
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
+        scheduleSave()
+      } else if (pageName === 'temporaryPlan.html') {
+        temporaryScheduleSave()
+      } else if (pageName === 'activityPlan.html') {
+        activityPlanScheduleSave()
+      }
     })
 
     // ---------- Touch-basiertes Drag & Drop (Handy/Tablet) ----------

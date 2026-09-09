@@ -34,6 +34,20 @@ function isPublicRequest(req) {
   return false
 }
 
+function updateArray(currentdata, data) {
+  data.forEach(item => {
+    const index = currentdata.findIndex(
+      cur => cur.role === item.role && cur.name === item.name
+    );
+    if (index === -1) {
+      currentdata.push(item);
+    } else {
+      currentdata[index] = item;
+    }
+  });
+  return currentdata;
+}
+
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
 app.use(
@@ -59,6 +73,7 @@ app.use((req, res, next) => {
     (req.method === 'POST' && req.path === '/api/create-user') ||
     (req.method === 'POST' && req.path === '/api/save-schedule') ||
     (req.method === 'POST' && req.path === '/api/save-temporary-schedule') ||
+    (req.method === 'GET' && req.path === '/api/latest-activity-schedule') ||
     (req.method === 'GET' && req.path === '/api/latest-schedule') ||
     (req.method === 'GET' && req.path === '/api/latest-temporary-schedule') ||
     (req.method === 'GET' && req.path === '/api/import-not-working-persons') ||
@@ -239,6 +254,91 @@ app.post('/api/save-schedule', (req, res) => {
     }
 
     const dir = path.join(__dirname, 'dailySchedule')
+    if (!fs.existsSync(dir)) {
+
+      fs.mkdirSync(dir)
+
+      fs.writeFileSync(
+        path.join(dir, 'current.json'),
+        JSON.stringify(data, null, 2),
+        'utf-8')
+    }
+    else {
+      const savefiles = fs
+        .readdirSync(dir)
+        .filter(f => f.endsWith('.json'))
+        .map(f => {
+          const full = path.join(dir, f)
+          return { name: f, mtime: fs.statSync(full).mtimeMs }
+        })
+        .sort((a, b) => b.mtime - a.mtime)
+
+      const latest = savefiles[0]
+      const currentdata = JSON.parse(
+        fs.readFileSync(path.join(dir, latest.name), 'utf-8')
+      )
+      
+      const multiRoles = ['Frei', 'Used'];
+      const neu = [];
+      const geaendert = [];
+      const geloescht = [];
+
+      // Snapshot vom alten Stand, BEVOR currentdata verändert wird
+      const alterStand = currentdata.map(x => ({ ...x }));
+
+      data.forEach(item => {
+        const index = multiRoles.includes(item.role)
+          ? currentdata.findIndex(cur => cur.role === item.role && cur.name === item.name)
+          : currentdata.findIndex(cur => cur.role === item.role);
+
+        if (index === -1) {
+          neu.push(item);
+          currentdata.push(item);
+        } else if (JSON.stringify(currentdata[index]) !== JSON.stringify(item)) {
+          geaendert.push({ vorher: currentdata[index], nachher: item });
+          currentdata[index] = item;
+        }
+      });
+
+      // Einträge, die im alten Stand waren, aber in data fehlen -> gelöscht
+      const ignoreRoles = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1'];
+
+      alterStand.forEach(cur => {
+        if (ignoreRoles.includes(cur.role)) return; // diese Rollen nie als "gelöscht" werten
+
+        const nochVorhanden = multiRoles.includes(cur.role)
+          ? data.some(item => item.role === cur.role && item.name === cur.name)
+          : data.some(item => item.role === cur.role);
+
+        if (!nochVorhanden) {
+          geloescht.push(cur);
+          const idx = currentdata.findIndex(c => JSON.stringify(c) === JSON.stringify(cur));
+          if (idx !== -1) currentdata.splice(idx, 1);
+        }
+      });
+
+      fs.writeFileSync(
+        path.join(dir, 'current.json'),
+        JSON.stringify(currentdata, null, 2),
+        'utf-8')
+    }
+    res.json({ success: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+app.post('/api/save-activity-schedule', (req, res) => {
+  try {
+    const { data } = req.body || {}
+    if (!Array.isArray(data)) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'data muss ein Array sein' })
+    }
+
+    const dir = path.join(__dirname, 'activitySchedule')
     if (!fs.existsSync(dir)) fs.mkdirSync(dir)
 
     fs.writeFileSync(
@@ -344,7 +444,7 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
 
       if (!fs.existsSync(fixSchedule)) {
         console.warn('There is now File odr directory "', fixSchedule, '"')
-      return res.json({ success: true, data: null })
+        return res.json({ success: true, data: null })
       }
       else {
         const files = fs

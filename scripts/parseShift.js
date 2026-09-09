@@ -6,7 +6,7 @@ const path = require('path')
 
 // Template laden
 const template = JSON.parse(
-fs.readFileSync(path.join(__dirname, '..', 'globalVariables', 'template.json'), 'utf-8')
+  fs.readFileSync(path.join(__dirname, '..', 'globalVariables', 'template.json'), 'utf-8')
 )
 
 const nameBeforeRole = new Set([
@@ -59,13 +59,9 @@ const forbiddenLines = new Set([
   'LD 1',
   'LD 2',
   'HLD',
-  'Getränke',
   'DD',
-  'BvD',
   'LFüGr',
   'EAL',
-  'ZAW',
-  'ZSW',
   'Abrufschicht',
   'ELW'
 ])

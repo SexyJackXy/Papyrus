@@ -169,13 +169,34 @@ async function activityPlanLoad() {
   const assignments = await window.Dienste.loadContent()
 
   assignments.forEach(({ role, name }) => {
+    console.log(role, name)
+
     if (!name) return
+
+
     const activityRole = document.querySelector(`.work-duty .person[data-role="${role}"]`)
     if (!activityRole) {
       return
     }
-    console.log(activityRole)
     activityRole.textContent = name
     activityRole.style.backgroundColor = '#B6D5FB'
+    activityRole.setAttribute('draggable', true)
+  })
+
+  initClearButtons()
+}
+
+function initClearButtons() {
+  var clearButton = document.querySelectorAll('.close')
+
+  clearButton.forEach(button => {
+    button.addEventListener('click', event => {
+      var parent = event.target.parentElement
+      var person = parent.querySelectorAll('.person')
+
+      console.log(person)
+
+      person.textContent = 'Frei'
+    })
   })
 }
