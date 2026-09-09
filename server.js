@@ -10,6 +10,8 @@ const { getUserByUsername, getNamesForUser, createUser, addNameToUser } = requir
 
 const app = express()
 const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
+const MULTI_ROLES = ['Frei', 'Used']
+const IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
 
 // Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 const PUBLIC_PATHS = new Set([
@@ -34,19 +36,84 @@ function isPublicRequest(req) {
   return false
 }
 
-function updateArray(currentdata, data) {
-  data.forEach(item => {
-    const index = currentdata.findIndex(
-      cur => cur.role === item.role && cur.name === item.name
-    );
-    if (index === -1) {
-      currentdata.push(item);
-    } else {
-      currentdata[index] = item;
-    }
-  });
-  return currentdata;
+function findMatch(list, item) {
+  return MULTI_ROLES.includes(item.role)
+    ? list.findIndex(x => x.role === item.role && x.name === item.name)
+    : list.findIndex(x => x.role === item.role)
 }
+
+function diffSchedule(currentdata, data) {
+  const merged = [...currentdata]
+  const neu = [], geaendert = [], geloescht = []
+
+  for (const item of data) {
+    const idx = findMatch(merged, item)
+    if (idx === -1) {
+      neu.push(item)
+      merged.push(item)
+    } else if (JSON.stringify(merged[idx]) !== JSON.stringify(item)) {
+      geaendert.push({ vorher: merged[idx], nachher: item })
+      merged[idx] = item
+    }
+  }
+
+  for (const cur of currentdata) {
+    if (IGNORE_ROLES.includes(cur.role)) continue
+    const nochVorhanden = MULTI_ROLES.includes(cur.role)
+      ? data.some(item => item.role === cur.role && item.name === cur.name)
+      : data.some(item => item.role === cur.role)
+
+    if (!nochVorhanden) {
+      geloescht.push(cur)
+      const i = merged.findIndex(m => JSON.stringify(m) === JSON.stringify(cur))
+      if (i !== -1) merged.splice(i, 1)
+    }
+  }
+
+  return { merged, neu, geaendert, geloescht }
+}
+
+function checkActivitys(currentdata, data) {
+  const curData = [...currentdata]
+  const neu = [], geaendert = [], geloescht = []
+
+  var roles = []
+
+  data.forEach(data => {
+    roles.push(data.role)
+  })
+
+  var curDataRoles = curData.filter(item => roles.includes(item.role));
+
+  for (const item of data) {
+    const idx = findMatch(curData, item)
+    if (idx === -1) {
+      neu.push(item)
+      curData.push(item)
+    } else if (JSON.stringify(curData[idx]) !== JSON.stringify(item)) {
+      geaendert.push({ vorher: curData[idx], nachher: item })
+      curData[idx] = item
+    }
+  }
+
+  for (const cur of curDataRoles) {
+    if (!IGNORE_ROLES.includes(cur.role)) continue
+    const nochVorhanden = MULTI_ROLES.includes(cur.role)
+      ? data.some(item => item.role === cur.role && item.name === cur.name)
+      : data.some(item => item.role === cur.role)
+
+    if (!nochVorhanden) {
+      geloescht.push(cur)
+      const i = curData.findIndex(m => JSON.stringify(m) === JSON.stringify(cur))
+      if (i !== -1) merged.splice(i, 1)
+    }
+  }
+
+  console.log(neu, geaendert, geloescht,curData)
+
+  return { neu, geaendert, geloescht,curData }
+}
+
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
@@ -248,80 +315,21 @@ app.post('/api/save-schedule', (req, res) => {
   try {
     const { data } = req.body || {}
     if (!Array.isArray(data)) {
-      return res
-        .status(400)
-        .json({ success: false, error: 'data muss ein Array sein' })
+      return res.status(400).json({ success: false, error: 'data muss ein Array sein' })
     }
 
     const dir = path.join(__dirname, 'dailySchedule')
+    const currentFile = path.join(dir, 'current.json')
+
+    let merged = data
     if (!fs.existsSync(dir)) {
-
       fs.mkdirSync(dir)
-
-      fs.writeFileSync(
-        path.join(dir, 'current.json'),
-        JSON.stringify(data, null, 2),
-        'utf-8')
+    } else if (fs.existsSync(currentFile)) {
+      const currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
+      merged = diffSchedule(currentdata, data).merged
     }
-    else {
-      const savefiles = fs
-        .readdirSync(dir)
-        .filter(f => f.endsWith('.json'))
-        .map(f => {
-          const full = path.join(dir, f)
-          return { name: f, mtime: fs.statSync(full).mtimeMs }
-        })
-        .sort((a, b) => b.mtime - a.mtime)
 
-      const latest = savefiles[0]
-      const currentdata = JSON.parse(
-        fs.readFileSync(path.join(dir, latest.name), 'utf-8')
-      )
-      
-      const multiRoles = ['Frei', 'Used'];
-      const neu = [];
-      const geaendert = [];
-      const geloescht = [];
-
-      // Snapshot vom alten Stand, BEVOR currentdata verändert wird
-      const alterStand = currentdata.map(x => ({ ...x }));
-
-      data.forEach(item => {
-        const index = multiRoles.includes(item.role)
-          ? currentdata.findIndex(cur => cur.role === item.role && cur.name === item.name)
-          : currentdata.findIndex(cur => cur.role === item.role);
-
-        if (index === -1) {
-          neu.push(item);
-          currentdata.push(item);
-        } else if (JSON.stringify(currentdata[index]) !== JSON.stringify(item)) {
-          geaendert.push({ vorher: currentdata[index], nachher: item });
-          currentdata[index] = item;
-        }
-      });
-
-      // Einträge, die im alten Stand waren, aber in data fehlen -> gelöscht
-      const ignoreRoles = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1'];
-
-      alterStand.forEach(cur => {
-        if (ignoreRoles.includes(cur.role)) return; // diese Rollen nie als "gelöscht" werten
-
-        const nochVorhanden = multiRoles.includes(cur.role)
-          ? data.some(item => item.role === cur.role && item.name === cur.name)
-          : data.some(item => item.role === cur.role);
-
-        if (!nochVorhanden) {
-          geloescht.push(cur);
-          const idx = currentdata.findIndex(c => JSON.stringify(c) === JSON.stringify(cur));
-          if (idx !== -1) currentdata.splice(idx, 1);
-        }
-      });
-
-      fs.writeFileSync(
-        path.join(dir, 'current.json'),
-        JSON.stringify(currentdata, null, 2),
-        'utf-8')
-    }
+    fs.writeFileSync(currentFile, JSON.stringify(merged, null, 2), 'utf-8')
     res.json({ success: true })
   } catch (err) {
     console.error(err)
@@ -338,14 +346,26 @@ app.post('/api/save-activity-schedule', (req, res) => {
         .json({ success: false, error: 'data muss ein Array sein' })
     }
 
-    const dir = path.join(__dirname, 'activitySchedule')
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir)
+    const dir = path.join(__dirname, 'dailySchedule')
+    let merged = data
+    const currentFile = path.join(dir, 'current.json')
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir)
+      fs.writeFileSync(
+        path.join(dir, 'current.json'),
+        JSON.stringify(data, null, 2),
+        'utf-8'
+      )
+    }
+    else {
+      const currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
+      const newData = checkActivitys(currentdata, data).curData
 
-    fs.writeFileSync(
-      path.join(dir, 'current.json'),
-      JSON.stringify(data, null, 2),
-      'utf-8'
-    )
+    fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
+    res.json({ success: true })
+    }
+
+
 
     res.json({ success: true })
   } catch (err) {

@@ -169,8 +169,6 @@ async function activityPlanLoad() {
   const assignments = await window.Dienste.loadContent()
 
   assignments.forEach(({ role, name }) => {
-    console.log(role, name)
-
     if (!name) return
 
 

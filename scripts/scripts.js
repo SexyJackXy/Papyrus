@@ -164,6 +164,7 @@
       if (name) result.push({ role: 'Used', name })
     })
 
+    console.log(result)
 
     return result
   }
@@ -217,10 +218,12 @@
   }
 
   function activityScheduleSave() {
+    console.log('in der Methode')
     clearTimeout(saveTimer)
+          const data = serializeAssignments()
     saveTimer = setTimeout(async () => {
-      const data = serializeAssignments()
 
+      console.log(data)
       try {
         await fetch('/api/save-activity-schedule', {
           method: 'POST',
@@ -464,13 +467,14 @@
 
         exportNotWorkingPeople(draggedEl)
       }
-
+        console.log(pageName)
       if (pageName === 'index.html' || pageName === 'dashboard.html') {
         scheduleSave()
       } else if (pageName === 'temporaryPlan.html') {
         temporaryScheduleSave()
       } else if (pageName === 'activityPlan.html') {
-        activityScheduleSave
+        console.log(pageName)
+        activityScheduleSave()
       }
     }
 
