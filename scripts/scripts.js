@@ -140,12 +140,34 @@ function parseContent (t) {
       return getContent()
     }
 
-    return getContent()
-  }
+    if (t.charCodeAt(0) === 0xfeff) t = t.slice(1)
 
-  function clearCookies() {
-    localStorage.removeItem(cookies)
-    document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
+    const parsed = parseContent(t)
+
+    localStorage.setItem(cookies, JSON.stringify(parsed))
+  })
+
+  return 'Datei ' + file.name + ' erfolgreich hochgeladen'
+}
+
+function parseContent (t) {
+  if (!t) return []
+  try {
+    const data = JSON.parse(t)
+    if (!Array.isArray(data)) return []
+
+    return data
+      .filter(e => e && typeof e.role === 'string')
+      .map(e => ({ role: e.role.trim(), name: (e.name || '').trim() }))
+  } catch (e) {
+    console.error('Parse Error:', e)
+    return []
+  }
+}
+
+function clearCookies () {
+  localStorage.removeItem(cookies)
+  document.querySelectorAll('.person').forEach(e => (e.textContent = 'Frei'))
 
   return 'Einteilung Zurückgesetzt'
 }
