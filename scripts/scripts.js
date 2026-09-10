@@ -170,7 +170,10 @@
       if (name) result.push({ role: 'Used', name })
     })
 
-    console.log(result)
+    document.querySelectorAll('#triggeredSpace .card').forEach(el => {
+      const name = el.textContent.trim()
+      if (name) result.push({ role: 'Triggerd', name })
+    })
 
     return result
   }
@@ -184,8 +187,6 @@
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
       localStorage.setItem(cookies, JSON.stringify(data))
-
-      console.log(localStorage,'\n',data)
 
       try {
         await fetch('/api/save-schedule', {
@@ -224,12 +225,9 @@
   }
 
   function activityScheduleSave() {
-    console.log('in der Methode')
     clearTimeout(saveTimer)
-          const data = serializeAssignments()
+    const data = serializeAssignments()
     saveTimer = setTimeout(async () => {
-
-      console.log(data)
       try {
         await fetch('/api/save-activity-schedule', {
           method: 'POST',
@@ -251,8 +249,11 @@
     const freeTeam = freeTeamParent.querySelector('#innerTeam')
     const usedTeamParent = document.getElementById('teamUsed')
     const usedTeam = usedTeamParent.querySelector('#innerTeam')
+
+
     if (!freeTeam) return
     if (!usedTeam) return
+
 
     assignment.forEach(({ role, name }) => {
       if (!name) return
@@ -277,6 +278,25 @@
         d.innerHTML = name
         usedTeam.appendChild(d)
         return
+      }
+
+      if (window.location.pathname.split('/').pop() === 'temporaryPlan.html') {
+        const triggertTeamParent = document.getElementById('triggeredSpace')
+        const triggerdTeam = triggertTeamParent.querySelector('#innerTeam')
+
+        if (!triggerdTeam) return
+        if (role === 'Triggerd') {
+          i++
+
+          const d = document.createElement('div')
+          d.className = 'card'
+          d.setAttribute('draggable', !reservedNames.includes(name))
+          d.innerHTML = name
+          d.style.backgroundColor = '#af2a1c'
+          d.style.color = '#ffffff'
+          triggerdTeam.appendChild(d)
+          return
+        }
       }
 
       const el = document.querySelector(`.person[data-role="${role}"]`)
@@ -335,26 +355,20 @@
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
-        console.log('// CARD -> PERSON')
-        if (!reservedNames.includes(personTarget.dataset.role)) {
-          return
-        }
+        const targetText = personTarget.textContent.trim()
+        const newCard = document.createElement('div')
 
-        console.log(personTarget.textContent, draggedEl.textContent)
+        newCard.className = 'card'
+        newCard.draggable = true
+        newCard.textContent = personTarget.textContent
 
-        if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
-
-          newCard.className = 'card'
-          newCard.draggable = true
-          newCard.textContent = personTarget.textContent
-
+        if (!reservedNames.includes(targetText)) {
           innerFreePool.appendChild(newCard)
-
-          personTarget.textContent = draggedEl.textContent
-          updatePersonColor(personTarget)
         }
-        console.log(draggedEl)
+
+        personTarget.textContent = draggedEl.textContent
+        updatePersonColor(personTarget)
+
         draggedEl.remove()
       }
 
@@ -418,7 +432,7 @@
         }
       }
 
-      // PERSOM -> TRIGGERT POOL
+      // PERSON -> TRIGGERT POOL
       else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
         const name = draggedEl.textContent.trim()
 
@@ -443,8 +457,18 @@
       } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
       } else if (draggedEl.classList.contains('card') && triggerPoolTarget) {
-        triggerPool.appendChild(draggedEl)
+        var newCard = document.createElement('div')
+        newCard.className = 'card'
+        newCard.draggable = true
+        newCard.textContent = draggedEl.textContent
+        newCard.setAttribute('data-role', 'triggerd')
+        newCard.style.backgroundColor = '#ff2a1c'
+        newCard.style.color = '#ffffff'
+
+        triggerPool.appendChild(newCard)
+        draggedEl.remove()
       }
+
       //FREEPOOL <-> USED POOL
       else if (draggedEl.classList.contains('person') && usedPoolTarget) {
         const name = draggedEl.textContent.trim()
@@ -463,23 +487,18 @@
         }
       } else if (draggedEl.classList.contains('card') && trashTarget) {
         draggedEl.remove()
-      } else if (
-        draggedEl.classList.contains('card') &&
-        addPerson &&
-        pageName === 'shiftSchedule.html'
+      } else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html'
       ) {
         draggedEl.style.opacity = '0.6'
         draggedEl.classList.add('moved')
 
         exportNotWorkingPeople(draggedEl)
       }
-        console.log(pageName)
       if (pageName === 'index.html' || pageName === 'dashboard.html') {
         scheduleSave()
       } else if (pageName === 'temporaryPlan.html') {
         temporaryScheduleSave()
       } else if (pageName === 'activityPlan.html') {
-        console.log(pageName)
         activityScheduleSave()
       }
     }

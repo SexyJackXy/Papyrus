@@ -109,7 +109,6 @@ function checkActivitys(currentdata, data) {
     }
   }
 
-  console.log(neu, geaendert, geloescht,curData)
 
   return { neu, geaendert, geloescht,curData }
 }
@@ -364,10 +363,6 @@ app.post('/api/save-activity-schedule', (req, res) => {
     fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
     res.json({ success: true })
     }
-
-
-
-    res.json({ success: true })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })

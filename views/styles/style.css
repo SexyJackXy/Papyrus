@@ -54,7 +54,7 @@ body {
 header {
   display: flex;
   width: 100%;
-  background: #ff2a1c;
+  background: #ff2a1c; /*Darkmode => #bb0c00 */
   color: #ffffff; /*Darkmode => #181a1b)*/
   text-align: center;
   gap: 0.6rem;
