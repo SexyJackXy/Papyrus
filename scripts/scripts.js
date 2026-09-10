@@ -43,7 +43,11 @@
     'Getränke',
     'ZAW',
     'ZSW',
-    'Abrufschicht'
+    'Abrufschicht',
+    'KFZ',
+    'Kleiderkammer',
+    'Kantine1',
+    'Kantine2'
   ]
 
   function captureDefaults() {
@@ -103,14 +107,24 @@
   }
 
   async function loadContent() {
+    var res
+    var path = window.location.pathname
+    var pageName = path.split('/').pop()
+
     try {
-      const res = await fetch('/api/latest-schedule')
+      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+        res = await fetch('/api/latest-schedule')
+      } else if (pageName === 'temporaryPlan.html') {
+        res = await fetch('/api/latest-temporary-schedule')
+      }
       if (res.ok) {
         const json = await res.json()
         if (json.success) {
-          if (Array.isArray(json.data)) {
+          if (json.data) {
             localStorage.setItem(cookies, JSON.stringify(json.data))
             return json.data
+          } else if (json.fixedData) {
+            return json.fixedData
           }
           // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
           // lokalen Cache leeren statt auf alten Stand zurückzufallen.
@@ -151,6 +165,13 @@
       if (name) result.push({ role: 'Frei', name })
     })
 
+    document.querySelectorAll('#teamUsed .card').forEach(el => {
+      const name = el.textContent.trim()
+      if (name) result.push({ role: 'Used', name })
+    })
+
+    console.log(result)
+
     return result
   }
 
@@ -163,6 +184,8 @@
     saveTimer = setTimeout(async () => {
       const data = serializeAssignments()
       localStorage.setItem(cookies, JSON.stringify(data))
+
+      console.log(localStorage,'\n',data)
 
       try {
         await fetch('/api/save-schedule', {
@@ -179,11 +202,57 @@
     }, 400)
   }
 
+  function temporaryScheduleSave() {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(async () => {
+      const data = serializeAssignments()
+      localStorage.setItem(cookies, JSON.stringify(data))
+
+      try {
+        await fetch('/api/save-temporary-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn(
+          'Änderung konnte nicht auf dem Server gespeichert werden:',
+          e
+        )
+      }
+    }, 400)
+  }
+
+  function activityScheduleSave() {
+    console.log('in der Methode')
+    clearTimeout(saveTimer)
+          const data = serializeAssignments()
+    saveTimer = setTimeout(async () => {
+
+      console.log(data)
+      try {
+        await fetch('/api/save-activity-schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data })
+        })
+      } catch (e) {
+        console.warn(
+          'Aktivitätsplan konnte nicht auf dem Server gespeichert werden:',
+          e
+        )
+      }
+    }, 400)
+  }
+
   function renderAssignments(assignment) {
     let i = 0
-    const poolParent = document.getElementById('teamFree')
-    const freeTeam = poolParent.querySelector('#innerTeam')
+    const freeTeamParent = document.getElementById('teamFree')
+    const freeTeam = freeTeamParent.querySelector('#innerTeam')
+    const usedTeamParent = document.getElementById('teamUsed')
+    const usedTeam = usedTeamParent.querySelector('#innerTeam')
     if (!freeTeam) return
+    if (!usedTeam) return
 
     assignment.forEach(({ role, name }) => {
       if (!name) return
@@ -196,6 +265,17 @@
         d.setAttribute('draggable', !reservedNames.includes(name))
         d.innerHTML = name
         freeTeam.appendChild(d)
+        return
+      }
+
+      if (role === 'Used') {
+        i++
+
+        const d = document.createElement('div')
+        d.className = 'card'
+        d.setAttribute('draggable', !reservedNames.includes(name))
+        d.innerHTML = name
+        usedTeam.appendChild(d)
         return
       }
 
@@ -222,14 +302,16 @@
     let innerFreePool = null
     let usedPool = null
     let innerUsedPool = null
+    let triggerPool = null
 
-    if (pageName === 'index.html' || pageName === 'dashboard.html') {
-      freePool = document.getElementById('teamFree')
-      innerFreePool = freePool.querySelector('#innerTeam')
+    freePool = document.getElementById('teamFree')
+    usedPool = document.getElementById('teamUsed')
+    triggerPool = document.getElementById('triggeredSpace')
 
-      usedPool = document.getElementById('teamUsed')
-      innerUsedPool = usedPool.querySelector('#innerTeam')
-    }
+
+    if (freePool) innerFreePool = freePool.querySelector('#innerTeam')
+    if (usedPool) innerUsedPool = usedPool.querySelector('#innerTeam')
+    if (triggerPool) triggerPool = triggerPool.querySelector('#innerTeam')
 
     function clearHighlights() {
       document
@@ -246,27 +328,38 @@
       const departmentTarget = dropElement.closest('.abteilungspersonal')
       const freePoolTarget = dropElement.closest('#teamFree')
       const usedPoolTarget = dropElement.closest('#teamUsed')
+      const triggerPoolTarget = dropElement.closest('#triggeredSpace')
       const trashTarget = dropElement.closest('#trash')
       const draggedRole = draggedEl.dataset.role
       const addPerson = dropElement.closest('#addPerson')
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
-        if (!reservedNames.includes(personTarget.textContent.trim())) {
+        console.log('// CARD -> PERSON')
+        if (!reservedNames.includes(personTarget.dataset.role)) {
           return
         }
 
-        personTarget.textContent = draggedEl.textContent
-        updatePersonColor(personTarget)
+        console.log(personTarget.textContent, draggedEl.textContent)
 
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = personTarget.textContent
+
+          innerFreePool.appendChild(newCard)
+
+          personTarget.textContent = draggedEl.textContent
+          updatePersonColor(personTarget)
+        }
+        console.log(draggedEl)
         draggedEl.remove()
       }
 
       // PERSON -> PERSON (tauschen)
-      else if (
-        draggedEl.classList.contains('person') &&
-        personTarget &&
-        draggedEl !== personTarget
+      else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget
       ) {
         const draggedText = draggedEl.textContent.trim()
         const targetText = personTarget.textContent.trim()
@@ -325,11 +418,32 @@
         }
       }
 
+      // PERSOM -> TRIGGERT POOL
+      else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
+        const name = draggedEl.textContent.trim()
+
+
+        if (!reservedNames.includes(name)) {
+          const newCard = document.createElement('div')
+
+          newCard.className = 'card'
+          newCard.draggable = true
+          newCard.textContent = name
+
+          triggerPool.appendChild(newCard)
+
+          draggedEl.textContent = draggedRole
+          updatePersonColor(draggedEl)
+        }
+      }
+
       // CARD -> FREEPOOL
       else if (draggedEl.classList.contains('card') && freePoolTarget) {
         innerFreePool.appendChild(draggedEl)
       } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
         innerUsedPool.appendChild(draggedEl)
+      } else if (draggedEl.classList.contains('card') && triggerPoolTarget) {
+        triggerPool.appendChild(draggedEl)
       }
       //FREEPOOL <-> USED POOL
       else if (draggedEl.classList.contains('person') && usedPoolTarget) {
@@ -341,7 +455,7 @@
           newCard.className = 'card'
           newCard.draggable = true
           newCard.textContent = name
-
+          newCard.setAttribute('data-role', 'used')
           innerUsedPool.appendChild(newCard)
 
           draggedEl.textContent = draggedRole
@@ -359,8 +473,15 @@
 
         exportNotWorkingPeople(draggedEl)
       }
-
-      scheduleSave()
+        console.log(pageName)
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
+        scheduleSave()
+      } else if (pageName === 'temporaryPlan.html') {
+        temporaryScheduleSave()
+      } else if (pageName === 'activityPlan.html') {
+        console.log(pageName)
+        activityScheduleSave()
+      }
     }
 
     // ---------- Maus-basiertes Drag & Drop (Desktop, native HTML5 DnD) ----------
@@ -374,6 +495,24 @@
 
         dragged = element
         dragged.classList.add('dragging')
+
+        // Für Cross-Frame-Drops (z. B. Dashboard/Index -> Aktivitätsplan-
+        // iFrame) werden die nötigen Infos zusätzlich über dataTransfer
+        // mitgegeben, da dort ein eigenes, separates Dokument läuft.
+        try {
+          e.dataTransfer.effectAllowed = 'copy'
+          e.dataTransfer.setData(
+            'text/papyrus-json',
+            JSON.stringify({
+              kind: dragged.classList.contains('card') ? 'card' : 'person',
+              text: dragged.textContent.trim(),
+              role: dragged.dataset.role || null
+            })
+          )
+          e.dataTransfer.setData('text/plain', dragged.textContent.trim())
+        } catch (err) {
+          // manche Kontexte erlauben setData nicht – Touch-DnD greift dann ohnehin
+        }
       },
       true
     )
@@ -402,12 +541,68 @@
     })
 
     document.addEventListener('drop', e => {
-      if (!dragged) return
-
       e.preventDefault()
+
+      if (dragged) {
+        clearHighlights()
+        performDrop(dragged, e.target)
+        dragged = null
+        return
+      }
+
+      // Kein im selben Dokument gestartetes Drag -> kommt evtl. aus dem
+      // Elternfenster (z. B. Dashboard/Index -> Aktivitätsplan-iFrame)
+      handleCrossFrameDrop(e)
+    })
+
+    // Verarbeitet einen Drop, dessen Drag in einem ANDEREN Dokument
+    // gestartet wurde (z. B. Dashboard/Index -> Aktivitätsplan-iFrame).
+    // Die Person wird nur in den Zielslot KOPIERT, die Quelle bleibt
+    // unverändert bestehen.
+    function handleCrossFrameDrop(e) {
+      let payload
+      try {
+        payload = JSON.parse(e.dataTransfer.getData('text/papyrus-json'))
+      } catch (err) {
+        return
+      }
+      if (!payload) return
+
       clearHighlights()
-      performDrop(dragged, e.target)
-      dragged = null
+
+      const virtualEl = document.createElement('div')
+      virtualEl.className = payload.kind
+      virtualEl.textContent = payload.text
+      if (payload.role) virtualEl.dataset.role = payload.role
+
+      performDrop(virtualEl, e.target)
+    }
+
+    // Reagiert im Elternfenster auf die Aufräum-Nachricht aus dem iFrame
+    window.addEventListener('message', e => {
+      if (e.origin !== window.location.origin) return
+      if (!e.data || e.data.type !== 'papyrus-cross-frame-drop') return
+
+      const el = document.querySelector(`[data-drag-id="${e.data.dragId}"]`)
+      if (!el) return
+
+      if (el.classList.contains('card')) {
+        el.remove()
+      } else if (el.classList.contains('person')) {
+        const role = el.dataset.role
+        el.textContent = role === 'ELW' ? 'LD 1' : role
+        updatePersonColor(el)
+      }
+
+      el.removeAttribute('data-drag-id')
+
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
+        scheduleSave()
+      } else if (pageName === 'temporaryPlan.html') {
+        temporaryScheduleSave()
+      } else if (pageName === 'activityPlan.html') {
+        activityPlanScheduleSave()
+      }
     })
 
     // ---------- Touch-basiertes Drag & Drop (Handy/Tablet) ----------
@@ -556,7 +751,6 @@
           const oldPerson = p.textContent.trim()
           const c = document.createElement('div')
 
-          console.log(p)
           p.style.backgroundColor = '#D1D5DB'
           c.className = 'card'
           p.textContent = p.dataset.default || 'Frei'
@@ -603,12 +797,12 @@
   }
 
   async function importNotWorkingPeople() {
-    const res = await fetch('/api/import-not-working-persons')
+    const res = await fetch('/api/import-not-working-persons', {
+      credentials: 'include' // oder 'same-origin'
+    })
     const result = await res.json()
 
     if (result.length > 0) {
-      initDragAndDrop()
-      const freeTeamSpace = document.querySelector('.freeTeamSpace')
       const poolParent = document.getElementById('teamFree')
       const freeTeam = poolParent.querySelector('#innerTeam')
 
@@ -623,9 +817,6 @@
         freeTeam.appendChild(div)
         return
       })
-
-      freeTeamSpace.style.display = 'flex'
-      poolParent.style.display = 'block'
     }
   }
 

@@ -14,12 +14,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
   <script src="../scripts/scripts.js"></script>
   <script src="../scripts/settings.js" defer></script>
+  <script src="../scripts/alternaivPlan.js"></script>
 </head>
 
 <body>
   <div id="papyrus">
     <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
-      <img id="PapyrusLogo" src="../img/Logo_2.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
+      <img id="PapyrusLogo" src="../img/Logo.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
       <h1 style="text-decoration: none;color: #FFFFFF;margin: 0;padding: 0;">Papyrus</h1>
     </a>
   </div>
@@ -109,20 +110,20 @@
         <h3 class="close">X</h3>
         <div class="person" data-role="Schichtführer" draggable="false">Frei</div>
       </div>
-    </section>
 
-    <h2>Fahrzeuge</h2>
-
-    <section class="middle-duty">
-      <div class="side">
-        <div class="vehicle">
+      <div class="vehicle" id="ils">
           <h3>ILS</h3>
           <h3 class="close">X</h3>
           <div class="person" data-role="1. Dispo" draggable="false">1. Dispo</div>
           <div class="person" data-role="2. Dispo" draggable="false">2. Dispo</div>
           <div class="person" data-role="3. Dispo" draggable="false">3. Dispo</div>
         </div>
+    </section>
 
+    <h2>Fahrzeuge</h2>
+
+    <section class="middle-duty">
+      <div class="side">
         <div class="vehicle">
           <h3>ELW</h3>
           <h3 class="close">X</h3>
@@ -189,51 +190,11 @@
       </div>
     </section>
 
-    <div class="alternativPlan" onclick="showAlternativPlan()">
+    <div class="temporaryPlan" onclick="showAlternativePlan()">
     </div>
 
-    <h2 id="workServicesTitle">Arbeitsdienste</h2>
-
-    <section class="middle-duty" id="workServices">
-
-      <div class="vehicle" id="cafeteria">
-        <h3>Kantine</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="Kantine1" draggable="false">Kantine</div>
-        <div class="person" data-role="Kantine2" draggable="false">Kantine</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>Wäsche</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="Wäsche" draggable="false">Wäsche</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>Getränke</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="Getränke" draggable="false">Getränke</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>ZAW</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="ZAW" draggable="false">ZAW</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>ZSW</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="ZSW" draggable="false">ZSW</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>Abrufschicht</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="Abrufschicht" draggable="false">Abrufschicht</div>
-      </div>
-    </section>
-
+    <div class="activityPlan" onclick="showActivityPlan()">
+    </div>
 
     <div class="freeTeamSpace">
       <div class="team" id="teamFree">
@@ -249,6 +210,18 @@
       </div>
     </div>
   </main>
+
+  <div id="temporaryDialog" title="Basic dialog">
+    <div class="temporaryPlanClose" onclick="closeTemporaryPlan()">
+    </div>
+    <iframe id="iframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+  </div>
+
+  <div id="activityDialog" title="Basic dialog">
+    <div class="activityPlanClose" onclick="closeActivityPlan()">
+    </div>
+    <iframe id="iframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", async () => {

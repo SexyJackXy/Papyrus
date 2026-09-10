@@ -1,6 +1,6 @@
 {
   "showWachabteilung": true,
   "autoLoadTagdienst": false,
-  "showArbeitsdienste": false,
-  "showDuty": false
+  "showArbeitsdienste": true,
+  "showDuty": true
 }

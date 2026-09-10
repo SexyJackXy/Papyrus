@@ -1,0 +1,45 @@
+h3.text {
+    color: #0a0a0a;
+    font-weight: 500;
+    text-shadow: none;
+    font-size: 2ch;
+    margin: 0;
+}
+
+.work-duty {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0.6rem;
+    align-items: center;
+}
+
+.work-duty .vehicle {
+    font-size: 15px;
+    padding-top: 34.5px;
+    height: 44px;
+    width: 350px;
+}
+
+#cafeteria {
+    flex-direction: row;
+    width: fit-content;
+    height: 44px;
+    font-size: 15px;
+    padding-top: 34.5px;
+    height: 44px;
+    width: 350px;
+}
+
+[data-role='Kantine1'],
+[data-role='Kantine2'],
+#Kantine2 {
+    height: 26px;
+    width: 166px;
+}
+
+#triggeredSpace {
+    width: clamp(300px, 70vw, 2160px);
+    gap: 0.6rem;
+    margin: 0 auto;
+}

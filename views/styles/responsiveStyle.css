@@ -106,13 +106,13 @@
     display: none;
   }
 
-  header{
+  header {
     justify-content: flex-end;
   }
 
-#papyrus{
-  right: 100%;
-}
+  #papyrus {
+    right: 100%;
+  }
 
   .buttonspace {
     max-width: 300px;
@@ -121,5 +121,15 @@
 
   .btnSpace {
     width: 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .heading {
+    font-size: 3ch;
+  }
+
+  .vehicle {
+    min-width: 60px;
   }
 }

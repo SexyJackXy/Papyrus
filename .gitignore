@@ -27,6 +27,8 @@ compile_commands.json
 structuredSeating/
 Einteilung/
 exportedPersons/
+dailySchedule/
+temporarySchedule/
 
 # npm package
 /npm/dist

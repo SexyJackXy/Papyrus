@@ -106,6 +106,12 @@
   min-height: 0;
 }
 
+.freeTeamSpace {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.6rem;
+}
+
 #innerTeam {
   display: flex;
   flex-wrap: wrap;
@@ -139,28 +145,16 @@
   display: none;
 }
 
-.freeTeamSpace {
-  display: none;
-  justify-content: space-around;
-  gap: 0.6rem;
-}
-
-#cafeteria {
+#ils{
   flex-direction: row;
-  width: fit-content;
+  width: 29vw;
+  align-items: center;
 }
 
-[data-role='Kantine1'],
-[data-role='Kantine2'],
-#Kantine2 {
-  height: 32px;
-  width: 166px;
-}
-
-#loginbtn.btn:hover,
-#registerbtn.btn:hover {
-  border: 1px solid #a81309;
-  background-color: #a81309;
+#ils .person{
+  width: 170px;
+  height: 20px;
+  margin-bottom: 0.6rem;
 }
 
 #trashCan {
@@ -171,50 +165,105 @@
   padding: 0.6rem;
 }
 
-.alternativPlan {
-  position: absolute;
+/* Styling for the fly outs */
+/* Farben & Größen der Tabs */
+.temporaryPlan {
   background-color: #d1d5db;
+  top: 50%;
+}
+
+.activityPlan {
+  background-color: #d1d5db;
+  top: 45%;
+}
+
+/* Breiten der Dialoge */
+#temporaryDialog iframe {
+  width: 90vw;
+}
+
+#activityDialog iframe {
+  width: 20vw;
+}
+
+/* Position der Close-Buttons */
+#temporaryDialog .temporaryPlanClose {
+  right: 90vw !important;
+}
+
+#activityDialog .activityPlanClose {
+  right: 20vw !important;
+}
+
+/* Gemeinsamer Tab-Stil */
+.temporaryPlan,
+.activityPlan {
+  position: absolute;
   border-top: solid 3px #ffffff;
   border-bottom: solid 3px #ffffff;
   border-left: solid 3px #ffffff;
   height: 100px;
   width: 15px;
   right: 0;
-  top: 50%;
   border-radius: 10px 0px 0px 10px;
-  transition: width 0.3s ease;
-  /* z-index: -2; */
+  transition: width 0.3s ease-out;
+  box-shadow: -10px 22px 25px -8px #000000;
 }
 
-.alternativPlan:hover {
-  width: 30px;
-}
-.altPic{
-    height: 100px;
-    width: 15px;
-}
-
-.altPic img {
-  position: absolute;
-  max-height: 50px;
-  max-width: 20px;
-  right: -12px;
-  top: 53.5%;
-  z-index: 2;
-  transition: right 0.3s ease;
-}
-
-.alternativPlan:hover+.altPic img{
-  right: 4px;
+.temporaryPlan:hover,
+.activityPlan:hover {
   display: block;
+  width: 30px;
+  box-shadow: none;
 }
 
-@media (max-width: 1100px) {
-  .heading {
-    font-size: 3ch;
-  }
+/* Iframes der Dialoge */
+#temporaryDialog iframe,
+#activityDialog iframe {
+  display: none;
+  position: absolute;
+  top: 59px;
+  right: 0;
+  height: 94vh;
+  z-index: 2;
+  background-color: #f3f4f6;
+  border-top: none;
+  border-right: none;
+  border-left: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  border-radius: 10px 0px 0px 10px;
+  box-shadow: -10px 1px 17px 10px rgba(0, 0, 0, 0.7);
+  transform: translateX(100%);
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
 
-  .vehicle {
-    min-width: 60px;
-  }
+#temporaryDialog iframe.is-open,
+#activityDialog iframe.is-open {
+  transform: translateX(0);
+}
+
+/* Close-Buttons */
+#temporaryDialog .temporaryPlanClose,
+#activityDialog .activityPlanClose {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  height: 100px;
+  width: 15px;
+  z-index: 3;
+  background-color: #f3f4f6;
+  border-top: solid 3px #ffffff;
+  border-bottom: solid 3px #ffffff;
+  border-left: solid 3px #ffffff;
+  border-radius: 10px 0px 0px 10px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 1s ease-out, opacity 1s ease-out;
+}
+
+#temporaryDialog .temporaryPlanClose.is-open,
+#activityDialog .activityPlanClose.is-open {
+  transform: translateX(0);
+  opacity: 1;
 }

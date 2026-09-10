@@ -75,20 +75,6 @@ ipcMain.handle("extract-and-save", async (event, base64) => {
   return { success: true, filePath };
 });
 
-ipcMain.handle("export-not-working-person", async (event, data) => {
-  // const outputDir = path.join(__dirname, "structuredSeating");
-  // if (!fs.existsSync(outputDir)) {
-  //   fs.mkdirSync(outputDir);
-  // }
-
-  // const filePath = path.join(outputDir, `${data.name}_${data.department}.json`);
-  // fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
-
-  // return { success: true, filePath };
-
-  console.log("passt")
-});
-
 ipcMain.handle("save-settings", async (event, settings) => {
   fs.writeFileSync(SETTINGS_PATH, JSON.stringify(settings, null, 2), "utf-8");
   return { success: true };

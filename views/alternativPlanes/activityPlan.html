@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/diverStyle.css">
+    <title>Papyrus</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+    <script src="../../scripts/alternaivPlan.js"></script>
+    <script src="../../scripts/scripts.js"></script>
+</head>
+
+<body style="height: 100vh;">
+    <h3 class="text">Arbeitsdienste</h3>
+
+    <section class="work-duty">
+        <div class="vehicle">
+            <h3>BvD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="BvD" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>ZAW</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="ZAW" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>ZSW</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="ZSW" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>KFZ</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="KFZ" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>Kleiderkammer</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="Kleiderkammer" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle" id="cafeteria">
+            <h3>Kantine</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="Kantine1" draggable="false">Frei</div>
+            <div class="person" data-role="Kantine2" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>Wäsche</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="Wäsche" draggable="false">Frei</div>
+        </div>
+
+        <div class="vehicle">
+            <h3>Getränke</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="Getränke" draggable="false">Frei</div>
+        </div>
+    </section>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        await activityPlanLoad()
+        window.Dienste.initDragAndDrop()
+    })
+</script>
+
+</html>
