@@ -10,24 +10,6 @@ var { getUserByUsername, getNamesForUser } = require("./db");
 
 var app = express();
 var SETTINGS_PATH = path.join(__dirname, "globalVariables", "settings.json");
-
-// Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
-var PUBLIC_PATHS = new Set([
-  "/",
-  "/views/dashboard.html",
-  "/views/login.html",
-]);
-const express = require('express')
-const path = require('path')
-const fs = require('fs')
-const bcrypt = require('bcrypt')
-const session = require('express-session')
-const SQLiteStore = require('connect-sqlite3')(session)
-const { extractShiftFromPdf } = require('./scripts/pdfExtractor')
-const { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
-
-const app = express()
-const SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
 const MULTI_ROLES = ['Frei', 'Used']
 const IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
 
@@ -186,9 +168,6 @@ app.get('/', (req, res) => {
   return res.redirect('/views/dashboard.html')
 })
 
-app.post("/api/login", async (req, res) => {
-
-  var { username, password } = req.body || {};
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body || {}
 
@@ -199,7 +178,6 @@ app.post('/api/login', async (req, res) => {
   }
 
   var user = getUserByUsername(username);
-  const user = getUserByUsername(username)
   if (!user) {
     return res
       .status(401)
@@ -207,7 +185,6 @@ app.post('/api/login', async (req, res) => {
   }
 
   var ok = await bcrypt.compare(password, user.password_hash);
-  const ok = await bcrypt.compare(password, user.password_hash)
   if (!ok) {
     return res
       .status(401)
