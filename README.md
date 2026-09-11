@@ -56,7 +56,7 @@ Papyrus/
 ├── server.js               # Express app entry point (web server, routes, auth)
 ├── db.js                   # SQLite access layer (users, assigned persons)
 ├── scripts/
-│   ├── scripts.js          # Main client-side logic (roster UI, drag & drop)
+│   ├── core.js          # Main client-side logic (roster UI, drag & drop)
 │   ├── alternaivPlan.js    # Alternative/temporary plan logic
 │   ├── settings.js         # Client-side settings page logic
 │   ├── parseShift.js       # Shift parsing helpers

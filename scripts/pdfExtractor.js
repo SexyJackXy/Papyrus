@@ -2,10 +2,10 @@
 // Ausgelagerte Logik: PDF lesen → Array extrahieren → JSON parsen
 // Wird vom Renderer-Script aufgerufen
 
-const pdfParse = require("pdf-parse-fork");
-const { parseShiftArray } = require("./parseShift");
+var pdfParse = require("pdf-parse-fork");
+var { parseShiftArray } = require("./parseShift");
 
-const reservedNames = [
+var reservedNames = [
   "ALvD", "DD", "LD 1", "LD2", "HLD", "EAL", "BvD", "LFüGr",
   "Schichtführer", "1. Dispo", "2. Dispo", "3. Dispo", "ELW", "FüAss",
   "Schw.Retter", "LF 1 Fü", "LF 1 Ma", "LF 1 ATF", "LF 1 ATM",
@@ -21,23 +21,23 @@ const reservedNames = [
  * @returns {Promise<object[]>} - Befülltes Template-Array
  */
 async function extractShiftFromPdf(fileBuffer) {
-  const result = await pdfParse(fileBuffer);
-  const extractedText = result.text;
+  var result = await pdfParse(fileBuffer);
+  var extractedText = result.text;
 
-  const regex = new RegExp(
+  var regex = new RegExp(
     `(${reservedNames.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
     "g"
   );
 
-  const formattedText = extractedText.replace(regex, "\n$1\n");
+  var formattedText = extractedText.replace(regex, "\n$1\n");
 
-  const lines = [];
-  for (const rawLine of formattedText.split("\n")) {
+  var lines = [];
+  for (var rawLine of formattedText.split("\n")) {
     if (rawLine === "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") {
       continue;
     }
 
-    const trimmed = rawLine.trim();
+    var trimmed = rawLine.trim();
 
     // Reserved Names bleiben unangetastet
     if (reservedNames.includes(trimmed)) {
@@ -46,11 +46,11 @@ async function extractShiftFromPdf(fileBuffer) {
     }
 
     // Schritt 2: nur bei "normalen" Zeilen an Klein→Groß-Übergängen splitten
-    const subLines = rawLine
+    var subLines = rawLine
       .replace(/([a-zäöüß])(?=[A-ZÄÖÜ])/g, "$1\n")
       .split("\n");
 
-    for (const sub of subLines) {
+    for (var sub of subLines) {
       if (sub.length > 0) {
         lines.push(sub);
       }

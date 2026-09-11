@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
-  <script src="../scripts/scripts.js"></script>
+  <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
 </head>
 
@@ -102,37 +102,37 @@
   </main>
 
   <script>
-    const inputJson = document.getElementById('inpoutJson');
-    const inputPdf = document.getElementById("inputPdf");
-    const btnReset = document.getElementById('btnReset');
-    const btnUpload = document.getElementById("btnUpload");
-    const resetResult = document.getElementById('resetResult');
-    const importResult = document.getElementById('importResult');
-    const pdfResult = document.getElementById('pdfResult')
+    var inputJson = document.getElementById('inpoutJson');
+    var inputPdf = document.getElementById("inputPdf");
+    var btnReset = document.getElementById('btnReset');
+    var btnUpload = document.getElementById("btnUpload");
+    var resetResult = document.getElementById('resetResult');
+    var importResult = document.getElementById('importResult');
+    var pdfResult = document.getElementById('pdfResult')
 
     inputJson.addEventListener('change', (e) => {
-      const f = e.target.files[0];
+      var f = e.target.files[0];
       if (!f) return;
 
-      const res = window.Dienste.readFromFile(f);
+      var res = window.Dienste.readFromFile(f);
       inputJson.value = "";
       jsonResult.textContent = res;
     });
 
     inputPdf.addEventListener('change', async (e) => {
-      const file = inputPdf.files[0];
-      const f = e.target.files[0];
+      var file = inputPdf.files[0];
+      var f = e.target.files[0];
       if (!file) return;
 
       // Datei als Base64 lesen — kein Buffer/Node nötig
-      const base64 = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
+      var base64 = await new Promise((resolve, reject) => {
+        var reader = new FileReader();
         reader.onload = () => resolve(reader.result.split(",")[1]);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
 
-      const result = await fetch('/api/extract-and-save', {
+      var result = await fetch('/api/extract-and-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64 })
@@ -144,8 +144,8 @@
         pdfResult.textContent = '';
       }, 2000);
 
-      const p = btnUpload.querySelector("p");
-      const originalText = p.textContent;
+      var p = btnUpload.querySelector("p");
+      var originalText = p.textContent;
 
       p.textContent = "Gespeichert!";
       setTimeout(() => {
@@ -154,12 +154,12 @@
     });
 
     btnReset.addEventListener('click', async () => {
-      const res = window.Dienste.clearCookies();
-      const response = await fetch('/api/reset-schedule', { method: 'POST' });
-      const responseTemp = await fetch('/api/reset-temporary-schedule', { method: 'POST' })
+      var res = window.Dienste.clearCookies();
+      var response = await fetch('/api/reset-schedule', { method: 'POST' });
+      var responseTemp = await fetch('/api/reset-temporary-schedule', { method: 'POST' })
 
       if (!response.ok && !responseTemp.ok) {
-        const body = await response.json().catch(() => ({}));
+        var body = await response.json().catch(() => ({}));
         throw new Error(body.error || `HTTP ${response.status}`);
       }
 

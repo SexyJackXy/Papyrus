@@ -1,6 +1,6 @@
 ; (function () {
-  const cookies = 'dienste_csv'
-  const reservedNames = [
+  var cookies = 'dienste_csv'
+  var reservedNames = [
     'ALvD',
     'DD',
     'LD 2',
@@ -58,7 +58,7 @@
 
   function readFromFile(file) {
     file.arrayBuffer().then(b => {
-      const candidates = [
+      var candidates = [
         new TextDecoder('utf-8').decode(b),
         new TextDecoder('windows-1252').decode(b),
         new TextDecoder('utf-16le').decode(b)
@@ -67,7 +67,7 @@
       let t = candidates[0],
         best = -1e9
 
-      for (const c of candidates) {
+      for (var c of candidates) {
         let sc = 0
         if (c.includes('{')) sc += 5
         if (c.includes(',')) sc += 2
@@ -78,7 +78,7 @@
 
       if (t.charCodeAt(0) === 0xfeff) t = t.slice(1)
 
-      const parsed = parseContent(t)
+      var parsed = parseContent(t)
 
       localStorage.setItem(cookies, JSON.stringify(parsed))
     })
@@ -89,7 +89,7 @@
   function parseContent(t) {
     if (!t) return []
     try {
-      const data = JSON.parse(t)
+      var data = JSON.parse(t)
       if (!Array.isArray(data)) return []
 
       return data
@@ -102,7 +102,7 @@
   }
 
   function getContent() {
-    const raw = localStorage.getItem(cookies)
+    var raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
   }
 
@@ -116,9 +116,11 @@
         res = await fetch('/api/latest-schedule')
       } else if (pageName === 'temporaryPlan.html') {
         res = await fetch('/api/latest-temporary-schedule')
+      } else if (pageName === 'activityPlan.html') {
+        res = await fetch('/api/latest-schedule')
       }
-      if (res.ok) {
-        const json = await res.json()
+      if (res && res.ok) {
+        var json = await res.json()
         if (json.success) {
           if (json.data) {
             localStorage.setItem(cookies, JSON.stringify(json.data))
@@ -151,27 +153,27 @@
   }
 
   function serializeAssignments() {
-    const result = []
+    var result = []
 
     document.querySelectorAll('.person[data-role]').forEach(el => {
-      const role = el.dataset.role
-      const text = el.textContent.trim()
-      const name = reservedNames.includes(text) ? '' : text
+      var role = el.dataset.role
+      var text = el.textContent.trim()
+      var name = reservedNames.includes(text) ? '' : text
       result.push({ role, name })
     })
 
     document.querySelectorAll('#teamFree .card').forEach(el => {
-      const name = el.textContent.trim()
+      var name = el.textContent.trim()
       if (name) result.push({ role: 'Frei', name })
     })
 
     document.querySelectorAll('#teamUsed .card').forEach(el => {
-      const name = el.textContent.trim()
+      var name = el.textContent.trim()
       if (name) result.push({ role: 'Used', name })
     })
 
     document.querySelectorAll('#triggeredSpace .card').forEach(el => {
-      const name = el.textContent.trim()
+      var name = el.textContent.trim()
       if (name) result.push({ role: 'Triggerd', name })
     })
 
@@ -185,7 +187,7 @@
   function scheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
-      const data = serializeAssignments()
+      var data = serializeAssignments()
       localStorage.setItem(cookies, JSON.stringify(data))
 
       try {
@@ -206,7 +208,7 @@
   function temporaryScheduleSave() {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(async () => {
-      const data = serializeAssignments()
+      var data = serializeAssignments()
       localStorage.setItem(cookies, JSON.stringify(data))
 
       try {
@@ -226,7 +228,7 @@
 
   function activityScheduleSave() {
     clearTimeout(saveTimer)
-    const data = serializeAssignments()
+    var data = serializeAssignments()
     saveTimer = setTimeout(async () => {
       try {
         await fetch('/api/save-activity-schedule', {
@@ -245,10 +247,10 @@
 
   function renderAssignments(assignment) {
     let i = 0
-    const freeTeamParent = document.getElementById('teamFree')
-    const freeTeam = freeTeamParent.querySelector('#innerTeam')
-    const usedTeamParent = document.getElementById('teamUsed')
-    const usedTeam = usedTeamParent.querySelector('#innerTeam')
+    var freeTeamParent = document.getElementById('teamFree')
+    var freeTeam = freeTeamParent.querySelector('#innerTeam')
+    var usedTeamParent = document.getElementById('teamUsed')
+    var usedTeam = usedTeamParent.querySelector('#innerTeam')
 
 
     if (!freeTeam) return
@@ -261,7 +263,7 @@
       if (role === 'Frei') {
         i++
 
-        const d = document.createElement('div')
+        var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
         d.innerHTML = name
@@ -272,7 +274,7 @@
       if (role === 'Used') {
         i++
 
-        const d = document.createElement('div')
+        var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
         d.innerHTML = name
@@ -281,14 +283,14 @@
       }
 
       if (window.location.pathname.split('/').pop() === 'temporaryPlan.html') {
-        const triggertTeamParent = document.getElementById('triggeredSpace')
-        const triggerdTeam = triggertTeamParent.querySelector('#innerTeam')
+        var triggertTeamParent = document.getElementById('triggeredSpace')
+        var triggerdTeam = triggertTeamParent.querySelector('#innerTeam')
 
         if (!triggerdTeam) return
         if (role === 'Triggerd') {
           i++
 
-          const d = document.createElement('div')
+          var d = document.createElement('div')
           d.className = 'card'
           d.setAttribute('draggable', !reservedNames.includes(name))
           d.innerHTML = name
@@ -299,7 +301,7 @@
         }
       }
 
-      const el = document.querySelector(`.person[data-role="${role}"]`)
+      var el = document.querySelector(`.person[data-role="${role}"]`)
       if (!el) return
 
       el.textContent = name
@@ -307,7 +309,7 @@
     })
 
     if (i > 0) {
-      const t = document.querySelector('.freeTeamSpace')
+      var t = document.querySelector('.freeTeamSpace')
       t.style.display = 'flex'
     }
 
@@ -344,19 +346,19 @@
     function performDrop(draggedEl, dropElement) {
       if (!draggedEl || !dropElement) return
 
-      const personTarget = dropElement.closest('.person')
-      const departmentTarget = dropElement.closest('.abteilungspersonal')
-      const freePoolTarget = dropElement.closest('#teamFree')
-      const usedPoolTarget = dropElement.closest('#teamUsed')
-      const triggerPoolTarget = dropElement.closest('#triggeredSpace')
-      const trashTarget = dropElement.closest('#trash')
-      const draggedRole = draggedEl.dataset.role
-      const addPerson = dropElement.closest('#addPerson')
+      var personTarget = dropElement.closest('.person')
+      var departmentTarget = dropElement.closest('.abteilungspersonal')
+      var freePoolTarget = dropElement.closest('#teamFree')
+      var usedPoolTarget = dropElement.closest('#teamUsed')
+      var triggerPoolTarget = dropElement.closest('#triggeredSpace')
+      var trashTarget = dropElement.closest('#trash')
+      var draggedRole = draggedEl.dataset.role
+      var addPerson = dropElement.closest('#addPerson')
 
       // CARD -> PERSON
       if (draggedEl.classList.contains('card') && personTarget) {
-        const targetText = personTarget.textContent.trim()
-        const newCard = document.createElement('div')
+        var targetText = personTarget.textContent.trim()
+        var newCard = document.createElement('div')
 
         newCard.className = 'card'
         newCard.draggable = true
@@ -375,9 +377,9 @@
       // PERSON -> PERSON (tauschen)
       else if (draggedEl.classList.contains('person') && personTarget && draggedEl !== personTarget
       ) {
-        const draggedText = draggedEl.textContent.trim()
-        const targetText = personTarget.textContent.trim()
-        const targetIsEmpty = reservedNames.includes(targetText)
+        var draggedText = draggedEl.textContent.trim()
+        var targetText = personTarget.textContent.trim()
+        var targetIsEmpty = reservedNames.includes(targetText)
 
         personTarget.textContent = draggedText
 
@@ -398,10 +400,10 @@
 
       // PERSON -> FREE POOL
       else if (draggedEl.classList.contains('person') && freePoolTarget) {
-        const name = draggedEl.textContent.trim()
+        var name = draggedEl.textContent.trim()
 
         if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
+          var newCard = document.createElement('div')
 
           newCard.className = 'card'
           newCard.draggable = true
@@ -416,10 +418,10 @@
 
       // PERSON -> USED POOL
       else if (draggedEl.classList.contains('person') && usedPoolTarget) {
-        const name = draggedEl.textContent.trim()
+        var name = draggedEl.textContent.trim()
 
         if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
+          var newCard = document.createElement('div')
 
           newCard.className = 'card'
           newCard.draggable = true
@@ -434,11 +436,11 @@
 
       // PERSON -> TRIGGERT POOL
       else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
-        const name = draggedEl.textContent.trim()
+        var name = draggedEl.textContent.trim()
 
 
         if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
+          var newCard = document.createElement('div')
 
           newCard.className = 'card'
           newCard.draggable = true
@@ -471,10 +473,10 @@
 
       //FREEPOOL <-> USED POOL
       else if (draggedEl.classList.contains('person') && usedPoolTarget) {
-        const name = draggedEl.textContent.trim()
+        var name = draggedEl.textContent.trim()
 
         if (!reservedNames.includes(name)) {
-          const newCard = document.createElement('div')
+          var newCard = document.createElement('div')
 
           newCard.className = 'card'
           newCard.draggable = true
@@ -508,7 +510,7 @@
     document.addEventListener(
       'dragstart',
       e => {
-        const element = e.target.closest('.card, .person')
+        var element = e.target.closest('.card, .person')
 
         if (!element) return
 
@@ -537,7 +539,7 @@
     )
 
     document.addEventListener('dragend', e => {
-      const element = e.target.closest('.card, .person')
+      var element = e.target.closest('.card, .person')
 
       if (!element) return
 
@@ -547,7 +549,7 @@
     })
 
     document.addEventListener('dragover', e => {
-      const target = e.target.closest(
+      var target = e.target.closest(
         '.person, .abteilungspersonal, #innerTeam, #trashCan, #addPerson'
       )
 
@@ -589,7 +591,7 @@
 
       clearHighlights()
 
-      const virtualEl = document.createElement('div')
+      var virtualEl = document.createElement('div')
       virtualEl.className = payload.kind
       virtualEl.textContent = payload.text
       if (payload.role) virtualEl.dataset.role = payload.role
@@ -602,13 +604,13 @@
       if (e.origin !== window.location.origin) return
       if (!e.data || e.data.type !== 'papyrus-cross-frame-drop') return
 
-      const el = document.querySelector(`[data-drag-id="${e.data.dragId}"]`)
+      var el = document.querySelector(`[data-drag-id="${e.data.dragId}"]`)
       if (!el) return
 
       if (el.classList.contains('card')) {
         el.remove()
       } else if (el.classList.contains('person')) {
-        const role = el.dataset.role
+        var role = el.dataset.role
         el.textContent = role === 'ELW' ? 'LD 1' : role
         updatePersonColor(el)
       }
@@ -632,11 +634,11 @@
     let touchDragged = null
     let ghost = null
     let touchStartPos = null
-    const TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
+    var TOUCH_MOVE_THRESHOLD = 6 // px – unterscheidet Tippen von echtem Ziehen
 
     function createGhost(el) {
-      const rect = el.getBoundingClientRect()
-      const g = el.cloneNode(true)
+      var rect = el.getBoundingClientRect()
+      var g = el.cloneNode(true)
 
       g.style.position = 'fixed'
       g.style.left = rect.left + 'px'
@@ -655,7 +657,7 @@
 
     function moveGhost(x, y) {
       if (!ghost) return
-      const rect = ghost.getBoundingClientRect()
+      var rect = ghost.getBoundingClientRect()
       ghost.style.left = x - rect.width / 2 + 'px'
       ghost.style.top = y - rect.height / 2 + 'px'
     }
@@ -663,7 +665,7 @@
     function elementUnderGhost(x, y) {
       if (!ghost) return document.elementFromPoint(x, y)
       ghost.style.display = 'none'
-      const el = document.elementFromPoint(x, y)
+      var el = document.elementFromPoint(x, y)
       ghost.style.display = ''
       return el
     }
@@ -671,12 +673,12 @@
     document.addEventListener(
       'touchstart',
       e => {
-        const element = e.target.closest('.card, .person')
+        var element = e.target.closest('.card, .person')
 
         if (!element) return
         if (element.draggable === false) return
 
-        const touch = e.touches[0]
+        var touch = e.touches[0]
         touchDragged = element
         touchStartPos = { x: touch.clientX, y: touch.clientY }
       },
@@ -690,11 +692,11 @@
 
         e.preventDefault() // verhindert Scrollen, sobald ein Drag-Kandidat aktiv ist
 
-        const touch = e.touches[0]
+        var touch = e.touches[0]
 
         if (!ghost) {
-          const dx = touch.clientX - touchStartPos.x
-          const dy = touch.clientY - touchStartPos.y
+          var dx = touch.clientX - touchStartPos.x
+          var dy = touch.clientY - touchStartPos.y
           if (Math.hypot(dx, dy) < TOUCH_MOVE_THRESHOLD) return
 
           touchDragged.classList.add('dragging')
@@ -704,8 +706,8 @@
         moveGhost(touch.clientX, touch.clientY)
 
         clearHighlights()
-        const under = elementUnderGhost(touch.clientX, touch.clientY)
-        const target =
+        var under = elementUnderGhost(touch.clientX, touch.clientY)
+        var target =
           under && under.closest('.person, .abteilungspersonal, #innerTeam')
         if (target) target.classList.add('drop-target')
       },
@@ -716,8 +718,8 @@
       if (!touchDragged) return
 
       if (ghost) {
-        const touch = e.changedTouches[0]
-        const dropElement = elementUnderGhost(touch.clientX, touch.clientY)
+        var touch = e.changedTouches[0]
+        var dropElement = elementUnderGhost(touch.clientX, touch.clientY)
 
         ghost.remove()
         ghost = null
@@ -745,7 +747,7 @@
   }
 
   function updatePersonColor(el) {
-    const text = el.textContent.trim()
+    var text = el.textContent.trim()
 
     if (!reservedNames.includes(text)) {
       el.style.backgroundColor = '#B6D5FB'
@@ -757,18 +759,18 @@
   }
 
   function initDeleteButtons() {
-    const deleteBtns = document.querySelectorAll('.close')
-    const poolParent = document.getElementById('teamFree')
-    const pool = poolParent.querySelector('#innerTeam')
+    var deleteBtns = document.querySelectorAll('.close')
+    var poolParent = document.getElementById('teamFree')
+    var pool = poolParent.querySelector('#innerTeam')
 
     deleteBtns.forEach(btn => {
       btn.addEventListener('click', event => {
-        const parent = event.target.parentElement
-        const persons = parent.querySelectorAll('.person')
+        var parent = event.target.parentElement
+        var persons = parent.querySelectorAll('.person')
 
         persons.forEach(p => {
-          const oldPerson = p.textContent.trim()
-          const c = document.createElement('div')
+          var oldPerson = p.textContent.trim()
+          var c = document.createElement('div')
 
           p.style.backgroundColor = '#D1D5DB'
           c.className = 'card'
@@ -787,8 +789,8 @@
 
   async function logout() {
     try {
-      const res = await fetch('/api/logout', { method: 'POST' })
-      const data = await res.json()
+      var res = await fetch('/api/logout', { method: 'POST' })
+      var data = await res.json()
       window.location.href = data.redirect || 'login.html'
     } catch (e) {
       console.error('Logout fehlgeschlagen:', e)
@@ -797,38 +799,38 @@
   }
 
   async function exportNotWorkingPeople(movedEl) {
-    const parent = movedEl.parentElement
-    const departmentShort = parent.parentElement.id
-    const person = movedEl.textContent.trim()
+    var parent = movedEl.parentElement
+    var departmentShort = parent.parentElement.id
+    var person = movedEl.textContent.trim()
 
-    const data = { name: person, department: departmentShort }
+    var data = { name: person, department: departmentShort }
 
     try {
-      const res = await fetch('/api/export-not-working-person', {
+      var res = await fetch('/api/export-not-working-person', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
-      const result = await res.json()
+      var result = await res.json()
     } catch (e) {
       console.error('Export fehlgeschlagen:', e)
     }
   }
 
   async function importNotWorkingPeople() {
-    const res = await fetch('/api/import-not-working-persons', {
+    var res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'
     })
-    const result = await res.json()
+    var result = await res.json()
 
     if (result.length > 0) {
-      const poolParent = document.getElementById('teamFree')
-      const freeTeam = poolParent.querySelector('#innerTeam')
+      var poolParent = document.getElementById('teamFree')
+      var freeTeam = poolParent.querySelector('#innerTeam')
 
       result.forEach(({ department, name }) => {
         if (!name) return
 
-        const div = document.createElement('div')
+        var div = document.createElement('div')
         div.className = 'card'
         div.setAttribute('draggable', !reservedNames.includes(name))
         div.innerHTML = name

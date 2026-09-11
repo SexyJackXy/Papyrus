@@ -1,15 +1,15 @@
 // parseShift.js
 // Wandelt das extrahierte PDF-Array in eine strukturierte JSON-Datei um
 
-const fs = require('fs')
-const path = require('path')
+var fs = require('fs')
+var path = require('path')
 
 // Template laden
-const template = JSON.parse(
+var template = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'globalVariables', 'template.json'), 'utf-8')
 )
 
-const nameBeforeRole = new Set([
+var nameBeforeRole = new Set([
   '1. Dispo',
   '2. Dispo',
   '3. Dispo',
@@ -37,7 +37,7 @@ const nameBeforeRole = new Set([
   'Fwk Ma',
   'Frei'
 ])
-const forbiddenLines = new Set([
+var forbiddenLines = new Set([
   'Schichtführer',
   'Feuerwehr Heilbronn',
   'Diensteinteilung',
@@ -71,43 +71,43 @@ const forbiddenLines = new Set([
  * @returns {object[]} - Array mit { role, name } Objekten
  */
 function parseShiftArray(lines) {
-  const roleSet = new Set(template.map(t => t.role))
+  var roleSet = new Set(template.map(t => t.role))
 
   lines.forEach(line => {
     line.replace(/(?<=[a-zäöüß])[A-ZÄÖÜ].*$/, '')
   })
 
 
-  const nameOccurrences = {}
+  var nameOccurrences = {}
   lines.forEach((line, idx) => {
-    const entry = line.trim()
+    var entry = line.trim()
     if (entry === '') return
     if (!nameOccurrences[entry]) nameOccurrences[entry] = []
     nameOccurrences[entry].push(idx)
   })
 
-  const result = template.map(t => ({ role: t.role, name: '' }))
-  const roleIndexTracker = {}
+  var result = template.map(t => ({ role: t.role, name: '' }))
+  var roleIndexTracker = {}
   result.forEach((item, idx) => {
     if (!roleIndexTracker[item.role]) roleIndexTracker[item.role] = []
     roleIndexTracker[item.role].push(idx)
   })
-  const roleFillCount = {}
+  var roleFillCount = {}
 
   let i = 0
   while (i < lines.length) {
-    const entry = lines[i].trim()
+    var entry = lines[i].trim()
 
     if (entry === 'Wäsche') {
       if (lines.length < 100) {
-        const firstCafeteria = lines[i - 1].trim()
-        const secondCafetaria = lines[i - 2].trim()
+        var firstCafeteria = lines[i - 1].trim()
+        var secondCafetaria = lines[i - 2].trim()
 
         result.push({ role: 'Kantine1', name: firstCafeteria })
         result.push({ role: 'Kantine2', name: secondCafetaria })
 
       } else {
-        const firstCafeteria = lines[i - 1].trim()
+        var firstCafeteria = lines[i - 1].trim()
 
         result.push({ role: 'Kantine2', name: firstCafeteria })
 
@@ -119,19 +119,19 @@ function parseShiftArray(lines) {
           } else if (forbiddenLines.has(name)) {
             // ...
           } else {
-            const rollenProIndex = indices
+            var rollenProIndex = indices
               .map(idx => {
                 // nächste nicht-leere Zeile darüber
                 let j = idx - 1
                 while (j >= 0 && lines[j].trim() === '') j--
-                const above = j >= 0 ? lines[j].trim() : ''
+                var above = j >= 0 ? lines[j].trim() : ''
 
                 // nächste nicht-leere Zeile darunter
                 let k = idx + 1
                 while (k < lines.length && lines[k].trim() === '') k++
-                const below = k < lines.length ? lines[k].trim() : ''
+                var below = k < lines.length ? lines[k].trim() : ''
 
-                const role = roleSet.has(above) ? above : (roleSet.has(below) ? below : null)
+                var role = roleSet.has(above) ? above : (roleSet.has(below) ? below : null)
                 return { idx, role }
               })
               .filter(eintrag => eintrag.role === null && eintrag.idx !== 0)
@@ -146,14 +146,14 @@ function parseShiftArray(lines) {
     }
 
     if (roleSet.has(entry)) {
-      const role = entry
+      var role = entry
       let name = ''
 
       if (nameBeforeRole.has(role)) {
         // Name rückwärts suchen — letzter nicht-leerer Eintrag vor dieser Rolle
         let j = i - 1
         while (j >= 0) {
-          const prev = lines[j].trim()
+          var prev = lines[j].trim()
           if (prev === '') {
             j--
             continue
@@ -167,7 +167,7 @@ function parseShiftArray(lines) {
         // Name vorwärts suchen
         let j = i + 1
         while (j < lines.length) {
-          const next = lines[j].trim()
+          var next = lines[j].trim()
           if (next === '') {
             j++
             continue
@@ -179,8 +179,8 @@ function parseShiftArray(lines) {
         }
       }
 
-      const fillCount = roleFillCount[role] || 0
-      const indices = roleIndexTracker[role] || []
+      var fillCount = roleFillCount[role] || 0
+      var indices = roleIndexTracker[role] || []
       if (indices[fillCount] !== undefined) {
         result[indices[fillCount]].name = name
         roleFillCount[role] = fillCount + 1
@@ -190,7 +190,7 @@ function parseShiftArray(lines) {
     i++
   }
 
-  const ld1Entry = result.find(r => r.role === 'LD 1')
+  var ld1Entry = result.find(r => r.role === 'LD 1')
   if (ld1Entry) {
     result.forEach(r => {
       if (r.role === 'ELW') {
@@ -199,14 +199,14 @@ function parseShiftArray(lines) {
     })
   }
 
-  const assignedNames = new Set(result.filter(r => r.name).map(r => r.name))
+  var assignedNames = new Set(result.filter(r => r.name).map(r => r.name))
 
-  const dateLineRegex =
+  var dateLineRegex =
     /^(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag),\s*\d{1,2}\.\s*\w+\s*\d{4}$/
 
-  const freiNames = new Set()
+  var freiNames = new Set()
   lines.forEach(line => {
-    const entry = line.trim()
+    var entry = line.trim()
 
     if (entry === '') return
     if (roleSet.has(entry)) return

@@ -1,8 +1,8 @@
 async function showAlternativePlan() {
-  const dialogDiv = document.getElementById('temporaryDialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('temporaryDialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -32,10 +32,10 @@ async function showAlternativePlan() {
 }
 
 async function closeTemporaryPlan() {
-  const dialogDiv = document.getElementById('temporaryDialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('temporaryDialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -66,12 +66,12 @@ async function closeTemporaryPlan() {
 
 async function altertivPlanLoad() {
   let i = 0
-  const poolParent = document
+  var poolParent = document
     .getElementById('iframe')
     .contentWindow.document.getElementById('teamFree')
-  const freeTeam = poolParent.querySelector('#innerTeam')
+  var freeTeam = poolParent.querySelector('#innerTeam')
 
-  const assignments = await window.Dienste.loadContent()
+  var assignments = await window.Dienste.loadContent()
   if (!freeTeam) return
 
 
@@ -81,7 +81,7 @@ async function altertivPlanLoad() {
     if (role === 'Frei') {
       i++
 
-      const d = document.createElement('div')
+      var d = document.createElement('div')
       d.className = 'card'
       d.setAttribute('draggable', !reservedNames.includes(name))
       d.innerHTML = name
@@ -89,21 +89,21 @@ async function altertivPlanLoad() {
       return
     }
 
-    const el = document.querySelector(`.person[data-role="${role}"]`)
+    var el = document.querySelector(`.person[data-role="${role}"]`)
     if (!el) return
   })
 
   if (i > 0) {
-    const t = document.querySelector('.freeTeamSpace')
+    var t = document.querySelector('.freeTeamSpace')
     t.style.display = 'flex'
   }
 }
 
 async function showActivityPlan() {
-  const dialogDiv = document.getElementById('activityDialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('activityDialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -133,10 +133,10 @@ async function showActivityPlan() {
 }
 
 async function closeActivityPlan() {
-  const dialogDiv = document.getElementById('activityDialog')
-  const dialogIframe = dialogDiv.querySelector('#iframe')
-  const dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  const delay = millis =>
+  var dialogDiv = document.getElementById('activityDialog')
+  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
+  var delay = millis =>
     new Promise((resolve, reject) => {
       setTimeout(_ => resolve(), millis)
     })
@@ -166,13 +166,13 @@ async function closeActivityPlan() {
 }
 
 async function activityPlanLoad() {
-  const assignments = await window.Dienste.loadContent()
+  var assignments = await window.Dienste.loadContent()
 
   assignments.forEach(({ role, name }) => {
     if (!name) return
 
 
-    const activityRole = document.querySelector(`.work-duty .person[data-role="${role}"]`)
+    var activityRole = document.querySelector(`.work-duty .person[data-role="${role}"]`)
     if (!activityRole) {
       return
     }

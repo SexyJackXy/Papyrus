@@ -2,11 +2,11 @@
 // Zentrale SQLite-Anbindung für Benutzer + zugehörige Vor-/Nachnamen.
 // Ein Benutzername/Passwort kann mehreren Personen (Vor- & Nachname) zugeordnet sein.
 
-const path = require("path");
-const Database = require("better-sqlite3");
+var path = require("path");
+var Database = require("better-sqlite3");
 
-const DB_PATH = path.join(__dirname, "app.db");
-const db = new Database(DB_PATH);
+var DB_PATH = path.join(__dirname, "app.db");
+var db = new Database(DB_PATH);
 
 db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
@@ -43,7 +43,7 @@ function getNamesForUser(userId) {
 }
 
 function createUser(username, passwordHash) {
-  const info = db
+  var info = db
     .prepare("INSERT INTO users (username, password_hash) VALUES (?, ?)")
     .run(username, passwordHash);
   return info.lastInsertRowid;

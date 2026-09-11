@@ -9,11 +9,11 @@
 // Beispiel:
 //   node scripts/createUser.js wa1 geheim123 "Max Mustermann" "Erika Musterfrau"
 
-const bcrypt = require("bcrypt");
-const { getUserByUsername, createUser, addNameToUser } = require("../db");
+var bcrypt = require("bcrypt");
+var { getUserByUsername, createUser, addNameToUser } = require("../db");
 
 async function main() {
-  const [username, password, ...nameArgs] = process.argv.slice(2);
+  var [username, password, ...nameArgs] = process.argv.slice(2);
 
   if (!username || !password || nameArgs.length === 0) {
     console.error(
@@ -27,21 +27,21 @@ async function main() {
     process.exit(1);
   }
 
-  const names = nameArgs.map((entry) => {
-    const parts = entry.trim().split(/\s+/);
+  var names = nameArgs.map((entry) => {
+    var parts = entry.trim().split(/\s+/);
     if (parts.length < 2) {
       console.error(
         `Fehler: "${entry}" muss aus Vorname und Nachname bestehen (z. B. "Max Mustermann").`
       );
       process.exit(1);
     }
-    const lastName = parts.pop();
-    const firstName = parts.join(" ");
+    var lastName = parts.pop();
+    var firstName = parts.join(" ");
     return { firstName, lastName };
   });
 
-  const passwordHash = await bcrypt.hash(password, 12);
-  const userId = createUser(username, passwordHash);
+  var passwordHash = await bcrypt.hash(password, 12);
+  var userId = createUser(username, passwordHash);
 
   names.forEach(({ firstName, lastName }) => {
     addNameToUser(userId, firstName, lastName);
