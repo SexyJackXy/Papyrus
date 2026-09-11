@@ -188,11 +188,11 @@
 
 /* Position der Close-Buttons */
 #temporaryDialog .temporaryPlanClose {
-  right: 90vw !important;
+  right: 90vw ;
 }
 
 #activityDialog .activityPlanClose {
-  right: 20vw !important;
+  right: 20% ;
 }
 
 /* Gemeinsamer Tab-Stil */

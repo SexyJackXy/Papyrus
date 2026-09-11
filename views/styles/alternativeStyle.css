@@ -17,25 +17,21 @@ h3.text {
 .work-duty .vehicle {
     font-size: 15px;
     padding-top: 34.5px;
-    height: 44px;
-    width: 350px;
+    width: 90%;
 }
 
 #cafeteria {
     flex-direction: row;
     width: fit-content;
-    height: 44px;
     font-size: 15px;
     padding-top: 34.5px;
-    height: 44px;
-    width: 350px;
+    width: 90%;
 }
 
 [data-role='Kantine1'],
-[data-role='Kantine2'],
-#Kantine2 {
+[data-role='Kantine2'] {
     height: 26px;
-    width: 166px;
+    width: 45%;
 }
 
 #triggeredSpace {
