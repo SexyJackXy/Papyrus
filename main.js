@@ -62,8 +62,8 @@ ipcMain.handle("extract-and-save", async (event, base64) => {
   var baseName = `Einteilung_${dd}${MM}${yyyy}`;
 
   // Eindeutigen Dateinamen finden
-  let fileName = `${baseName}.json`;
-  let counter = 1;
+  var fileName = `${baseName}.json`;
+  var counter = 1;
   while (fs.existsSync(path.join(outputDir, fileName))) {
     fileName = `${baseName} (${counter}).json`;
     counter++;

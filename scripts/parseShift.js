@@ -94,7 +94,7 @@ function parseShiftArray(lines) {
   })
   var roleFillCount = {}
 
-  let i = 0
+  var i = 0
   while (i < lines.length) {
     var entry = lines[i].trim()
 
@@ -122,12 +122,12 @@ function parseShiftArray(lines) {
             var rollenProIndex = indices
               .map(idx => {
                 // nächste nicht-leere Zeile darüber
-                let j = idx - 1
+                var j = idx - 1
                 while (j >= 0 && lines[j].trim() === '') j--
                 var above = j >= 0 ? lines[j].trim() : ''
 
                 // nächste nicht-leere Zeile darunter
-                let k = idx + 1
+                var k = idx + 1
                 while (k < lines.length && lines[k].trim() === '') k++
                 var below = k < lines.length ? lines[k].trim() : ''
 
@@ -147,11 +147,11 @@ function parseShiftArray(lines) {
 
     if (roleSet.has(entry)) {
       var role = entry
-      let name = ''
+      var name = ''
 
       if (nameBeforeRole.has(role)) {
         // Name rückwärts suchen — letzter nicht-leerer Eintrag vor dieser Rolle
-        let j = i - 1
+        var j = i - 1
         while (j >= 0) {
           var prev = lines[j].trim()
           if (prev === '') {
@@ -165,7 +165,7 @@ function parseShiftArray(lines) {
         }
       } else {
         // Name vorwärts suchen
-        let j = i + 1
+        var j = i + 1
         while (j < lines.length) {
           var next = lines[j].trim()
           if (next === '') {

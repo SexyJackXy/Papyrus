@@ -110,7 +110,7 @@ function checkActivitys(currentdata, data) {
   }
 
 
-  return { neu, geaendert, geloescht,curData }
+  return { neu, geaendert, geloescht, curData }
 }
 
 
@@ -252,8 +252,8 @@ app.post('/api/extract-and-save', async (req, res) => {
     var yyyy = now.getFullYear()
     var baseName = `current`
 
-    let fileName = `${baseName}.json`
-    let counter = 1
+    var fileName = `${baseName}.json`
+    var counter = 1
     while (fs.existsSync(path.join(outputDir, fileName))) {
       fileName = `${baseName} (${counter}).json`
       counter++
@@ -320,7 +320,7 @@ app.post('/api/save-schedule', (req, res) => {
     var dir = path.join(__dirname, 'dailySchedule')
     var currentFile = path.join(dir, 'current.json')
 
-    let merged = data
+    var merged = data
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
     } else if (fs.existsSync(currentFile)) {
@@ -346,7 +346,6 @@ app.post('/api/save-activity-schedule', (req, res) => {
     }
 
     var dir = path.join(__dirname, 'dailySchedule')
-    let merged = data
     var currentFile = path.join(dir, 'current.json')
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
@@ -360,8 +359,8 @@ app.post('/api/save-activity-schedule', (req, res) => {
       var currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
       var newData = checkActivitys(currentdata, data).curData
 
-    fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
-    res.json({ success: true })
+      fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
+      res.json({ success: true })
     }
   } catch (err) {
     console.error(err)

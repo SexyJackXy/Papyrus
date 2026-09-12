@@ -65,7 +65,7 @@ async function closeTemporaryPlan() {
 }
 
 async function altertivPlanLoad() {
-  let i = 0
+  var i = 0
   var poolParent = document
     .getElementById('iframe')
     .contentWindow.document.getElementById('teamFree')
