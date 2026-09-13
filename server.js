@@ -11,7 +11,7 @@ var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
-var SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
+var SETTINGS_PATH = path.join(__dirname,'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
 
@@ -231,12 +231,14 @@ app.post('/api/create-user', async (req, res) => {
     var { username, password, } = req.body || {}
 
     if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        error: 'Benutzername, Passwort sind erforderlich'
-      })
+      return res.status(400).json({ success: false, error: 'Benutzername, Passwort sind erforderlich' })
     }
-
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, error: 'Passwort muss mindestens 8 Zeichen lang sein' })
+    }
+    if (!/^[a-zA-Z0-9._-]{3,32}$/.test(username)) {
+      return res.status(400).json({ success: false, error: 'Ungültiger Benutzername' })
+    }
     if (getUserByUsername(username)) {
       return res.status(409).json({ success: false, error: 'Benutzername existiert bereits' })
     }
@@ -260,31 +262,25 @@ app.post('/api/extract-and-save', async (req, res) => {
     var outputDir = path.join(__dirname, 'dailySchedule')
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir)
 
-    var now = new Date()
-    var dd = String(now.getDate()).padStart(2, '0')
-    var MM = String(now.getMonth() + 1).padStart(2, '0')
-    var yyyy = now.getFullYear()
-    var baseName = `current`
+    var archiveDir = path.join(outputDir, 'archive')
+    if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir)
 
-    var fileName = `${baseName}.json`
-    var counter = 1
-    while (fs.existsSync(path.join(outputDir, fileName))) {
-      fileName = `${baseName} (${counter}).json`
-      counter++
-    }
+    // Historie: ein Snapshot pro Import, sauber mit Zeitstempel
+    var stamp = new Date().toISOString().replace(/[:.]/g, '-')
+    fs.writeFileSync(
+      path.join(archiveDir, `${stamp}.json`),
+      JSON.stringify(shiftJson, null, 2),
+      'utf-8'
+    )
 
-    var filePath = path.join(outputDir, fileName)
-    fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), 'utf-8')
-
-    // Importierte Einteilung wird zugleich der neue "aktuelle Stand",
-    // den alle Geräte über /api/latest-schedule bekommen.
+    // Aktueller Stand
     fs.writeFileSync(
       path.join(outputDir, 'current.json'),
       JSON.stringify(shiftJson, null, 2),
       'utf-8'
     )
 
-    res.json({ success: true, filePath, data: shiftJson })
+    res.json({ success: true, data: shiftJson })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
@@ -539,8 +535,13 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
 })
 
 app.post('/api/settings', (req, res) => {
-  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), 'utf-8')
-  res.json({ success: true })
+  try {
+    fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), 'utf-8')
+    res.json({ success: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
 })
 
 app.get('/api/settings', (req, res) => {

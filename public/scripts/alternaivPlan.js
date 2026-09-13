@@ -1,6 +1,6 @@
 async function showAlternativePlan() {
   var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
   var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
   var delay = millis =>
     new Promise((resolve, reject) => {
@@ -33,7 +33,7 @@ async function showAlternativePlan() {
 
 async function closeTemporaryPlan() {
   var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
   var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
   var delay = millis =>
     new Promise((resolve, reject) => {
@@ -101,7 +101,7 @@ async function altertivPlanLoad() {
 
 async function showActivityPlan() {
   var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogIframe = dialogDiv.querySelector('#activityIframe')
   var dialogButton = dialogDiv.querySelector('.activityPlanClose')
   var delay = millis =>
     new Promise((resolve, reject) => {
@@ -134,7 +134,7 @@ async function showActivityPlan() {
 
 async function closeActivityPlan() {
   var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#iframe')
+  var dialogIframe = dialogDiv.querySelector('#activityIframe')
   var dialogButton = dialogDiv.querySelector('.activityPlanClose')
   var delay = millis =>
     new Promise((resolve, reject) => {

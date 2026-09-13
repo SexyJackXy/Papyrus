@@ -17,7 +17,7 @@ h1.loginText {
 
 h2 {
   margin: 1rem 0;
-  color: #0a0a0a;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -25,7 +25,7 @@ h3 {
   display: flex;
   padding-left: 0.6rem;
   padding-top: 0.3rem;
-  color: #0a0a0a;
+  color: var(--color-text);
   text-align: left;
   font-weight: 300;
   font-size: 1.5ch;
@@ -40,7 +40,7 @@ h3 {
 }
 
 hr {
-  color: #0a0a0a;
+  color: var(--color-text);
   /*Darkmode => */
 }
 
@@ -54,7 +54,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f3f4f6;
+  background: var(--color-bg);
   /*Darkmode => #1e2022*/
   margin: 0;
 }
@@ -79,7 +79,7 @@ header img {
 }
 
 .heading {
-  color: #ffffff;
+  color: var(--color-text-on-primary);
   margin: 0;
   padding: 1rem;
   flex: 0 1 auto;
@@ -104,7 +104,7 @@ header img {
 .text {
   flex: 0 1 auto;
   text-decoration: none;
-  color: #ffffff;
+  color: var(--color-text-on-primary);
   float: right;
   text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.9);
 }
@@ -194,7 +194,7 @@ header img {
 
 .card#LD,
 #LD .card {
-  background-color: #d1d5db;
+  background-color: var(--color-card-bg);
 }
 
 .card#DD,

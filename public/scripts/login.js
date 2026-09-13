@@ -1,16 +1,16 @@
-;(function () {
+; (function () {
   document.addEventListener('DOMContentLoaded', () => {
     var loginBtn = document.getElementById('loginbtn')
     var usernameInput = document.getElementById('username')
     var passwordInput = document.getElementById('password')
     var errorEl = document.getElementById('loginError')
 
-    function showError (msg) {
+    function showError(msg) {
       errorEl.textContent = msg
       errorEl.style.display = 'block'
     }
 
-    async function doLogin () {
+    async function doLogin() {
       var username = usernameInput.value.trim()
       var password = passwordInput.value
 
@@ -58,13 +58,13 @@
     var registerErrorEl = document.getElementById('registerError')
     var registerSuccessEl = document.getElementById('registerSuccess')
 
-    function showRegisterError (msg) {
+    function showRegisterError(msg) {
       registerSuccessEl.style.display = 'none'
       registerErrorEl.textContent = msg
       registerErrorEl.style.display = 'block'
     }
 
-    function showRegisterSuccess (msg) {
+    function showRegisterSuccess(msg) {
       registerErrorEl.style.display = 'none'
       registerSuccessEl.textContent = msg
       registerSuccessEl.style.display = 'block'
@@ -84,9 +84,22 @@
       loginCard.classList.remove('registerMode')
     })
 
-    addNameBtn.addEventListener('click')
+    addNameBtn.addEventListener('click', () => {
+      var row = document.createElement('div')
+      row.className = 'nameRow'
+      row.innerHTML = `
+    <input type="text" class="regFirstName" placeholder="Vorname" />
+    <input type="text" class="regLastName" placeholder="Nachname" />
+  `
+      regNameRows.appendChild(row)
+    })
 
-    async function doRegister () {
+    registerBtn.addEventListener('click', doRegister)
+    regPasswordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doRegister()
+    })
+
+    async function doRegister() {
       var username = regUsernameInput.value.trim()
       var password = regPasswordInput.value
 
