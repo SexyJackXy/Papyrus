@@ -1,4 +1,6 @@
 // server.js
+require('dotenv').config()
+
 var express = require('express')
 var path = require('path')
 var fs = require('fs')
@@ -105,7 +107,7 @@ function checkActivitys(currentdata, data) {
     if (!nochVorhanden) {
       geloescht.push(cur)
       var i = curData.findIndex(m => JSON.stringify(m) === JSON.stringify(cur))
-      if (i !== -1) merged.splice(i, 1)
+      if (i !== -1) curData.splice(i, 1) // ✅ korrekt: curData
     }
   }
 
@@ -116,16 +118,22 @@ function checkActivitys(currentdata, data) {
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
+if (!process.env.SESSION_SECRET) {
+  console.error('FATAL: SESSION_SECRET ist nicht gesetzt. Server wird nicht gestartet.')
+  process.exit(1)
+}
+
 app.use(
   session({
     store: new SQLiteStore({ db: 'sessions.db', dir: __dirname }),
-    secret: process.env.SESSION_SECRET || 'bitte-in-produktion-aendern',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 12 // 12 Stunden
-      // secure: true, // aktivieren, sobald der Server über HTTPS läuft
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 12
     }
   })
 )
@@ -160,7 +168,7 @@ app.use((req, res, next) => {
   return res.redirect('/views/login.html')
 })
 
-app.use(express.static(__dirname)) // liefert views/, scripts/, img/, styles/ aus
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
   if (req.session && req.session.userId) {
@@ -169,7 +177,17 @@ app.get('/', (req, res) => {
   return res.redirect('/views/dashboard.html')
 })
 
-app.post('/api/login', async (req, res) => {
+var rateLimit = require('express-rate-limit')
+
+var loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 Minuten
+  max: 10, // max. 10 Versuche pro IP
+  message: { success: false, error: 'Zu viele Login-Versuche, bitte später erneut versuchen.' },
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
+app.post('/api/login', loginLimiter, async (req, res) => {
   var { username, password } = req.body || {}
 
   if (!username || !password) {
