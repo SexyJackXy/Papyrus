@@ -7,7 +7,7 @@ var fs = require('fs')
 var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
-var { extractShiftFromPdf } = require('./scripts/pdfExtractor')
+var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
@@ -138,30 +138,25 @@ app.use(
   })
 )
 
-// Zugriffsschutz: alles außer Login-Seite + zugehörige statische Assets
-// erfordert eine eingeloggte Session.
+var PUBLIC_GET_APIS = new Set([
+  '/api/latest-activity-schedule',
+  '/api/latest-schedule',
+  '/api/latest-temporary-schedule',
+  '/api/settings'
+])
+
 app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
-    (req.method === 'POST' && req.path === '/api/create-user') ||
-    (req.method === 'POST' && req.path === '/api/save-schedule') ||
-    (req.method === 'POST' && req.path === '/api/save-temporary-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-activity-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-temporary-schedule') ||
-    (req.method === 'GET' && req.path === '/api/import-not-working-persons') ||
-    (req.method === 'GET' && req.path === '/api/settings') ||
-    (req.method === 'POST' && req.path === '/api/delete-schedule-entry')
+    (req.method === 'GET' && PUBLIC_GET_APIS.has(req.path))
   ) {
     return next()
   }
-
-  // War bisher komplett vergessen: eingeloggte Sessions einfach durchlassen.
+  // Auch /api/create-user, /api/save-schedule etc. brauchen jetzt eine Session
   if (req.session && req.session.userId) {
     return next()
   }
-
   if (req.path.startsWith('/api/')) {
     return res.status(401).json({ success: false, error: 'Nicht eingeloggt' })
   }
@@ -359,33 +354,28 @@ app.post('/api/save-activity-schedule', (req, res) => {
   try {
     var { data } = req.body || {}
     if (!Array.isArray(data)) {
-      return res
-        .status(400)
-        .json({ success: false, error: 'data muss ein Array sein' })
+      return res.status(400).json({ success: false, error: 'data muss ein Array sein' })
     }
 
     var dir = path.join(__dirname, 'dailySchedule')
     var currentFile = path.join(dir, 'current.json')
+
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
-      fs.writeFileSync(
-        path.join(dir, 'current.json'),
-        JSON.stringify(data, null, 2),
-        'utf-8'
-      )
+      fs.writeFileSync(currentFile, JSON.stringify(data, null, 2), 'utf-8')
+      return res.json({ success: true }) // ✅ ergänzt
     }
-    else {
-      var currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
-      var newData = checkActivitys(currentdata, data).curData
 
-      fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
-      res.json({ success: true })
-    }
+    var currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
+    var newData = checkActivitys(currentdata, data).curData
+    fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
+    res.json({ success: true })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
   }
 })
+
 app.post('/api/delete-schedule-entry', (req, res) => {
   try {
     var { department, name } = req.body || {}

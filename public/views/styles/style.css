@@ -1,11 +1,17 @@
 :root {
+  --color-primary: #ff2a1c;
+  --color-primary-dark: #bb0c00;
+  --color-text: #0a0a0a;
+  --color-text-on-primary: #ffffff;
+  --color-card-bg: #d1d5db;
+  --color-bg: #f3f4f6;
   font-family: 'Roboto', sans-serif;
 }
 
 h1.loginText {
   text-align: center;
   font-size: 4ch;
-  color: #ff2a1c;
+  color: var(--color-primary);
   margin-bottom: 0;
 }
 
@@ -34,7 +40,8 @@ h3 {
 }
 
 hr {
-  color: #0a0a0a; /*Darkmode => */
+  color: #0a0a0a;
+  /*Darkmode => */
 }
 
 html {
@@ -47,15 +54,16 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #f3f4f6; /*Darkmode => #1e2022*/
+  background: #f3f4f6;
+  /*Darkmode => #1e2022*/
   margin: 0;
 }
 
 header {
   display: flex;
   width: 100%;
-  background: #ff2a1c; /*Darkmode => #bb0c00 */
-  color: #ffffff; /*Darkmode => #181a1b)*/
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
   text-align: center;
   gap: 0.6rem;
   align-items: center;
@@ -117,12 +125,12 @@ header img {
 }
 
 .card {
-  background: #d1d5db; /* Darkmode => #2f3335*/
+  background: var(--color-card-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #0a0a0a;
+  color: var(--color-text);
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
