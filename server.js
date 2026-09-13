@@ -29,7 +29,7 @@ function isPublicRequest(req) {
   // Statische Assets (CSS, Bilder, Client-Scripts) müssen immer ladbar sein,
   // sonst kann die Login-Seite selbst nicht gerendert werden.
   if (
-    req.path.startsWith('/views/styles/') ||
+    req.path.startsWith('/styles/') ||
     req.path.startsWith('/img/') ||
     req.path.startsWith('/scripts/')
   ) {
