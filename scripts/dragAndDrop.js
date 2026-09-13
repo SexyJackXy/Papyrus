@@ -9,6 +9,7 @@
     var temporaryScheduleSave = deps.temporaryScheduleSave
     var activityScheduleSave = deps.activityScheduleSave
     var exportNotWorkingPeople = deps.exportNotWorkingPeople
+    var removeFromSchedule = deps.removeFromSchedule
 
     function updatePersonColor(el) {
       var text = el.textContent.trim()
@@ -195,27 +196,7 @@
           }
         } else if (draggedEl.classList.contains('card') && trashTarget) {
           draggedEl.remove()
-          console.log(draggedEl)
-
-          var name = draggedEl.textContent
-          var pool = draggedEl.closest('#teamFree, #teamUsed, #triggeredSpace')
-          var role =
-            pool && pool.id === 'teamFree' ? 'Frei' :
-              pool && pool.id === 'teamUsed' ? 'Used' :
-                pool && pool.id === 'triggeredSpace' ? 'Triggerd' :
-                  null
-
-
-          if (!role || !name) return
-          try {
-            fetch('/api/delete-schedule-entry', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ role, name })
-            })
-          } catch (e) {
-            console.warn('Karte konnte nicht aus current.json gelöscht werden:', e)
-          }
+          removeFromSchedule(draggedEl)
         } else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html'
         ) {
           draggedEl.style.opacity = '0.6'

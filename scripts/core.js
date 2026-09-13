@@ -215,7 +215,7 @@
         await fetch('/api/save-temporary-schedule', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data})
+          body: JSON.stringify({ data })
         })
       } catch (e) {
         console.warn(
@@ -243,6 +243,29 @@
         )
       }
     }, 400)
+  }
+
+  async function removeFromSchedule(draggedEl) {
+    clearTimeout(saveTimer)
+    var name = draggedEl.textContent
+    var department = draggedEl.id
+
+    if(!department){
+      return
+    }
+
+    try {
+      await fetch('/api/delete-schedule-entry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ department, name })
+      })
+    } catch (e) {
+      console.warn(
+        'Aktivitätsplan konnte nicht auf dem Server gespeichert werden:',
+        e
+      )
+    }
   }
 
   function renderAssignments(assignment) {
@@ -321,7 +344,8 @@
     scheduleSave,
     temporaryScheduleSave,
     activityScheduleSave,
-    exportNotWorkingPeople
+    exportNotWorkingPeople,
+    removeFromSchedule
   })
   var initDragAndDrop = dnd.initDragAndDrop
   var updatePersonColor = dnd.updatePersonColor
@@ -384,7 +408,7 @@
       console.error('Export fehlgeschlagen:', e)
     }
   }
-  
+
   async function importNotWorkingPeople() {
     var res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'

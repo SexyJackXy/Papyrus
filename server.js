@@ -143,7 +143,8 @@ app.use((req, res, next) => {
     (req.method === 'GET' && req.path === '/api/latest-schedule') ||
     (req.method === 'GET' && req.path === '/api/latest-temporary-schedule') ||
     (req.method === 'GET' && req.path === '/api/import-not-working-persons') ||
-    (req.method === 'GET' && req.path === '/api/settings')
+    (req.method === 'GET' && req.path === '/api/settings') ||
+    (req.method === 'POST' && req.path === '/api/delete-schedule-entry')
   ) {
     return next()
   }
@@ -362,6 +363,26 @@ app.post('/api/save-activity-schedule', (req, res) => {
       fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
       res.json({ success: true })
     }
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+app.post('/api/delete-schedule-entry', (req, res) => {
+  try {
+    var { department, name } = req.body || {}
+    var dir = path.join(__dirname, 'exportedPersons')
+    var currentFile = path.join(dir, 'exportedPersons.json')
+
+    if (!fs.existsSync(currentFile)) {
+      return res.json({ success: true })
+    }
+
+    var currentData = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
+    var filtered = currentData.filter(item => !(item.department === department && item.name === name))
+
+    fs.writeFileSync(currentFile, JSON.stringify(filtered, null, 2), 'utf-8')
+    res.json({ success: true, removed: currentData.length !== filtered.length })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })

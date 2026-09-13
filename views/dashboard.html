@@ -120,7 +120,7 @@
 
     <section class="middle-duty">
       <div class="side">
-        <div class="vehicle">
+        <div class="vehicle" id="ELW">
           <h3>ELW</h3>
           <h3 class="close">X</h3>
           <div class="person" data-role="ELW" draggable="false">LD 1</div>
@@ -230,7 +230,11 @@
       window.Dienste.initDragAndDrop();
       window.Dienste.initDeleteButtons();
     });
-  </script>
+    
+    window.addEventListener("beforeunload", () => {
+      localStorage.removeItem(K);
+    });
+    </script>
 </body>
 
 </html>
