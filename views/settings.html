@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+  <script src="../scripts/dragAndDrop.js"></script>
   <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
 </head>
@@ -50,7 +51,7 @@
     <div class="buttonspace">
       <input id="inpoutJson" type="file" accept=".json" style="display:none">
       <input id="inputPdf" type="file" accept=".pdf" style="display:none">
-      
+
       <div class="btnSpace">
         <button type="button" class="btn" id="btnUpload">
           <p>PDF Importieren</p>
@@ -68,14 +69,14 @@
     <hr>
     <div class="settingSpace">
       <div class="settingLine">
-        <a>Zeige Wachabteilung in Einteilung [WiP]</a>
+        <a>Zeige Wachabteilung in Einteilung</a>
         <label class="switch">
           <input type="checkbox" id="showWachabteilung">
           <span class="slider"></span>
         </label>
       </div>
       <div class="settingLine">
-        <a>Zeige Dienst außer Haus [WiP]</a>
+        <a>Zeige Dienst außer Haus</a>
         <label class="switch">
           <input type="checkbox" id="showDuty">
           <span class="slider"></span>

@@ -339,14 +339,17 @@
     importNotWorkingPeople()
   }
 
-  var dnd = window.DragAndDrop.createDragAndDrop({
-    reservedNames,
-    scheduleSave,
-    temporaryScheduleSave,
-    activityScheduleSave,
-    exportNotWorkingPeople,
-    removeFromSchedule
-  })
+  var dnd = window.DragAndDrop
+    ? window.DragAndDrop.createDragAndDrop({
+      reservedNames,
+      scheduleSave,
+      temporaryScheduleSave,
+      activityScheduleSave,
+      exportNotWorkingPeople,
+      removeFromSchedule
+    })
+    : { initDragAndDrop: () => { }, updatePersonColor: () => { } }
+
   var initDragAndDrop = dnd.initDragAndDrop
   var updatePersonColor = dnd.updatePersonColor
 
