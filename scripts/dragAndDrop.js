@@ -163,9 +163,12 @@
         // CARD -> FREEPOOL
         else if (draggedEl.classList.contains('card') && freePoolTarget) {
           innerFreePool.appendChild(draggedEl)
+          draggedEl.style.backgroundColor = '#d1d5db'
+          draggedEl.style.color = '#0a0a0a'
         } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
           innerUsedPool.appendChild(draggedEl)
         } else if (draggedEl.classList.contains('card') && triggerPoolTarget) {
+
           var newCard = document.createElement('div')
           newCard.className = 'card'
           newCard.draggable = true
