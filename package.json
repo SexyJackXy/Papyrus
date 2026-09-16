@@ -1,5 +1,5 @@
 {
-  "name": "dutyroster-electron",
+  "name": "papyrus-feuerwehr-hn",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -13,8 +13,10 @@
     "bcrypt": "^5.1.1",
     "better-sqlite3": "^13.0.3",
     "connect-sqlite3": "^0.9.15",
+    "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
     "express": "^4.19.2",
+    "express-rate-limit": "^8.7.0",
     "express-session": "^1.18.0",
     "fs-extra": "^11.2.0",
     "pdf-lib": "^1.17.1",

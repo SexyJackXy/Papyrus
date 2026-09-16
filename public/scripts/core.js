@@ -250,7 +250,7 @@
     var name = draggedEl.textContent
     var department = draggedEl.id
 
-    if(!department){
+    if (!department) {
       return
     }
 

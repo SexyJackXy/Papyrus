@@ -1,15 +1,17 @@
 // server.js
+require('dotenv').config()
+
 var express = require('express')
 var path = require('path')
 var fs = require('fs')
 var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
-var { extractShiftFromPdf } = require('./scripts/pdfExtractor')
+var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
-var SETTINGS_PATH = path.join(__dirname, 'globalVariables', 'settings.json')
+var SETTINGS_PATH = path.join(__dirname,'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
 
@@ -27,7 +29,7 @@ function isPublicRequest(req) {
   // Statische Assets (CSS, Bilder, Client-Scripts) müssen immer ladbar sein,
   // sonst kann die Login-Seite selbst nicht gerendert werden.
   if (
-    req.path.startsWith('/views/styles/') ||
+    req.path.startsWith('/styles/') ||
     req.path.startsWith('/img/') ||
     req.path.startsWith('/scripts/')
   ) {
@@ -105,7 +107,7 @@ function checkActivitys(currentdata, data) {
     if (!nochVorhanden) {
       geloescht.push(cur)
       var i = curData.findIndex(m => JSON.stringify(m) === JSON.stringify(cur))
-      if (i !== -1) merged.splice(i, 1)
+      if (i !== -1) curData.splice(i, 1) // ✅ korrekt: curData
     }
   }
 
@@ -116,51 +118,52 @@ function checkActivitys(currentdata, data) {
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
+if (!process.env.SESSION_SECRET) {
+  console.error('FATAL: SESSION_SECRET ist nicht gesetzt. Server wird nicht gestartet.')
+  process.exit(1)
+}
+
 app.use(
   session({
     store: new SQLiteStore({ db: 'sessions.db', dir: __dirname }),
-    secret: process.env.SESSION_SECRET || 'bitte-in-produktion-aendern',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 12 // 12 Stunden
-      // secure: true, // aktivieren, sobald der Server über HTTPS läuft
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 12
     }
   })
 )
 
-// Zugriffsschutz: alles außer Login-Seite + zugehörige statische Assets
-// erfordert eine eingeloggte Session.
+var PUBLIC_GET_APIS = new Set([
+  '/api/latest-activity-schedule',
+  '/api/latest-schedule',
+  '/api/latest-temporary-schedule',
+  '/api/settings'
+])
+
 app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
-    (req.method === 'POST' && req.path === '/api/create-user') ||
-    (req.method === 'POST' && req.path === '/api/save-schedule') ||
-    (req.method === 'POST' && req.path === '/api/save-temporary-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-activity-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-schedule') ||
-    (req.method === 'GET' && req.path === '/api/latest-temporary-schedule') ||
-    (req.method === 'GET' && req.path === '/api/import-not-working-persons') ||
-    (req.method === 'GET' && req.path === '/api/settings') ||
-    (req.method === 'POST' && req.path === '/api/delete-schedule-entry')
+    (req.method === 'GET' && PUBLIC_GET_APIS.has(req.path))
   ) {
     return next()
   }
-
-  // War bisher komplett vergessen: eingeloggte Sessions einfach durchlassen.
+  // Auch /api/create-user, /api/save-schedule etc. brauchen jetzt eine Session
   if (req.session && req.session.userId) {
     return next()
   }
-
   if (req.path.startsWith('/api/')) {
     return res.status(401).json({ success: false, error: 'Nicht eingeloggt' })
   }
   return res.redirect('/views/login.html')
 })
 
-app.use(express.static(__dirname)) // liefert views/, scripts/, img/, styles/ aus
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
   if (req.session && req.session.userId) {
@@ -169,7 +172,17 @@ app.get('/', (req, res) => {
   return res.redirect('/views/dashboard.html')
 })
 
-app.post('/api/login', async (req, res) => {
+var rateLimit = require('express-rate-limit')
+
+var loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 Minuten
+  max: 10, // max. 10 Versuche pro IP
+  message: { success: false, error: 'Zu viele Login-Versuche, bitte später erneut versuchen.' },
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
+app.post('/api/login', loginLimiter, async (req, res) => {
   var { username, password } = req.body || {}
 
   if (!username || !password) {
@@ -218,12 +231,14 @@ app.post('/api/create-user', async (req, res) => {
     var { username, password, } = req.body || {}
 
     if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        error: 'Benutzername, Passwort sind erforderlich'
-      })
+      return res.status(400).json({ success: false, error: 'Benutzername, Passwort sind erforderlich' })
     }
-
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, error: 'Passwort muss mindestens 8 Zeichen lang sein' })
+    }
+    if (!/^[a-zA-Z0-9._-]{3,32}$/.test(username)) {
+      return res.status(400).json({ success: false, error: 'Ungültiger Benutzername' })
+    }
     if (getUserByUsername(username)) {
       return res.status(409).json({ success: false, error: 'Benutzername existiert bereits' })
     }
@@ -247,31 +262,25 @@ app.post('/api/extract-and-save', async (req, res) => {
     var outputDir = path.join(__dirname, 'dailySchedule')
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir)
 
-    var now = new Date()
-    var dd = String(now.getDate()).padStart(2, '0')
-    var MM = String(now.getMonth() + 1).padStart(2, '0')
-    var yyyy = now.getFullYear()
-    var baseName = `current`
+    var archiveDir = path.join(outputDir, 'archive')
+    if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir)
 
-    var fileName = `${baseName}.json`
-    var counter = 1
-    while (fs.existsSync(path.join(outputDir, fileName))) {
-      fileName = `${baseName} (${counter}).json`
-      counter++
-    }
+    // Historie: ein Snapshot pro Import, sauber mit Zeitstempel
+    var stamp = new Date().toISOString().replace(/[:.]/g, '-')
+    fs.writeFileSync(
+      path.join(archiveDir, `${stamp}.json`),
+      JSON.stringify(shiftJson, null, 2),
+      'utf-8'
+    )
 
-    var filePath = path.join(outputDir, fileName)
-    fs.writeFileSync(filePath, JSON.stringify(shiftJson, null, 2), 'utf-8')
-
-    // Importierte Einteilung wird zugleich der neue "aktuelle Stand",
-    // den alle Geräte über /api/latest-schedule bekommen.
+    // Aktueller Stand
     fs.writeFileSync(
       path.join(outputDir, 'current.json'),
       JSON.stringify(shiftJson, null, 2),
       'utf-8'
     )
 
-    res.json({ success: true, filePath, data: shiftJson })
+    res.json({ success: true, data: shiftJson })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
@@ -341,33 +350,28 @@ app.post('/api/save-activity-schedule', (req, res) => {
   try {
     var { data } = req.body || {}
     if (!Array.isArray(data)) {
-      return res
-        .status(400)
-        .json({ success: false, error: 'data muss ein Array sein' })
+      return res.status(400).json({ success: false, error: 'data muss ein Array sein' })
     }
 
     var dir = path.join(__dirname, 'dailySchedule')
     var currentFile = path.join(dir, 'current.json')
+
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir)
-      fs.writeFileSync(
-        path.join(dir, 'current.json'),
-        JSON.stringify(data, null, 2),
-        'utf-8'
-      )
+      fs.writeFileSync(currentFile, JSON.stringify(data, null, 2), 'utf-8')
+      return res.json({ success: true }) // ✅ ergänzt
     }
-    else {
-      var currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
-      var newData = checkActivitys(currentdata, data).curData
 
-      fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
-      res.json({ success: true })
-    }
+    var currentdata = JSON.parse(fs.readFileSync(currentFile, 'utf-8'))
+    var newData = checkActivitys(currentdata, data).curData
+    fs.writeFileSync(currentFile, JSON.stringify(newData, null, 2), 'utf-8')
+    res.json({ success: true })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
   }
 })
+
 app.post('/api/delete-schedule-entry', (req, res) => {
   try {
     var { department, name } = req.body || {}
@@ -531,8 +535,13 @@ app.get('/api/latest-temporary-schedule', (req, res) => {
 })
 
 app.post('/api/settings', (req, res) => {
-  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), 'utf-8')
-  res.json({ success: true })
+  try {
+    fs.writeFileSync(SETTINGS_PATH, JSON.stringify(req.body, null, 2), 'utf-8')
+    res.json({ success: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
 })
 
 app.get('/api/settings', (req, res) => {

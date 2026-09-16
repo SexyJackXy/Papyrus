@@ -25,10 +25,10 @@ compile_commands.json
 
 #Folder created by the programm
 structuredSeating/
-Einteilung/
 exportedPersons/
 dailySchedule/
 temporarySchedule/
+classifications/
 
 # npm package
 /npm/dist
