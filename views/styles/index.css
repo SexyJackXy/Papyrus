@@ -112,6 +112,20 @@
   gap: 0.6rem;
 }
 
+#ils-text {
+  display: flex;
+  text-align: center;
+}
+
+#ils-text a{
+  margin: 0.1rem 0.4rem;
+  width: 170px;
+}
+
+#inner-vehicle {
+  display: flex;
+}
+
 #innerTeam {
   display: flex;
   flex-wrap: wrap;
@@ -145,13 +159,27 @@
   display: none;
 }
 
-#ils{
-  flex-direction: row;
-  width: 29vw;
+#ils {
   align-items: center;
 }
 
-#ils .person{
+#ils2{
+  width: 29vw;
+}
+
+#dispos{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: baseline;
+}
+
+#disponennt{
+  text-align: center;
+  width: 30vw;
+}
+
+#ils .person {
   width: 170px;
   height: 20px;
   margin-bottom: 0.6rem;
@@ -163,6 +191,12 @@
   right: 0;
   bottom: 0;
   padding: 0.6rem;
+}
+
+#second-Row{
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
 }
 
 /* Styling for the fly outs */
@@ -188,11 +222,11 @@
 
 /* Position der Close-Buttons */
 #temporaryDialog .temporaryPlanClose {
-  right: 90vw ;
+  right: 90vw;
 }
 
 #activityDialog .activityPlanClose {
-  right: 20% ;
+  right: 20%;
 }
 
 /* Gemeinsamer Tab-Stil */

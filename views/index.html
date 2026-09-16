@@ -34,24 +34,24 @@
     </div>
 
     <div class="navBar" style="float: right;">
-      <a class="text" style="padding-right: 0.6rem;" href="login.html" onclick="Dienste.logout(); return false;">
-        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      <a href="index.html">
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
-      <a class="text" href="settings.html" style="padding-right: 0.6rem;">
+      <a href="settings.html">
         <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
       </a>
-      <a class="text" href="index.html" style="padding-right: 0.6rem;">
-        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+      <a href="login.html" onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
       </a>
     </div>
   </header>
 
   <main class="container">
-    <a class="text" href="shiftSchedule.html" style="padding-right: 0.6rem;" id="showStation">
+    <a href="shiftSchedule.html" id="showStation">
       <img src="../img/menschen.png" alt="Mannschaft" id="showStationPic">
     </a>
 
-    <a class="text" style="padding-left: 0.6rem;" id="trash">
+    <a id="trash">
       <img src="../img/trash.png" alt="Löschen" id="trashCan">
     </a>
 
@@ -101,12 +101,23 @@
         <div class="person" data-role="LFüGr" draggable="false">Frei</div>
       </div>
 
-      <div class="vehicle" id="ils">
+      <div class="vehicle" id="ils2">
         <h3>ILS</h3>
         <h3 class="close">X</h3>
-        <div class="person" data-role="1. Dispo" draggable="false">1. Dispo</div>
-        <div class="person" data-role="2. Dispo" draggable="false">2. Dispo</div>
-        <div class="person" data-role="3. Dispo" draggable="false">3. Dispo</div>
+        <div id="dispos">
+          <div id="disponennt">
+            <a>1. Dispo</a>
+            <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+          </div>
+          <div id="disponennt">
+            <a>2. Dispo</a>
+            <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+          </div>
+          <div id="disponennt">
+            <a>3. Dispo</a>
+            <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -164,7 +175,7 @@
 
       <div class="side">
         <div class="vehicle">
-          <h3>KEF/GW-T</h3>
+          <h3>KEF</h3>
           <h3 class="close">X</h3>
           <div class="person" data-role="KEF Fü" draggable="false">Fahrzeugführer</div>
           <div class="person" data-role="KEF Ma" draggable="false">Maschinist</div>
@@ -194,7 +205,7 @@
       </div>
 
       <div class="team" id="teamUsed">
-        <h2>Frei außer Haus</h2>
+        <h2>außer Haus</h2>
         <section id="innerTeam">
         </section>
       </div>
