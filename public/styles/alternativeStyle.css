@@ -39,3 +39,37 @@ h3.text {
     gap: 0.6rem;
     margin: 0 auto;
 }
+
+/* Future Plans */
+
+.upcommingPlans {
+    width: 99%;
+    height: 90%;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 0.6rem;
+    margin: auto;
+}
+
+.plan {
+    display: flex;
+    background-color: var(--color-card-bg);
+    width: 33%;
+    height: 90%;
+    border: solid 7px var(--color-text-on-primary);
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+}
+
+.plan a{
+    width: 99%;
+    height: 99%;
+}
+
+img {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+}

@@ -213,7 +213,11 @@ function parseShiftArray(lines) {
     if (assignedNames.has(entry)) return
     if (freiNames.has(entry)) return
     if (forbiddenLines.has(entry)) return
-    if (dateLineRegex.test(entry)) return
+    if (dateLineRegex.test(entry)) {
+      var date = entry.split(",").pop();
+      result.push({ role: 'Date', name: date })
+      return
+    }
 
     freiNames.add(entry)
     result.push({ role: 'Frei', name: entry })

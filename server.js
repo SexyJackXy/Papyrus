@@ -11,10 +11,13 @@ var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
-var SETTINGS_PATH = path.join(__dirname,'public', 'globalVariables', 'settings.json')
+var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
-
+var UPCOMMING_PLANS_DIR = path.join(__dirname, 'data', 'upcomming-plans')
+if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
+  fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
+}
 // Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 var PUBLIC_PATHS = new Set([
   '/',
@@ -293,6 +296,26 @@ app.post('/api/extract-and-save', async (req, res) => {
     )
 
     res.json({ success: true, data: shiftJson })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+app.post('/api/save-upcomming-plans', async (req, res) => {
+  try {
+    var { base, filename } = req.body
+    var buffer = Buffer.from(base, 'base64')
+
+    var safeName = Date.now() + '_' + filename.replace(/[^a-zA-Z0-9_.-]/g, '_')
+    var savePath = path.join(UPCOMMING_PLANS_DIR, safeName)
+    fs.writeFileSync(savePath, buffer)
+
+    var content = await extractShiftFromPdf(buffer)
+
+    console.log(content)
+
+    res.json({ success: true, data: content, filename, savedAs: safeName })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })

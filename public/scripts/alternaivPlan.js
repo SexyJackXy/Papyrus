@@ -200,3 +200,28 @@ function initClearButtons() {
     })
   })
 }
+
+async function uploadUpcommingPlan(curElement) {
+  var parentElement = curElement.parentElement;
+  var inputPlan = parentElement.querySelector("#inputPlan");
+  var result;
+
+  parentElement.addEventListener("click", () => inputPlan.click());
+  inputPlan.addEventListener("change", async (e) => {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var base = await new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    result = await fetch('/api/save-upcomming-plans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base, filename: file.name })
+    }).then(r => r.json());
+  })
+}
