@@ -33,6 +33,9 @@
     </div>
 
     <div class="navBar" style="float: right;">
+      <a href="alternativPlanes/futurePlans.html">
+        <img src="#" alt="futurePlans" class="navLogo">
+      </a>
       <a href="index.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -190,11 +193,15 @@
       </div>
     </section>
 
-    <div class="temporaryPlan" onclick="showAlternativePlan()">
+    <div class="flyOuts">
+        <div class="temporaryPlan" onclick="showAlternativePlan()">
+        </div>
+        <div class="activityPlan" onclick="showActivityPlan()">
+        </div>
+        <div class="futurePlan" onclick="showfuturePlan()">
+        </div>
     </div>
 
-    <div class="activityPlan" onclick="showActivityPlan()">
-    </div>
 
     <div class="freeTeamSpace">
       <div class="team" id="teamFree">
@@ -221,6 +228,12 @@
     <div class="activityPlanClose" onclick="closeActivityPlan()">
     </div>
     <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+  </div>
+
+  <div id="futureDialog" title="Basic dialog">
+    <div class="futurePlanClose" onclick="futureActivityPlan()">
+    </div>
+    <iframe id="futureIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
   </div>
 
   <script>

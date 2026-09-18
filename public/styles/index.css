@@ -117,7 +117,7 @@
   text-align: center;
 }
 
-#ils-text a{
+#ils-text a {
   margin: 0.1rem 0.4rem;
   width: 170px;
 }
@@ -163,18 +163,18 @@
   align-items: center;
 }
 
-#ils2{
+#ils2 {
   width: 29vw;
 }
 
-#dispos{
+#dispos {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: baseline;
 }
 
-#disponennt{
+#disponennt {
   text-align: center;
   width: 30vw;
 }
@@ -193,7 +193,7 @@
   padding: 0.6rem;
 }
 
-#second-Row{
+#second-Row {
   display: flex;
   flex-direction: row;
   gap: 0.6rem;
@@ -201,17 +201,37 @@
 
 /* Styling for the fly outs */
 /* Farben & Größen der Tabs */
+.flyOuts {
+  height: 206px;
+  position: absolute;
+  right: 0;
+  z-index: 3000;
+  width: 20px;
+  top: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+}
+
 .temporaryPlan {
-  background-color: #d1d5db;
-  top: 50%;
+  background-color: red;
+  top: 0
 }
 
 .activityPlan {
-  background-color: #d1d5db;
-  top: 45%;
+  background-color: blue;
+  top: 50px
+}
+
+.futurePlan {
+  background-color: green;
+  top: 100px
 }
 
 /* Breiten der Dialoge */
+#futureDialog iframe,
 #temporaryDialog iframe {
   width: 90vw;
 }
@@ -221,6 +241,7 @@
 }
 
 /* Position der Close-Buttons */
+#futureDialog .futurePlanClose,
 #temporaryDialog .temporaryPlanClose {
   right: 90vw;
 }
@@ -230,6 +251,7 @@
 }
 
 /* Gemeinsamer Tab-Stil */
+.futurePlan,
 .temporaryPlan,
 .activityPlan {
   position: absolute;
@@ -244,6 +266,7 @@
   box-shadow: -10px 22px 25px -8px #000000;
 }
 
+.futurePlan:hover,
 .temporaryPlan:hover,
 .activityPlan:hover {
   display: block;
@@ -252,6 +275,7 @@
 }
 
 /* Iframes der Dialoge */
+#futureDialog iframe,
 #temporaryDialog iframe,
 #activityDialog iframe {
   display: none;
@@ -271,12 +295,14 @@
   transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
 
+#futureDialog iframe.is-open,
 #temporaryDialog iframe.is-open,
 #activityDialog iframe.is-open {
   transform: translateX(0);
 }
 
 /* Close-Buttons */
+#futureDialog .futurePlanClose,
 #temporaryDialog .temporaryPlanClose,
 #activityDialog .activityPlanClose {
   display: none;
@@ -295,6 +321,7 @@
   transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
+#futureDialog .futurePlanClose.is-open,
 #temporaryDialog .temporaryPlanClose.is-open,
 #activityDialog .activityPlanClose.is-open {
   transform: translateX(0);
