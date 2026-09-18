@@ -110,7 +110,7 @@
         }))
         .filter(n => n.firstName && n.lastName)
 
-      if (!username || !password || names.length === 0) {
+      if (!username || !password) {
         showRegisterError('Bitte Benutzername, Passwort und mindestens einen Namen angeben.')
         return
       }
@@ -119,7 +119,7 @@
         var res = await fetch('/api/create-user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, password, names })
         })
         var data = await res.json()
 

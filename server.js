@@ -149,11 +149,11 @@ app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
+    (req.path === '/api/create-user' && req.method === 'POST') ||
     (req.method === 'GET' && PUBLIC_GET_APIS.has(req.path))
   ) {
     return next()
   }
-  // Auch /api/create-user, /api/save-schedule etc. brauchen jetzt eine Session
   if (req.session && req.session.userId) {
     return next()
   }
@@ -178,6 +178,14 @@ var loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 Minuten
   max: 10, // max. 10 Versuche pro IP
   message: { success: false, error: 'Zu viele Login-Versuche, bitte später erneut versuchen.' },
+  standardHeaders: true,
+  legacyHeaders: false
+})
+
+var createUserLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 Minuten
+  max: 5, // max. 5 Registrierungen pro IP
+  message: { success: false, error: 'Zu viele Registrierungen, bitte später erneut versuchen.' },
   standardHeaders: true,
   legacyHeaders: false
 })
@@ -226,9 +234,9 @@ app.get('/api/me', (req, res) => {
   res.json({ success: true, username: req.session.username, names })
 })
 
-app.post('/api/create-user', async (req, res) => {
+app.post('/api/create-user', createUserLimiter, async (req, res) => {
   try {
-    var { username, password, } = req.body || {}
+    var { username, password, names } = req.body || {}
 
     if (!username || !password) {
       return res.status(400).json({ success: false, error: 'Benutzername, Passwort sind erforderlich' })
@@ -245,6 +253,10 @@ app.post('/api/create-user', async (req, res) => {
 
     var passwordHash = await bcrypt.hash(password, 12)
     var userId = createUser(username, passwordHash)
+
+    names.forEach(({ firstName, lastName }) => {
+      if (firstName && lastName) addNameToUser(userId, firstName, lastName)
+    })
 
     res.json({ success: true, userId })
   } catch (err) {
