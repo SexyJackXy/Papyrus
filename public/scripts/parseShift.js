@@ -38,7 +38,6 @@ var nameBeforeRole = new Set([
   'Frei'
 ])
 var forbiddenLines = new Set([
-  'Schichtführer',
   'Feuerwehr Heilbronn',
   'Diensteinteilung',
   'Wäsche',
