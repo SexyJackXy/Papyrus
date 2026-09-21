@@ -16,7 +16,7 @@
   <script src="../scripts/dragAndDrop.js"></script>
   <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
-  <script src="../../scripts/alternaivPlan.js"></script>
+  <script src="../scripts/alternaivPlan.js"></script>
 </head>
 
 <body>
@@ -96,23 +96,22 @@
       </div>
 
       <div id="second-Row">
-      <div class="vehicle" id="ils">
-        <h3 class="close">X</h3>
-        <h3>1. Dispo</h3>
-        <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+        <div class="vehicle" id="ils">
+          <h3 class="close">X</h3>
+          <h3>1. Dispo</h3>
+          <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+        </div>
+        <div class="vehicle" id="ils">
+          <h3 class="close">X</h3>
+          <h3>2. Dispo</h3>
+          <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+        </div>
+        <div class="vehicle" id="ils">
+          <h3 class="close">X</h3>
+          <h3>3. Dispo</h3>
+          <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
+        </div>
       </div>
-      <div class="vehicle" id="ils">
-        <h3 class="close">X</h3>
-        <h3>2. Dispo</h3>
-        <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
-      </div>
-      <div class="vehicle" id="ils">
-        <h3 class="close">X</h3>
-        <h3>3. Dispo</h3>
-        <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
-      </div>
-      </div>
-
     </section>
 
     <h2>Fahrzeuge</h2>
@@ -185,11 +184,15 @@
       </div>
     </section>
 
-    <div class="temporaryPlan" onclick="showAlternativePlan()">
+    <div class="flyOuts">
+      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
+      </div>
+      <div class="activityPlan" onclick="showActivityPlan(this)">
+      </div>
+        <div class="futurePlan" onclick="showfuturePlan(this)">
+        </div>
     </div>
 
-    <div class="activityPlan" onclick="showActivityPlan()">
-    </div>
 
     <div class="freeTeamSpace">
       <div class="team" id="teamFree">
@@ -216,6 +219,12 @@
     <div class="activityPlanClose" onclick="closeActivityPlan()">
     </div>
     <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+  </div>
+
+  <div id="futureDialog" title="Basic dialog">
+    <div class="futurePlanClose" onclick="futureActivityPlan()">
+    </div>
+    <iframe id="futureIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
   </div>
 
   <script>

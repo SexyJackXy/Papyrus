@@ -216,18 +216,18 @@
 }
 
 .temporaryPlan {
-  background-color: red;
-  top: 0
+  background-color: var(--color-card-bg);
+  top: 0;
 }
 
 .activityPlan {
-  background-color: blue;
-  top: 50px
+  background-color: var(--color-card-bg);
+  top: 50px;
 }
 
 .futurePlan {
-  background-color: green;
-  top: 100px
+  background-color: var(--color-card-bg);
+  top: 100px;
 }
 
 /* Breiten der Dialoge */

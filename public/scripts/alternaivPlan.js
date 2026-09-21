@@ -1,4 +1,5 @@
-async function showAlternativePlan() {
+async function showAlternativePlan(clickedDiv) {
+  var FlyOuts = clickedDiv.parentElement
   var dialogDiv = document.getElementById('temporaryDialog')
   var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
   var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
@@ -10,7 +11,7 @@ async function showAlternativePlan() {
   document.body.style.overflow = 'hidden'
 
   dialogIframe.style.display = 'block'
-
+  FlyOuts.style.display = 'none'
   requestAnimationFrame(() => {
     dialogIframe.classList.add('is-open')
   })
@@ -99,7 +100,8 @@ async function altertivPlanLoad() {
   }
 }
 
-async function showActivityPlan() {
+async function showActivityPlan(clickedDiv) {
+  var FlyOuts = clickedDiv.parentElement
   var dialogDiv = document.getElementById('activityDialog')
   var dialogIframe = dialogDiv.querySelector('#activityIframe')
   var dialogButton = dialogDiv.querySelector('.activityPlanClose')
@@ -111,7 +113,7 @@ async function showActivityPlan() {
   document.body.style.overflow = 'hidden'
 
   dialogIframe.style.display = 'block'
-
+  FlyOuts.style.display = 'none'
   requestAnimationFrame(() => {
     dialogIframe.classList.add('is-open')
   })

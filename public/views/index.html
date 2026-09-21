@@ -4,6 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="60" />
   <link rel="stylesheet" href="../styles/style.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
@@ -33,9 +34,6 @@
     </div>
 
     <div class="navBar" style="float: right;">
-      <a href="alternativPlanes/futurePlans.html">
-        <img src="#" alt="futurePlans" class="navLogo">
-      </a>
       <a href="index.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -103,24 +101,23 @@
         <div class="person" data-role="LFüGr" draggable="false">Frei</div>
       </div>
 
-      <div class="vehicle" id="ils2">
-        <h3>ILS</h3>
+      <div id="second-Row">
+        <div class="vehicle" id="ils">
         <h3 class="close">X</h3>
-        <div id="dispos">
-          <div id="disponennt">
-            <a>1. Dispo</a>
+          <h3>1. Dispo</h3>
             <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
           </div>
-          <div id="disponennt">
-            <a>2. Dispo</a>
+        <div class="vehicle" id="ils">
+          <h3 class="close">X</h3>
+          <h3>2. Dispo</h3>
             <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
           </div>
-          <div id="disponennt">
-            <a>3. Dispo</a>
+        <div class="vehicle" id="ils">
+          <h3 class="close">X</h3>
+          <h3>3. Dispo</h3>
             <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
           </div>
         </div>
-      </div>
     </section>
 
     <h2>Fahrzeuge</h2>
@@ -193,7 +190,7 @@
       </div>
     </section>
 
-    <div class="flyOuts">
+    <div class="flyOuts" id="flyOutId">
         <div class="temporaryPlan" onclick="showAlternativePlan()">
         </div>
         <div class="activityPlan" onclick="showActivityPlan()">
@@ -251,13 +248,6 @@
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem(K);
     });
-
-    setInterval(async () => {
-      var assignments = await window.Dienste.loadContent()
-      if (assignments && assignments.length) {
-        window.Dienste.renderAssignments(assignments)
-      }
-    }, 60000)
   </script>
 </body>
 
