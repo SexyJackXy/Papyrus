@@ -170,20 +170,46 @@ async function uploadUpcomingPlan(curElement) {
   })
 }
 
-function showUpcomingPlans(container, url) {
-  var preview = container.querySelector(".planPreview");
-  var uploadPlan = container.querySelector('#uploadPlan')
-  if (!preview) {
-    preview = document.createElement("iframe");
-    preview.className = "planPreview";
-    container.appendChild(preview);
+async function showUpcomingPlans(container, url) {
+  if (typeof pdfjsLib === 'undefined') {
+    console.warn('pdfjsLib nicht geladen – PDF.js-Script fehlt auf dieser Seite.')
+    return
+  }
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   }
 
+  var uploadPlan = container.querySelector('#uploadPlan')
+  var img = container.querySelector('.img')
   uploadPlan.style.display = 'none'
-  preview.src = url + "#toolbar=0&navpanes=0&scrollbar=0";
+  img.style.display = 'none'
 
-  container.querySelector("#uploadPlan").style.display = "none"; // Upload-Link ausblenden
-  container.querySelector(".img").style.display = "none";        // Plus-Icon ausblenden
+  var wrapper = container.querySelector('.planPreview')
+  if (!wrapper) {
+    wrapper = document.createElement('div')
+    wrapper.className = 'planPreview'
+    container.appendChild(wrapper)
+  }
+  wrapper.innerHTML = ''
+
+  var canvas = document.createElement('canvas')
+  canvas.className = 'planCanvas'
+  wrapper.appendChild(canvas)
+
+  var pdf = await pdfjsLib.getDocument(url).promise
+  var page = await pdf.getPage(1)
+
+  var containerWidth = wrapper.clientWidth
+  var unscaledViewport = page.getViewport({ scale: 1 })
+  var scale = containerWidth / unscaledViewport.width
+  var viewport = page.getViewport({ scale })
+
+  var ctx = canvas.getContext('2d')
+  canvas.width = viewport.width
+  canvas.height = viewport.height
+
+  await page.render({ canvasContext: ctx, viewport }).promise
 }
 
 async function loadFuturePlans() {

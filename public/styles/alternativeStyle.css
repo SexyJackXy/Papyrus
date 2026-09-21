@@ -91,7 +91,17 @@ img {
 .planPreview {
     width: 100%;
     height: 100%;
-    border: none;
-    display: block;
-    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #fff;
+}
+
+.planCanvas {
+    max-width: 100%;
+    border-radius: 6px;
+}
+
+body{
+    overflow: hidden;
 }

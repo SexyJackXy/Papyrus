@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="60" />
+  <!-- <meta http-equiv="refresh" content="60" /> -->
   <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
@@ -33,7 +33,7 @@
       </a>
     </div>
 
-    <div class="navBar" style="float: right;">
+    <div class="navBar">
       <a href="index.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -47,15 +47,6 @@
   </header>
 
   <main class="container">
-    <a href="shiftSchedule.html" id="showStation">
-      <img src="../img/menschen.png" alt="Mannschaft" id="showStationPic">
-    </a>
-
-    <a id="trash">
-      <img src="../img/trash.png" alt="Löschen" id="trashCan">
-    </a>
-
-
     <h2>Führungsdienste</h2>
 
     <section class="top-duty">
@@ -123,7 +114,7 @@
     <h2>Fahrzeuge</h2>
 
     <section class="middle-duty">
-      <div class="side">
+      <div class="splitContainer">
         <div class="vehicle" id="ELW">
           <h3>ELW</h3>
           <h3 class="close">X</h3>
@@ -155,7 +146,7 @@
         <div class="person" data-role="LF 2 WTM" draggable="false">LF 2 WTM</div>
       </div>
 
-      <div class="side">
+      <div class="splitContainer">
 
         <div class="vehicle">
           <h3>DLK/RW</h3>
@@ -172,7 +163,7 @@
         </div>
       </div>
 
-      <div class="side">
+      <div class="splitContainer">
         <div class="vehicle">
           <h3>KEF</h3>
           <h3 class="close">X</h3>
@@ -190,16 +181,6 @@
       </div>
     </section>
 
-    <div class="flyOuts" id="flyOutId">
-      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
-      </div>
-      <div class="activityPlan" onclick="showActivityPlan(this)">
-      </div>
-      <div class="futurePlan" onclick="showFuturePlan(this)">
-      </div>
-    </div>
-
-
     <div class="freeTeamSpace">
       <div class="team" id="teamFree">
         <h2>Frei auf Wache</h2>
@@ -215,24 +196,44 @@
     </div>
   </main>
 
-  <div id="temporaryDialog" title="Basic dialog">
-    <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
-    </div>
-    <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
-  </div>
+  <section class="sidebar">
+    <a href="shiftSchedule.html" id="showStation">
+      <img src="../img/menschen.png" alt="Mannschaft" id="showStationPic">
+    </a>
 
-  <div id="activityDialog" title="Basic dialog">
-    <div class="activityPlanClose" onclick="closeActivityPlan(this)">
-    </div>
-    <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-  </div>
+    <a id="trash">
+      <img src="../img/trash.png" alt="Löschen" id="trashCan">
+    </a>
 
-  <div id="futureDialog" title="Basic dialog">
-    <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+    <div class="flyOuts" id="flyOutId">
+      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
+      </div>
+      <div class="activityPlan" onclick="showActivityPlan(this)">
+      </div>
+      <div class="futurePlan" onclick="showFuturePlan(this)">
+      </div>
     </div>
-    <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe>
-  </div>
+  </section>
 
+  <section class="iFrames">
+    <div id="temporaryDialog" title="Basic dialog">
+      <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
+      </div>
+      <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+    </div>
+
+    <div id="activityDialog" title="Basic dialog">
+      <div class="activityPlanClose" onclick="closeActivityPlan(this)">
+      </div>
+      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    </div>
+
+    <div id="futureDialog" title="Basic dialog">
+      <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+      </div>
+      <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe>
+    </div>
+  </section>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       window.DiensteSettings.initSettingsAdjustment();
