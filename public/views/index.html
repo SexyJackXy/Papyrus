@@ -198,7 +198,7 @@
       </div>
       <div class="activityPlan" onclick="showActivityPlan(this)">
       </div>
-      <div class="futurePlan" onclick="showfuturePlan(this)">
+      <div class="futurePlan" onclick="showFuturePlan(this)">
       </div>
     </div>
 
@@ -219,21 +219,21 @@
   </main>
 
   <div id="temporaryDialog" title="Basic dialog">
-    <div class="temporaryPlanClose" onclick="closeTemporaryPlan()">
+    <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
     </div>
     <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
   </div>
 
   <div id="activityDialog" title="Basic dialog">
-    <div class="activityPlanClose" onclick="closeActivityPlan()">
+    <div class="activityPlanClose" onclick="closeActivityPlan(this)">
     </div>
     <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
   </div>
 
   <div id="futureDialog" title="Basic dialog">
-    <div class="futurePlanClose" onclick="futureActivityPlan()">
+    <div class="futurePlanClose" onclick="closeFuturePlan(this)">
     </div>
-    <iframe id="futureIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe>
   </div>
 
   <script>

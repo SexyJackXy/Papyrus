@@ -231,7 +231,11 @@
 }
 
 /* Breiten der Dialoge */
-#futureDialog iframe,
+
+#futureDialog iframe{
+  width: 95vw;
+}
+
 #temporaryDialog iframe {
   width: 90vw;
 }
@@ -241,7 +245,9 @@
 }
 
 /* Position der Close-Buttons */
-#futureDialog .futurePlanClose,
+#futureDialog .futurePlanClose{
+  right: 95vw;
+}
 #temporaryDialog .temporaryPlanClose {
   right: 90vw;
 }

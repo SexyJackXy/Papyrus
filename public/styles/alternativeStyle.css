@@ -50,13 +50,14 @@ h3.text {
 }
 
 .planTitles a {
-    width: 613px;
+    width: 33%;
     color: var(--color-text);
     text-shadow: none;
 }
 
 .upcommingPlans {
     display: flex;
+    width: 1800px;
     justify-content: space-evenly;
     gap: 0.6rem;
     margin-top: 0 !important;
@@ -67,7 +68,7 @@ h3.text {
 .plan {
     display: flex;
     background-color: var(--color-card-bg);
-    width: 613px;
+    width: 33%;
     height: 864px;
     border: solid 7px var(--color-text-on-primary);
     border-radius: 10px;
