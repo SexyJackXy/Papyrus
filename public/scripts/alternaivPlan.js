@@ -32,7 +32,8 @@ async function showAlternativePlan(clickedDiv) {
   })
 }
 
-async function closeTemporaryPlan() {
+async function closeTemporaryPlan(clickedDiv) {
+  var FlyOuts = document.getElementById('flyOutId')
   var dialogDiv = document.getElementById('temporaryDialog')
   var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
   var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
@@ -42,7 +43,7 @@ async function closeTemporaryPlan() {
     })
 
   dialogButton.classList.remove('is-open')
-
+  FlyOuts.style.display = 'flex'
   dialogButton.addEventListener(
     'transitionend',
     () => {
@@ -134,7 +135,8 @@ async function showActivityPlan(clickedDiv) {
   })
 }
 
-async function closeActivityPlan() {
+async function closeActivityPlan(clickedDiv) {
+  var FlyOuts = document.getElementById('flyOutId')
   var dialogDiv = document.getElementById('activityDialog')
   var dialogIframe = dialogDiv.querySelector('#activityIframe')
   var dialogButton = dialogDiv.querySelector('.activityPlanClose')
@@ -156,7 +158,7 @@ async function closeActivityPlan() {
   await delay(1100)
 
   dialogIframe.classList.remove('is-open')
-
+  FlyOuts.style.display = 'flex'
   dialogIframe.addEventListener(
     'transitionend',
     () => {
