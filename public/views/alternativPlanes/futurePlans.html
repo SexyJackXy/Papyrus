@@ -3,14 +3,13 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
     <meta http-equiv="refresh" content="60" />
+    <meta charset="utf-8">
     <link rel="stylesheet" href="../../styles/style.css">
     <link rel="stylesheet" href="../../styles/alternativeStyle.css">
-        <link rel="stylesheet" href="../../styles/futurePlans.css">
     <link rel="stylesheet" href="../../styles/responsiveStyle.css">
     <title>Papyrus</title>
-    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../../img/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
@@ -21,27 +20,34 @@
 
 <body style="height: 100vh;">
     <h3 class="text">Zukünfitge Pläne</h3>
+    <div class="planTitles">
+        <a class="text" id="plan1-title">Plan Heute</a>
+        <a class="text" id="plan2-title">Plan Morgen</a>
+        <a class="text" id="plan3-title">Plan Übermorgen</a>
+    </div>
     <div class="upcommingPlans">
         <div class="plan" id="plan1">
             <input id="inputPlan" type="file" accept=".pdf" style="display:none">
-            <a id="uploadPlan" onclick="uploadUpcommingPlan(this)"></a>
+            <a id="uploadPlan" onclick="uploadUpcomingPlan(this)"></a>
             <img class="img" src="../../img/plus.png">
         </div>
         <div class="plan" id="plan2">
             <input id="inputPlan" type="file" accept=".pdf" style="display:none">
-            <a id="uploadPlan" onclick="uploadUpcommingPlan(this)"></a>
+            <a id="uploadPlan" onclick="uploadUpcomingPlan(this)"></a>
             <img class="img" src="../../img/plus.png">
         </div>
         <div class="plan" id="plan3">
             <input id="inputPlan" type="file" accept=".pdf" style="display:none">
-            <a id="uploadPlan" onclick="uploadUpcommingPlan(this)"></a>
+            <a id="uploadPlan" onclick="uploadUpcomingPlan(this)"></a>
             <img class="img" src="../../img/plus.png">
         </div>
     </div>
 </body>
 
 <script>
-
+    document.addEventListener("DOMContentLoaded", async () => {
+        loadFuturePlans()
+    })
 
 </script>
 

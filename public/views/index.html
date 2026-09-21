@@ -34,6 +34,9 @@
     </div>
 
     <div class="navBar" style="float: right;">
+      <a href="alternativPlanes/futurePlans.html">
+        <img src="" alt="Zukünfitge" class="navLogo">
+      </a>
       <a href="index.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -43,9 +46,6 @@
       <a href="login.html" onclick="Dienste.logout(); return false;">
         <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
       </a>
-    </div>
-    <div>
-      <a href="alternativPlanes/futurePlans.html">Test</a>
     </div>
   </header>
 
@@ -106,21 +106,21 @@
 
       <div id="second-Row">
         <div class="vehicle" id="ils">
-        <h3 class="close">X</h3>
+          <h3 class="close">X</h3>
           <h3>1. Dispo</h3>
-            <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+        </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
           <h3>2. Dispo</h3>
-            <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+        </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
           <h3>3. Dispo</h3>
-            <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
         </div>
+      </div>
     </section>
 
     <h2>Fahrzeuge</h2>
@@ -194,12 +194,12 @@
     </section>
 
     <div class="flyOuts" id="flyOutId">
-        <div class="temporaryPlan" onclick="showAlternativePlan()">
-        </div>
-        <div class="activityPlan" onclick="showActivityPlan()">
-        </div>
-        <div class="futurePlan" onclick="showfuturePlan()">
-        </div>
+      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
+      </div>
+      <div class="activityPlan" onclick="showActivityPlan(this)">
+      </div>
+      <div class="futurePlan" onclick="showfuturePlan(this)">
+      </div>
     </div>
 
 

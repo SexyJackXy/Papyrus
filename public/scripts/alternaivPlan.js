@@ -1,3 +1,15 @@
+function formatDateGerman(timestamp) {
+  var date = new Date(timestamp);
+  var monate = [
+    "Januar", "Februar", "März", "April", "Mai", "Juni",
+    "Juli", "August", "September", "Oktober", "November", "Dezember"
+  ];
+  var tag = String(date.getDate()).padStart(2, '0');
+  var monat = monate[date.getMonth()];
+  var jahr = date.getFullYear();
+  return `${tag} ${monat} ${jahr}`;
+}
+
 async function showAlternativePlan(clickedDiv) {
   var FlyOuts = clickedDiv.parentElement
   var dialogDiv = document.getElementById('temporaryDialog')
@@ -33,6 +45,7 @@ async function showAlternativePlan(clickedDiv) {
 }
 
 async function closeTemporaryPlan() {
+  var FlyOuts = clickedDiv.parentElement
   var dialogDiv = document.getElementById('temporaryDialog')
   var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
   var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
@@ -42,7 +55,7 @@ async function closeTemporaryPlan() {
     })
 
   dialogButton.classList.remove('is-open')
-
+  FlyOuts.style.display = 'none'
   dialogButton.addEventListener(
     'transitionend',
     () => {
@@ -135,6 +148,7 @@ async function showActivityPlan(clickedDiv) {
 }
 
 async function closeActivityPlan() {
+  var FlyOuts = clickedDiv.parentElement
   var dialogDiv = document.getElementById('activityDialog')
   var dialogIframe = dialogDiv.querySelector('#activityIframe')
   var dialogButton = dialogDiv.querySelector('.activityPlanClose')
@@ -144,7 +158,7 @@ async function closeActivityPlan() {
     })
 
   dialogButton.classList.remove('is-open')
-
+  FlyOuts.style.display = 'none'
   dialogButton.addEventListener(
     'transitionend',
     () => {
@@ -201,7 +215,7 @@ function initClearButtons() {
   })
 }
 
-async function uploadUpcommingPlan(curElement) {
+async function uploadUpcomingPlan(curElement) {
   var parentElement = curElement.parentElement;
   var inputPlan = parentElement.querySelector("#inputPlan");
   var result;
@@ -211,6 +225,9 @@ async function uploadUpcommingPlan(curElement) {
     var file = e.target.files[0];
     if (!file) return;
 
+    var previewUrl = URL.createObjectURL(file);
+    showUpcomingPlans(parentElement, previewUrl);
+
     var base = await new Promise((resolve, reject) => {
       var reader = new FileReader();
       reader.onload = () => resolve(reader.result.split(",")[1]);
@@ -218,10 +235,62 @@ async function uploadUpcommingPlan(curElement) {
       reader.readAsDataURL(file);
     });
 
-    result = await fetch('/api/save-upcomming-plans', {
+    result = await fetch('/api/save-upcoming-plans', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ base, filename: file.name })
     }).then(r => r.json());
+
+    console.log(result)
   })
+}
+
+function showUpcomingPlans(container, url) {
+  var preview = container.querySelector(".planPreview");
+  var uploadPlan = container.querySelector('#uploadPlan')
+  if (!preview) {
+    preview = document.createElement("iframe");
+    preview.className = "planPreview";
+    container.appendChild(preview);
+  }
+
+  uploadPlan.style.display = 'none'
+  preview.src = url + "#toolbar=0&navpanes=0&scrollbar=0";
+
+  container.querySelector("#uploadPlan").style.display = "none"; // Upload-Link ausblenden
+  container.querySelector(".img").style.display = "none";        // Plus-Icon ausblenden
+}
+
+async function loadFuturePlans() {
+  var res = await fetch('/api/load-upcoming-plans')
+  var result = await res.json()
+
+  var today = new Date()
+  var tomorrow = (d => new Date(d.setDate(d.getDate() + 1)))(new Date)
+  var dayAfterTomorrow = (d => new Date(d.setDate(d.getDate() + 2)))(new Date)
+  var dateTimeNow = formatDateGerman(today)
+  var dateTomorow = formatDateGerman(tomorrow)
+  var dateDayAfterTomorrow = formatDateGerman(dayAfterTomorrow)
+  var i = 1
+
+  if (result.data.length > 0) {
+    result.data.forEach(({ name, path }) => {
+      if (i > 3) return;
+
+      if (name === dateTimeNow + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
+      else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
+      else if (name === dateDayAfterTomorrow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
+      else {
+        var planDiv = document.getElementById('plan' + i);
+        var plantitle = document.getElementById('plan' + i + '-title')
+        var filePath = path.replace(/%20/g, " ")
+
+        plantitle.textContent = "Plan vom: " + name
+        showUpcomingPlans(planDiv, filePath)
+      }
+
+      i++
+    })
+  }
+  else { console.log(result) }
 }

@@ -124,17 +124,23 @@
       if (!file) return;
 
       // Datei als Base64 lesen — kein Buffer/Node nötig
-      var base64 = await new Promise((resolve, reject) => {
+      var base = await new Promise((resolve, reject) => {
         var reader = new FileReader();
         reader.onload = () => resolve(reader.result.split(",")[1]);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
 
+      var resultfuture = await fetch('/api/save-upcoming-plans', { // NEU: Doppel-M, wie im Backend (Zeile 311)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base, filename: file.name })
+      }).then(r => r.json());
+
       var result = await fetch('/api/extract-and-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ base64 })
+        body: JSON.stringify({ base64: base }) // NEU: Feldname base64 statt base, passend zum Backend
       }).then(r => r.json());
 
       localStorage.setItem('dienste_csv', JSON.stringify(result.data));

@@ -18,6 +18,7 @@ var UPCOMMING_PLANS_DIR = path.join(__dirname, 'data', 'upcomming-plans')
 if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
   fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
 }
+var MONATE = "januar,februar,märz,april,mai,juni,juli,august,september,oktober,november,dezember".split(",")
 // Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 var PUBLIC_PATHS = new Set([
   '/',
@@ -118,6 +119,10 @@ function checkActivitys(currentdata, data) {
   return { neu, geaendert, geloescht, curData }
 }
 
+function dateFromName(name) {
+  var [, d, m, y] = name.match(/(\d+)\.\s*(\S+)\s*(\d+)/)
+  return new Date(y, MONATE.indexOf(m.toLowerCase()), d)
+}
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
@@ -145,7 +150,8 @@ var PUBLIC_GET_APIS = new Set([
   '/api/latest-activity-schedule',
   '/api/latest-schedule',
   '/api/latest-temporary-schedule',
-  '/api/settings'
+  '/api/settings',
+  '/api/load-upcoming-plans'
 ])
 
 app.use((req, res, next) => {
@@ -167,6 +173,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/upcoming-plans', express.static(UPCOMMING_PLANS_DIR))
 
 app.get('/', (req, res) => {
   if (req.session && req.session.userId) {
@@ -302,24 +309,49 @@ app.post('/api/extract-and-save', async (req, res) => {
   }
 })
 
-app.post('/api/save-upcomming-plans', async (req, res) => {
+app.post('/api/save-upcoming-plans', async (req, res) => {
   try {
     var { base, filename } = req.body
     var buffer = Buffer.from(base, 'base64')
+    var content = await extractShiftFromPdf(buffer)
+    var upcomming_Date;
 
-    var safeName = Date.now() + '_' + filename.replace(/[^a-zA-Z0-9_.-]/g, '_')
+    content.forEach(({ role, name }) => {
+      if (!name) return
+
+      if (role === 'Date') {
+        upcomming_Date = name.trimStart()
+        return
+      }
+    })
+
+    var safeName = upcomming_Date + '.pdf'
     var savePath = path.join(UPCOMMING_PLANS_DIR, safeName)
     fs.writeFileSync(savePath, buffer)
-
-    var content = await extractShiftFromPdf(buffer)
-
-    console.log(content)
 
     res.json({ success: true, data: content, filename, savedAs: safeName })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
   }
+})
+
+app.get('/api/load-upcoming-plans', (req, res) => {
+  if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
+    return res.json({ success: true, data: null })
+  }
+
+  var files = fs
+    .readdirSync(UPCOMMING_PLANS_DIR)
+    .filter(f => f.endsWith('.pdf'))
+    .sort((a, b) => dateFromName(b) - dateFromName(a))
+    .map(name => ({ name, path: `/upcoming-plans/${encodeURIComponent(name)}` })) // NEU: URL statt Serverpfad
+
+  if (!files.length) {
+    return res.json({ success: true, data: null })
+  }
+
+  return res.json({success:true, data: files})
 })
 
 app.post('/api/reset-schedule', (req, res) => {
@@ -491,7 +523,6 @@ app.get('/api/latest-schedule', (req, res) => {
         var full = path.join(dir, f)
         return { name: f, mtime: fs.statSync(full).mtimeMs }
       })
-      .sort((a, b) => b.mtime - a.mtime)
 
     if (!files.length) {
       return res.json({ success: true, data: null })
