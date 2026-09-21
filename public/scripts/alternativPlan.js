@@ -1,3 +1,10 @@
+const showAlternativePlan = makeShowPlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
+const showActivityPlan   = makeShowPlan({ dialogId: 'activityDialog',  iframeId: 'activityIframe',  closeSelector: '.activityPlanClose' })
+const showFuturePlan     = makeShowPlan({ dialogId: 'futureDialog',   iframeId: 'futureIframe',    closeSelector: '.futurePlanClose' })
+const closeTemporaryPlan = makeClosePlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
+const closeActivityPlan  = makeClosePlan({ dialogId: 'activityDialog',  iframeId: 'activityIframe',  closeSelector: '.activityPlanClose' })
+const closeFuturePlan    = makeClosePlan({ dialogId: 'futureDialog',   iframeId: 'futureIframe',    closeSelector: '.futurePlanClose' })
+
 function formatDateGerman(timestamp) {
   var date = new Date(timestamp);
   var monate = [
@@ -10,176 +17,57 @@ function formatDateGerman(timestamp) {
   return `${tag} ${monat} ${jahr}`;
 }
 
-async function showAlternativePlan(clickedDiv) {
-  var FlyOuts = clickedDiv.parentElement
-  var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
-  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
+function makeShowPlan({ dialogId, iframeId, closeSelector }) {
+  return async function (clickedDiv) {
+    var FlyOuts = clickedDiv.parentElement
+    var dialogDiv = document.getElementById(dialogId)
+    var dialogIframe = dialogDiv.querySelector('#' + iframeId)
+    var dialogButton = dialogDiv.querySelector(closeSelector)
+    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
 
-  document.body.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
 
-  dialogIframe.style.display = 'block'
-  FlyOuts.style.display = 'none'
-  requestAnimationFrame(() => {
-    dialogIframe.classList.add('is-open')
-  })
+    dialogIframe.style.display = 'block'
+    FlyOuts.style.display = 'none'
+    requestAnimationFrame(() => dialogIframe.classList.add('is-open'))
 
-  if (!dialogIframe.src) {
-    await new Promise(resolve => {
-      dialogIframe.addEventListener('load', resolve, { once: true })
-      dialogIframe.src = dialogIframe.dataset.src
-    })
+    if (!dialogIframe.src) {
+      await new Promise(resolve => {
+        dialogIframe.addEventListener('load', resolve, { once: true })
+        dialogIframe.src = dialogIframe.dataset.src
+      })
+    }
+
+    await delay(400)
+
+    dialogButton.style.display = 'block'
+    requestAnimationFrame(() => dialogButton.classList.add('is-open'))
   }
-
-  await delay(400)
-
-  dialogButton.style.display = 'block'
-
-  requestAnimationFrame(() => {
-    dialogButton.classList.add('is-open')
-  })
 }
 
-async function showActivityPlan(clickedDiv) {
-  var FlyOuts = clickedDiv.parentElement
-  var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#activityIframe')
-  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
+function makeClosePlan({ dialogId, iframeId, closeSelector }) {
+  return async function () {
+    var FlyOuts = document.getElementById('flyOutId')
+    var dialogDiv = document.getElementById(dialogId)
+    var dialogIframe = dialogDiv.querySelector('#' + iframeId)
+    var dialogButton = dialogDiv.querySelector(closeSelector)
+    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
 
-  document.body.style.overflow = 'hidden'
-
-  dialogIframe.style.display = 'block'
-  FlyOuts.style.display = 'none'
-  requestAnimationFrame(() => {
-    dialogIframe.classList.add('is-open')
-  })
-
-  if (!dialogIframe.src) {
-    await new Promise(resolve => {
-      dialogIframe.addEventListener('load', resolve, { once: true })
-      dialogIframe.src = dialogIframe.dataset.src
-    })
-  }
-
-  await delay(400)
-
-  dialogButton.style.display = 'block'
-
-  requestAnimationFrame(() => {
-    dialogButton.classList.add('is-open')
-  })
-}
-
-async function showFuturePlan(clickedDiv) {
-  var FlyOuts = clickedDiv.parentElement
-  var dialogDiv = document.getElementById('futureDialog')
-  var dialogIframe = dialogDiv.querySelector('#futureIframe')
-  var dialogButton = dialogDiv.querySelector('.futurePlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
-
-  document.body.style.overflow = 'hidden'
-
-  dialogIframe.style.display = 'block'
-  FlyOuts.style.display = 'none'
-  requestAnimationFrame(() => {
-    dialogIframe.classList.add('is-open')
-  })
-
-  if (!dialogIframe.src) {
-    await new Promise(resolve => {
-      dialogIframe.addEventListener('load', resolve, { once: true })
-      dialogIframe.src = dialogIframe.dataset.src
-    })
-  }
-
-  await delay(400)
-
-  dialogButton.style.display = 'block'
-
-  requestAnimationFrame(() => {
-    dialogButton.classList.add('is-open')
-  })
-}
-
-async function closeTemporaryPlan() {
-  var FlyOuts = document.getElementById('flyOutId')
-  var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
-  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
-
-  dialogButton.classList.remove('is-open')
-
-  dialogButton.addEventListener(
-    'transitionend',
-    () => {
+    dialogButton.classList.remove('is-open')
+    dialogButton.addEventListener('transitionend', () => {
       dialogButton.style.display = 'none'
-    },
-    { once: true }
-  )
+    }, { once: true })
 
-  await delay(1100)
+    await delay(1100)
 
-  dialogIframe.classList.remove('is-open')
-
-  dialogIframe.addEventListener(
-    'transitionend',
-    () => {
+    dialogIframe.classList.remove('is-open')
+    dialogIframe.addEventListener('transitionend', () => {
       dialogIframe.style.display = 'none'
       document.body.style.overflow = ''
-    },
-    { once: true }
-  )
-  FlyOuts.style.display = 'flex'
-}
+    }, { once: true })
 
-async function closeActivityPlan() {
-  var FlyOuts = document.getElementById('flyOutId')
-  var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#activityIframe')
-  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
-
-  dialogButton.classList.remove('is-open')
-
-  dialogButton.addEventListener(
-    'transitionend',
-    () => {
-      dialogButton.style.display = 'none'
-    },
-    { once: true }
-  )
-
-  await delay(1100)
-
-  dialogIframe.classList.remove('is-open')
-
-  dialogIframe.addEventListener(
-    'transitionend',
-    () => {
-      dialogIframe.style.display = 'none'
-      document.body.style.overflow = ''
-    },
-    { once: true }
-  )
     FlyOuts.style.display = 'flex'
+  }
 }
 
 async function altertivPlanLoad() {

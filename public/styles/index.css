@@ -39,7 +39,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: var(--color-text-on-primary);
   border-radius: 10px;
   width: clamp(110px, 8vw, 200px);
   box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
@@ -57,7 +57,7 @@
 .close {
   right: 0.6rem;
   max-height: 18px;
-  color: #0a0a0a;
+  color: var(--color-text);
 }
 
 .close:hover {
@@ -73,8 +73,8 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #0a0a0a;
-  background-color: #d1d5db;
+  color: var(--color-text);
+  background-color: var(--color-card-bg);
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
@@ -131,7 +131,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.6rem;
-  background-color: #ffffff;
+  background-color: var(--color-text-on-primary);
   padding: 0.6rem 0;
   border-radius: 10px;
 }
@@ -147,8 +147,8 @@
 }
 
 #teamUsed #innerTeam .card {
-  background-color: #ff2a1c;
-  color: #ffffff;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
 }
 
 #workServices {
@@ -261,9 +261,9 @@
 .temporaryPlan,
 .activityPlan {
   position: absolute;
-  border-top: solid 3px #ffffff;
-  border-bottom: solid 3px #ffffff;
-  border-left: solid 3px #ffffff;
+  border-top: solid 3px var(--color-text-on-primary);
+  border-bottom: solid 3px var(--color-text-on-primary);
+  border-left: solid 3px var(--color-text-on-primary);
   height: 100px;
   width: 15px;
   right: 0;
@@ -290,11 +290,11 @@
   right: 0;
   height: 94vh;
   z-index: 2;
-  background-color: #f3f4f6;
+  background-color: var(--color-bg);
   border-top: none;
   border-right: none;
-  border-left: solid 3px #ffffff;
-  border-bottom: solid 3px #ffffff;
+  border-left: solid 3px var(--color-text-on-primary);
+  border-bottom: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
   box-shadow: -10px 1px 17px 10px rgba(0, 0, 0, 0.7);
   transform: translateX(100%);
@@ -317,10 +317,10 @@
   height: 100px;
   width: 15px;
   z-index: 3;
-  background-color: #f3f4f6;
-  border-top: solid 3px #ffffff;
-  border-bottom: solid 3px #ffffff;
-  border-left: solid 3px #ffffff;
+  background-color: var(--color-bg);
+  border-top: solid 3px var(--color-text-on-primary);
+  border-bottom: solid 3px var(--color-text-on-primary);
+  border-left: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
   opacity: 0;
   transform: translateX(100%);

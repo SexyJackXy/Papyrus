@@ -1,5 +1,5 @@
 h3.text {
-    color: #0a0a0a;
+    color: var(--color-text);
     font-weight: 500;
     text-shadow: none;
     font-size: 2ch;
@@ -69,7 +69,7 @@ h3.text {
     display: flex;
     background-color: var(--color-card-bg);
     width: 33%;
-    height: 864px;
+    height: 816px;
     border: solid 7px var(--color-text-on-primary);
     border-radius: 10px;
     justify-content: center;
@@ -93,4 +93,5 @@ img {
     height: 100%;
     border: none;
     display: block;
+    border-radius: 10px;
 }

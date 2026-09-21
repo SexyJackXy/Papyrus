@@ -318,7 +318,7 @@
           d.setAttribute('draggable', !reservedNames.includes(name))
           d.innerHTML = name
           d.style.backgroundColor = '#af2a1c'
-          d.style.color = '#ffffff'
+          d.style.color = 'var(--color-text-on-primary)'
           triggerdTeam.appendChild(d)
           return
         }
@@ -367,7 +367,7 @@
           var oldPerson = p.textContent.trim()
           var c = document.createElement('div')
 
-          p.style.backgroundColor = '#D1D5DB'
+          p.style.backgroundColor = 'var(--color-card-bg)'
           c.className = 'card'
           p.textContent = p.dataset.default || 'Frei'
           p.draggable = false
