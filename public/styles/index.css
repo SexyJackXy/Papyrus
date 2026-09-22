@@ -26,6 +26,11 @@
   touch-action: none;
 }
 
+[present='false']{
+  /* border: inset 2px#a81309; */
+  box-shadow: inset 0 0 0 2px var(--color-primary-dark)
+}
+
 .middle-duty {
   display: flex;
   flex-direction: row;

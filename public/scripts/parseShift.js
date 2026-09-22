@@ -85,7 +85,7 @@ function parseShiftArray(lines) {
     nameOccurrences[entry].push(idx)
   })
 
-  var result = template.map(t => ({ role: t.role, name: '' }))
+  var result = template.map(t => ({ role: t.role, name: '', present: 'false' }))
   var roleIndexTracker = {}
   result.forEach((item, idx) => {
     if (!roleIndexTracker[item.role]) roleIndexTracker[item.role] = []

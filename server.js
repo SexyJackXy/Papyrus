@@ -13,7 +13,7 @@ var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require(
 var app = express()
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
-var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1']
+var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1','BvD','Schichtführer']
 var UPCOMMING_PLANS_DIR = path.join(__dirname, 'data', 'upcomming-plans')
 if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
   fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
@@ -65,9 +65,13 @@ function diffSchedule(currentdata, data) {
 
   for (var cur of currentdata) {
     if (IGNORE_ROLES.includes(cur.role)) continue
-    var nochVorhanden = MULTI_ROLES.includes(cur.role)
-      ? data.some(item => item.role === cur.role && item.name === cur.name)
-      : data.some(item => item.role === cur.role)
+    var nochVorhanden
+    if (MULTI_ROLES.includes(cur.role)) {
+      nochVorhanden = data.some(item => item.role === cur.role && item.name === cur.name)
+    }
+    else {
+      nochVorhanden = data.some(item => item.role === cur.role)
+    }
 
     if (!nochVorhanden) {
       geloescht.push(cur)
@@ -351,7 +355,7 @@ app.get('/api/load-upcoming-plans', (req, res) => {
     return res.json({ success: true, data: null })
   }
 
-  return res.json({success:true, data: files})
+  return res.json({ success: true, data: files })
 })
 
 app.post('/api/reset-schedule', (req, res) => {

@@ -50,12 +50,6 @@
     'Kantine2'
   ]
 
-  function captureDefaults() {
-    document.querySelectorAll('.person').forEach(el => {
-      el.dataset.default = el.textContent.trim()
-    })
-  }
-
   function readFromFile(file) {
     file.arrayBuffer().then(b => {
       var candidates = [
@@ -104,6 +98,21 @@
   function getContent() {
     var raw = localStorage.getItem(cookies)
     return raw ? JSON.parse(raw) : []
+  }
+
+  function setActive(clickedElement) {
+    var allPersons = Array.from(document.querySelectorAll('.person'))
+    var clickedName = clickedElement.textContent
+
+    var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
+
+    selectedPostions.forEach(postion => {
+      postion.setAttribute('present', 'true')
+    })
+
+    var data = serializeAssignments()
+
+    scheduleSave()
   }
 
   async function loadContent() {
@@ -159,7 +168,8 @@
       var role = el.dataset.role
       var text = el.textContent.trim()
       var name = reservedNames.includes(text) ? '' : text
-      result.push({ role, name })
+      var present = el.getAttribute('present')
+      result.push({ role, name, present })
     })
 
     document.querySelectorAll('#teamFree .card').forEach(el => {
@@ -275,12 +285,10 @@
     var usedTeamParent = document.getElementById('teamUsed')
     var usedTeam = usedTeamParent.querySelector('#innerTeam')
 
-
     if (!freeTeam) return
     if (!usedTeam) return
 
-
-    assignment.forEach(({ role, name }) => {
+    assignment.forEach(({ role, name, present }) => {
       if (!name) return
 
       if (role === 'Frei') {
@@ -289,6 +297,7 @@
         var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
+        d.setAttribute('present', present)
         d.innerHTML = name
         freeTeam.appendChild(d)
         return
@@ -300,6 +309,7 @@
         var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
+        d.setAttribute('present', present)
         d.innerHTML = name
         usedTeam.appendChild(d)
         return
@@ -327,6 +337,7 @@
       var el = document.querySelector(`.person[data-role="${role}"]`)
       if (!el) return
 
+      el.setAttribute('present', present)
       el.textContent = name
       updatePersonColor(el)
     })
@@ -446,6 +457,7 @@
     initDragAndDrop,
     initDeleteButtons,
     logout,
-    importNotWorkingPeople
+    importNotWorkingPeople,
+    setActive
   }
 })()

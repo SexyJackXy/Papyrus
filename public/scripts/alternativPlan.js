@@ -1,9 +1,9 @@
 const showAlternativePlan = makeShowPlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
-const showActivityPlan   = makeShowPlan({ dialogId: 'activityDialog',  iframeId: 'activityIframe',  closeSelector: '.activityPlanClose' })
-const showFuturePlan     = makeShowPlan({ dialogId: 'futureDialog',   iframeId: 'futureIframe',    closeSelector: '.futurePlanClose' })
+const showActivityPlan = makeShowPlan({ dialogId: 'activityDialog', iframeId: 'activityIframe', closeSelector: '.activityPlanClose' })
+const showFuturePlan = makeShowPlan({ dialogId: 'futureDialog', iframeId: 'futureIframe', closeSelector: '.futurePlanClose' })
 const closeTemporaryPlan = makeClosePlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
-const closeActivityPlan  = makeClosePlan({ dialogId: 'activityDialog',  iframeId: 'activityIframe',  closeSelector: '.activityPlanClose' })
-const closeFuturePlan    = makeClosePlan({ dialogId: 'futureDialog',   iframeId: 'futureIframe',    closeSelector: '.futurePlanClose' })
+const closeActivityPlan = makeClosePlan({ dialogId: 'activityDialog', iframeId: 'activityIframe', closeSelector: '.activityPlanClose' })
+const closeFuturePlan = makeClosePlan({ dialogId: 'futureDialog', iframeId: 'futureIframe', closeSelector: '.futurePlanClose' })
 
 function formatDateGerman(timestamp) {
   var date = new Date(timestamp);
@@ -224,24 +224,27 @@ async function loadFuturePlans() {
   var dateDayAfterTomorrow = formatDateGerman(dayAfterTomorrow)
   var i = 1
 
-  if (result.data.length > 0) {
-    result.data.forEach(({ name, path }) => {
-      if (i > 3) return;
+  if (result.data) {
+    if (result.data.length > 0) {
+      result.data.forEach(({ name, path }) => {
+        if (i > 3) return;
 
-      if (name === dateTimeNow + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
-      else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
-      else if (name === dateDayAfterTomorrow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
-      else {
-        var planDiv = document.getElementById('plan' + i);
-        var plantitle = document.getElementById('plan' + i + '-title')
-        var filePath = path.replace(/%20/g, " ")
+        if (name === dateTimeNow + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
+        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
+        else if (name === dateDayAfterTomorrow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
+        else {
+          var planDiv = document.getElementById('plan' + i);
+          var plantitle = document.getElementById('plan' + i + '-title')
+          var filePath = path.replace(/%20/g, " ")
 
-        plantitle.textContent = "Plan vom: " + name
-        showUpcomingPlans(planDiv, filePath)
-      }
+          plantitle.textContent = "Plan vom: " + name
+          showUpcomingPlans(planDiv, filePath)
+        }
 
-      i++
-    })
+        i++
+      })
+    }
+    else { }
   }
-  else { console.log(result) }
+
 }

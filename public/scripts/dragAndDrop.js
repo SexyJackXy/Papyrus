@@ -13,9 +13,14 @@
 
     function updatePersonColor(el) {
       var text = el.textContent.trim()
+      var date = new Date()
+      var timeStamp = date.toLocaleTimeString('en-US', { hour12: false });
 
       if (!reservedNames.includes(text)) {
-        el.style.backgroundColor = '#B6D5FB'
+        if (timeStamp < "07:15:00") {
+          el.style.backgroundColor = '#FFA39C'
+        }
+        else { el.style.backgroundColor = '#B6D5FB' }
         el.draggable = true
       } else {
         el.style.backgroundColor = ''
