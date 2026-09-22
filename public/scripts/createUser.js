@@ -10,7 +10,7 @@
 //   node scripts/createUser.js wa1 geheim123 "Max Mustermann" "Erika Musterfrau"
 
 var bcrypt = require("bcrypt");
-var { getUserByUsername, createUser, addNameToUser } = require("../db");
+var { getUserByUsername, createUser, addNameToUser } = require("../../db");
 
 async function main() {
   var [username, password, ...nameArgs] = process.argv.slice(2);
