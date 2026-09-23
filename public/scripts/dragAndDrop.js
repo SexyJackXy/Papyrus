@@ -17,7 +17,7 @@
       var timeStamp = date.toLocaleTimeString('en-US', { hour12: false });
 
       if (!reservedNames.includes(text)) {
-        if (timeStamp < "07:15:00") {
+        if (timeStamp < "07:15:00" && el.getAttribute('present') === 'false') {
           el.style.backgroundColor = '#FFA39C'
         }
         else { el.style.backgroundColor = '#B6D5FB' }

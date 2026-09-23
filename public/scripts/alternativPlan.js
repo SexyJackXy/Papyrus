@@ -216,30 +216,40 @@ async function loadFuturePlans() {
   var res = await fetch('/api/load-upcoming-plans')
   var result = await res.json()
 
+  console.log(result)
+
   var today = new Date()
   var tomorrow = (d => new Date(d.setDate(d.getDate() + 1)))(new Date)
+  var yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
   var dayAfterTomorrow = (d => new Date(d.setDate(d.getDate() + 2)))(new Date)
-  var dateTimeNow = formatDateGerman(today)
+  var dateYesterday = formatDateGerman(yesterday)
+  var dateToDay = formatDateGerman(today)
   var dateTomorow = formatDateGerman(tomorrow)
   var dateDayAfterTomorrow = formatDateGerman(dayAfterTomorrow)
   var i = 1
+  var path = '/upcoming-plans/';
 
   if (result.data) {
     if (result.data.length > 0) {
-      result.data.forEach(({ name, path }) => {
+      result.data.forEach((name) => {
         if (i > 3) return;
 
-        if (name === dateTimeNow + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
-        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
-        else if (name === dateDayAfterTomorrow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
-        else {
-          var planDiv = document.getElementById('plan' + i);
-          var plantitle = document.getElementById('plan' + i + '-title')
-          var filePath = path.replace(/%20/g, " ")
+        console.log(name,dateYesterday,dateToDay,dateTomorow)
 
-          plantitle.textContent = "Plan vom: " + name
-          showUpcomingPlans(planDiv, filePath)
-        }
+        var datapath = path + name
+        var filePath = datapath.replace(/%20/g, " ")
+
+        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
+        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
+        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
+        // else {
+        //   console.log(name)
+        //   var planDiv = document.getElementById('plan' + i);
+        //   var plantitle = document.getElementById('plan' + i + '-title')
+
+        //   plantitle.textContent = "Plan vom: " + name
+        //   showUpcomingPlans(planDiv, filePath)
+        // }
 
         i++
       })

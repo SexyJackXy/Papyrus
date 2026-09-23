@@ -13,7 +13,7 @@ var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require(
 var app = express()
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
-var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1','BvD','Schichtführer']
+var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
 var UPCOMMING_PLANS_DIR = path.join(__dirname, 'data', 'upcomming-plans')
 if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
   fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
@@ -119,13 +119,21 @@ function checkActivitys(currentdata, data) {
     }
   }
 
-
   return { neu, geaendert, geloescht, curData }
 }
 
 function dateFromName(name) {
-  var [, d, m, y] = name.match(/(\d+)\.\s*(\S+)\s*(\d+)/)
-  return new Date(y, MONATE.indexOf(m.toLowerCase()), d)
+  var base = name.replace(/\.pdf$/i, '')
+  var parts = base.split(/[^0-9a-zA-ZäöüÄÖÜß]+/).filter(Boolean)
+  var [d, m, y] = parts
+
+  if (!d || !m || !y) {
+    console.warn('Konnte Datum aus Dateiname nicht lesen:', name)
+    return new Date(0) // ans Ende der Sortierung schieben, statt zu crashen
+  }
+
+  var monthIndex = MONATE.indexOf(m.toLowerCase())
+  return new Date(y, monthIndex, d)
 }
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
@@ -291,13 +299,7 @@ app.post('/api/extract-and-save', async (req, res) => {
     var archiveDir = path.join(outputDir, 'archive')
     if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir)
 
-    // Historie: ein Snapshot pro Import, sauber mit Zeitstempel
-    var stamp = new Date().toISOString().replace(/[:.]/g, '-')
-    fs.writeFileSync(
-      path.join(archiveDir, `${stamp}.json`),
-      JSON.stringify(shiftJson, null, 2),
-      'utf-8'
-    )
+
 
     // Aktueller Stand
     fs.writeFileSync(
@@ -324,7 +326,7 @@ app.post('/api/save-upcoming-plans', async (req, res) => {
       if (!name) return
 
       if (role === 'Date') {
-        upcomming_Date = name.trimStart()
+        upcomming_Date = name.trimStart().split('.').join("");
         return
       }
     })
@@ -349,7 +351,6 @@ app.get('/api/load-upcoming-plans', (req, res) => {
     .readdirSync(UPCOMMING_PLANS_DIR)
     .filter(f => f.endsWith('.pdf'))
     .sort((a, b) => dateFromName(b) - dateFromName(a))
-    .map(name => ({ name, path: `/upcoming-plans/${encodeURIComponent(name)}` })) // NEU: URL statt Serverpfad
 
   if (!files.length) {
     return res.json({ success: true, data: null })
