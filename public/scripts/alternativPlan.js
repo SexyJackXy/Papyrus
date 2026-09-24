@@ -1,69 +1,73 @@
-async function showAlternativePlan(clickedDiv) {
-  var FlyOuts = clickedDiv.parentElement
-  var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
-  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
+const showAlternativePlan = makeShowPlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
+const showActivityPlan = makeShowPlan({ dialogId: 'activityDialog', iframeId: 'activityIframe', closeSelector: '.activityPlanClose' })
+const showFuturePlan = makeShowPlan({ dialogId: 'futureDialog', iframeId: 'futureIframe', closeSelector: '.futurePlanClose' })
+const closeTemporaryPlan = makeClosePlan({ dialogId: 'temporaryDialog', iframeId: 'temporaryIframe', closeSelector: '.temporaryPlanClose' })
+const closeActivityPlan = makeClosePlan({ dialogId: 'activityDialog', iframeId: 'activityIframe', closeSelector: '.activityPlanClose' })
+const closeFuturePlan = makeClosePlan({ dialogId: 'futureDialog', iframeId: 'futureIframe', closeSelector: '.futurePlanClose' })
 
-  document.body.style.overflow = 'hidden'
-
-  dialogIframe.style.display = 'block'
-  FlyOuts.style.display = 'none'
-  requestAnimationFrame(() => {
-    dialogIframe.classList.add('is-open')
-  })
-
-  if (!dialogIframe.src) {
-    await new Promise(resolve => {
-      dialogIframe.addEventListener('load', resolve, { once: true })
-      dialogIframe.src = dialogIframe.dataset.src
-    })
-  }
-
-  await delay(400)
-
-  dialogButton.style.display = 'block'
-
-  requestAnimationFrame(() => {
-    dialogButton.classList.add('is-open')
-  })
+function formatDateGerman(timestamp) {
+  var date = new Date(timestamp);
+  var monate = [
+    "Januar", "Februar", "März", "April", "Mai", "Juni",
+    "Juli", "August", "September", "Oktober", "November", "Dezember"
+  ];
+  var tag = String(date.getDate()).padStart(2, '0');
+  var monat = monate[date.getMonth()];
+  var jahr = date.getFullYear();
+  return `${tag} ${monat} ${jahr}`;
 }
 
-async function closeTemporaryPlan(clickedDiv) {
-  var FlyOuts = document.getElementById('flyOutId')
-  var dialogDiv = document.getElementById('temporaryDialog')
-  var dialogIframe = dialogDiv.querySelector('#temporaryIframe')
-  var dialogButton = dialogDiv.querySelector('.temporaryPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
+function makeShowPlan({ dialogId, iframeId, closeSelector }) {
+  return async function (clickedDiv) {
+    var FlyOuts = clickedDiv.parentElement
+    var dialogDiv = document.getElementById(dialogId)
+    var dialogIframe = dialogDiv.querySelector('#' + iframeId)
+    var dialogButton = dialogDiv.querySelector(closeSelector)
+    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
 
-  dialogButton.classList.remove('is-open')
-  FlyOuts.style.display = 'flex'
-  dialogButton.addEventListener(
-    'transitionend',
-    () => {
+    document.body.style.overflow = 'hidden'
+
+    dialogIframe.style.display = 'block'
+    FlyOuts.style.display = 'none'
+    requestAnimationFrame(() => dialogIframe.classList.add('is-open'))
+
+    if (!dialogIframe.src) {
+      await new Promise(resolve => {
+        dialogIframe.addEventListener('load', resolve, { once: true })
+        dialogIframe.src = dialogIframe.dataset.src
+      })
+    }
+
+    await delay(400)
+
+    dialogButton.style.display = 'block'
+    requestAnimationFrame(() => dialogButton.classList.add('is-open'))
+  }
+}
+
+function makeClosePlan({ dialogId, iframeId, closeSelector }) {
+  return async function () {
+    var FlyOuts = document.getElementById('flyOutId')
+    var dialogDiv = document.getElementById(dialogId)
+    var dialogIframe = dialogDiv.querySelector('#' + iframeId)
+    var dialogButton = dialogDiv.querySelector(closeSelector)
+    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
+
+    dialogButton.classList.remove('is-open')
+    dialogButton.addEventListener('transitionend', () => {
       dialogButton.style.display = 'none'
-    },
-    { once: true }
-  )
+    }, { once: true })
 
-  await delay(1100)
+    await delay(1100)
 
-  dialogIframe.classList.remove('is-open')
-
-  dialogIframe.addEventListener(
-    'transitionend',
-    () => {
+    dialogIframe.classList.remove('is-open')
+    dialogIframe.addEventListener('transitionend', () => {
       dialogIframe.style.display = 'none'
       document.body.style.overflow = ''
-    },
-    { once: true }
-  )
+    }, { once: true })
+
+    FlyOuts.style.display = 'flex'
+  }
 }
 
 async function altertivPlanLoad() {
@@ -101,73 +105,6 @@ async function altertivPlanLoad() {
   }
 }
 
-async function showActivityPlan(clickedDiv) {
-  var FlyOuts = clickedDiv.parentElement
-  var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#activityIframe')
-  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
-
-  document.body.style.overflow = 'hidden'
-
-  dialogIframe.style.display = 'block'
-  FlyOuts.style.display = 'none'
-  requestAnimationFrame(() => {
-    dialogIframe.classList.add('is-open')
-  })
-
-  if (!dialogIframe.src) {
-    await new Promise(resolve => {
-      dialogIframe.addEventListener('load', resolve, { once: true })
-      dialogIframe.src = dialogIframe.dataset.src
-    })
-  }
-
-  await delay(400)
-
-  dialogButton.style.display = 'block'
-
-  requestAnimationFrame(() => {
-    dialogButton.classList.add('is-open')
-  })
-}
-
-async function closeActivityPlan(clickedDiv) {
-  var FlyOuts = document.getElementById('flyOutId')
-  var dialogDiv = document.getElementById('activityDialog')
-  var dialogIframe = dialogDiv.querySelector('#activityIframe')
-  var dialogButton = dialogDiv.querySelector('.activityPlanClose')
-  var delay = millis =>
-    new Promise((resolve, reject) => {
-      setTimeout(_ => resolve(), millis)
-    })
-
-  dialogButton.classList.remove('is-open')
-
-  dialogButton.addEventListener(
-    'transitionend',
-    () => {
-      dialogButton.style.display = 'none'
-    },
-    { once: true }
-  )
-
-  await delay(1100)
-
-  dialogIframe.classList.remove('is-open')
-  FlyOuts.style.display = 'flex'
-  dialogIframe.addEventListener(
-    'transitionend',
-    () => {
-      dialogIframe.style.display = 'none'
-      document.body.style.overflow = ''
-    },
-    { once: true }
-  )
-}
 
 async function activityPlanLoad() {
   var assignments = await window.Dienste.loadContent()
@@ -201,4 +138,123 @@ function initClearButtons() {
       person.textContent = 'Frei'
     })
   })
+}
+
+async function uploadUpcomingPlan(curElement) {
+  var parentElement = curElement.parentElement;
+  var inputPlan = parentElement.querySelector("#inputPlan");
+  var result;
+
+  parentElement.addEventListener("click", () => inputPlan.click());
+  inputPlan.addEventListener("change", async (e) => {
+    var file = e.target.files[0];
+    if (!file) return;
+
+    var previewUrl = URL.createObjectURL(file);
+    showUpcomingPlans(parentElement, previewUrl);
+
+    var base = await new Promise((resolve, reject) => {
+      var reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+    result = await fetch('/api/save-upcoming-plans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ base, filename: file.name })
+    }).then(r => r.json());
+
+    console.log(result)
+  })
+}
+
+async function showUpcomingPlans(container, url) {
+  if (typeof pdfjsLib === 'undefined') {
+    console.warn('pdfjsLib nicht geladen – PDF.js-Script fehlt auf dieser Seite.')
+    return
+  }
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  }
+
+  var uploadPlan = container.querySelector('#uploadPlan')
+  var img = container.querySelector('.img')
+  uploadPlan.style.display = 'none'
+  img.style.display = 'none'
+
+  var wrapper = container.querySelector('.planPreview')
+  if (!wrapper) {
+    wrapper = document.createElement('div')
+    wrapper.className = 'planPreview'
+    container.appendChild(wrapper)
+  }
+  wrapper.innerHTML = ''
+
+  var canvas = document.createElement('canvas')
+  canvas.className = 'planCanvas'
+  wrapper.appendChild(canvas)
+
+  var pdf = await pdfjsLib.getDocument(url).promise
+  var page = await pdf.getPage(1)
+
+  var containerWidth = wrapper.clientWidth
+  var unscaledViewport = page.getViewport({ scale: 1 })
+  var scale = containerWidth / unscaledViewport.width
+  var viewport = page.getViewport({ scale })
+
+  var ctx = canvas.getContext('2d')
+  canvas.width = viewport.width
+  canvas.height = viewport.height
+
+  await page.render({ canvasContext: ctx, viewport }).promise
+}
+
+async function loadFuturePlans() {
+  var res = await fetch('/api/load-upcoming-plans')
+  var result = await res.json()
+
+  console.log(result)
+
+  var today = new Date()
+  var tomorrow = (d => new Date(d.setDate(d.getDate() + 1)))(new Date)
+  var yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
+  var dayAfterTomorrow = (d => new Date(d.setDate(d.getDate() + 2)))(new Date)
+  var dateYesterday = formatDateGerman(yesterday)
+  var dateToDay = formatDateGerman(today)
+  var dateTomorow = formatDateGerman(tomorrow)
+  var dateDayAfterTomorrow = formatDateGerman(dayAfterTomorrow)
+  var i = 1
+  var path = '/upcoming-plans/';
+
+  if (result.data) {
+    if (result.data.length > 0) {
+      result.data.forEach((name) => {
+        if (i > 3) return;
+
+        console.log(name, dateYesterday, dateToDay, dateTomorow)
+
+        var datapath = path + name
+        var filePath = datapath.replace(/%20/g, " ")
+
+        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath); console.log('Plan von gestern wird geladen'); return }
+        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath); console.log('Plan von heute wird geladen'); return }
+        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath); console.log('Plan von morgen wird geladen'); return }
+        else {
+          console.log(name)
+          var planDiv = document.getElementById('plan' + i);
+          var plantitle = document.getElementById('plan' + i + '-title')
+
+          plantitle.textContent = "Plan vom: " + name
+          showUpcomingPlans(planDiv, filePath)
+        }
+
+        i++
+      })
+    }
+    else { }
+  }
+
 }

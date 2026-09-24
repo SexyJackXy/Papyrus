@@ -13,9 +13,14 @@
 
     function updatePersonColor(el) {
       var text = el.textContent.trim()
+      var date = new Date()
+      var timeStamp = date.toLocaleTimeString('en-US', { hour12: false });
 
       if (!reservedNames.includes(text)) {
-        el.style.backgroundColor = '#B6D5FB'
+        if (timeStamp < "07:15:00" && el.getAttribute('present') === 'false') {
+          el.style.backgroundColor = '#FFA39C'
+        }
+        else { el.style.backgroundColor = '#B6D5FB' }
         el.draggable = true
       } else {
         el.style.backgroundColor = ''
@@ -163,8 +168,8 @@
         // CARD -> FREEPOOL
         else if (draggedEl.classList.contains('card') && freePoolTarget) {
           innerFreePool.appendChild(draggedEl)
-          draggedEl.style.backgroundColor = '#d1d5db'
-          draggedEl.style.color = '#0a0a0a'
+          draggedEl.style.backgroundColor = 'var(--color-card-bg)'
+          draggedEl.style.color = 'var(--color-text)'
         } else if (draggedEl.classList.contains('card') && usedPoolTarget) {
           innerUsedPool.appendChild(draggedEl)
         } else if (draggedEl.classList.contains('card') && triggerPoolTarget) {
@@ -174,8 +179,8 @@
           newCard.draggable = true
           newCard.textContent = draggedEl.textContent
           newCard.setAttribute('data-role', 'triggerd')
-          newCard.style.backgroundColor = '#ff2a1c'
-          newCard.style.color = '#ffffff'
+          newCard.style.backgroundColor = 'var(--color-primary)'
+          newCard.style.color = 'var(--color-text-on-primary)'
 
           triggerPool.appendChild(newCard)
           draggedEl.remove()

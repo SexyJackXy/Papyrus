@@ -85,7 +85,7 @@ function parseShiftArray(lines) {
     nameOccurrences[entry].push(idx)
   })
 
-  var result = template.map(t => ({ role: t.role, name: '' }))
+  var result = template.map(t => ({ role: t.role, name: '', present: 'false' }))
   var roleIndexTracker = {}
   result.forEach((item, idx) => {
     if (!roleIndexTracker[item.role]) roleIndexTracker[item.role] = []
@@ -213,7 +213,11 @@ function parseShiftArray(lines) {
     if (assignedNames.has(entry)) return
     if (freiNames.has(entry)) return
     if (forbiddenLines.has(entry)) return
-    if (dateLineRegex.test(entry)) return
+    if (dateLineRegex.test(entry)) {
+      var date = entry.split(",").pop();
+      result.push({ role: 'Date', name: date })
+      return
+    }
 
     freiNames.add(entry)
     result.push({ role: 'Frei', name: entry })

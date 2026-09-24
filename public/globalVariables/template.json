@@ -1,162 +1,202 @@
 [
    {
       "role": "ALvD",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "DD",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LD 1",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LD 2",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "HLD",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "EAL",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "BvD",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LFüGr",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Schichtführer",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "1. Dispo",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "2. Dispo",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "3. Dispo",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "ELW",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "FüAss",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Schw.Retter",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 ATF",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 ATM",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 WTF",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 1 WTM",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 ATF",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 ATM",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 WTF",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "LF 2 WTM",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "DLK1 Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "DLK1 Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "SoFzg Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "SoFzg Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "KEF Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "KEF Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Fwk Fü",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Fwk Ma",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Wäsche",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Getränke",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "ZAW",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "ZSW",
-      "name": ""
+      "name": "",
+      "present": "false"
    },
    {
       "role": "Abrufschicht",
-      "name": ""
+      "name": "",
+      "present": "false"
    }
 ]

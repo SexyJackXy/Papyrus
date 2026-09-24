@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <title>Papyrus</title>
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
-  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/settingsStyle.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
   <div id="papyrus">
     <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
       <img id="PapyrusLogo" src="../img/Logo_3.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
-      <h1 style="text-decoration: none;color: #FFFFFF;margin: 0;padding: 0;">Papyrus</h1>
+      <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </a>
   </div>
   <header>
@@ -124,17 +124,23 @@
       if (!file) return;
 
       // Datei als Base64 lesen — kein Buffer/Node nötig
-      var base64 = await new Promise((resolve, reject) => {
+      var base = await new Promise((resolve, reject) => {
         var reader = new FileReader();
         reader.onload = () => resolve(reader.result.split(",")[1]);
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
 
+      var resultfuture = await fetch('/api/save-upcoming-plans', { // NEU: Doppel-M, wie im Backend (Zeile 311)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base, filename: file.name })
+      }).then(r => r.json());
+
       var result = await fetch('/api/extract-and-save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ base64 })
+        body: JSON.stringify({ base64: base }) // NEU: Feldname base64 statt base, passend zum Backend
       }).then(r => r.json());
 
       localStorage.setItem('dienste_csv', JSON.stringify(result.data));

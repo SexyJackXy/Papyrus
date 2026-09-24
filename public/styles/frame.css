@@ -1,10 +1,10 @@
 :root {
-  --color-primary: #ff2a1c;
-  --color-primary-dark: #bb0c00;
-  --color-text: #0a0a0a;
-  --color-text-on-primary: #ffffff;
-  --color-card-bg: #d1d5db;
-  --color-bg: #f3f4f6;
+--color-primary: #ff2a1c;
+--color-primary-dark: #bb0c00;
+--color-text: #0a0a0a;
+--color-text-on-primary: #ffffff;
+--color-card-bg: #d1d5db;
+--color-bg: #f3f4f6;
   font-family: 'Roboto', sans-serif;
 }
 

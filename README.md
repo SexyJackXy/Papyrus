@@ -57,7 +57,7 @@ Papyrus/
 ├── db.js                   # SQLite access layer (users, assigned persons)
 ├── scripts/
 │   ├── core.js          # Main client-side logic (roster UI, drag & drop)
-│   ├── alternaivPlan.js    # Alternative/temporary plan logic
+│   ├── alternativPlan.js    # Alternative/temporary plan logic
 │   ├── settings.js         # Client-side settings page logic
 │   ├── parseShift.js       # Shift parsing helpers
 │   ├── pdfExtractor.js     # PDF import/extraction

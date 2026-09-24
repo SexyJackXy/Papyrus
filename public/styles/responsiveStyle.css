@@ -45,7 +45,7 @@
     height: 25px;
   }
 
-  .side .vehicle .person {
+  .splitContainer .vehicle .person {
     width: 45%;
     padding: 0.3rem 0;
     font-size: 1.6ch;
@@ -59,7 +59,7 @@
     height: max-content;
   }
 
-  .side {
+  .splitContainer {
     max-height: 180px;
   }
 

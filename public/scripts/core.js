@@ -50,12 +50,6 @@
     'Kantine2'
   ]
 
-  function captureDefaults() {
-    document.querySelectorAll('.person').forEach(el => {
-      el.dataset.default = el.textContent.trim()
-    })
-  }
-
   function readFromFile(file) {
     file.arrayBuffer().then(b => {
       var candidates = [
@@ -106,13 +100,27 @@
     return raw ? JSON.parse(raw) : []
   }
 
+  function setActive(clickedElement) {
+    var allPersons = Array.from(document.querySelectorAll('.person'))
+    var clickedName = clickedElement.textContent
+
+    var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
+
+    selectedPostions.forEach(postion => {
+      postion.setAttribute('present', 'true')
+    })
+
+    var data = serializeAssignments()
+
+    scheduleSave()
+  }
+
   async function loadContent() {
     var res
     var path = window.location.pathname
     var pageName = path.split('/').pop()
-
     try {
-      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
         res = await fetch('/api/latest-schedule')
       } else if (pageName === 'temporaryPlan.html') {
         res = await fetch('/api/latest-temporary-schedule')
@@ -159,7 +167,8 @@
       var role = el.dataset.role
       var text = el.textContent.trim()
       var name = reservedNames.includes(text) ? '' : text
-      result.push({ role, name })
+      var present = el.getAttribute('present')
+      result.push({ role, name, present })
     })
 
     document.querySelectorAll('#teamFree .card').forEach(el => {
@@ -275,12 +284,10 @@
     var usedTeamParent = document.getElementById('teamUsed')
     var usedTeam = usedTeamParent.querySelector('#innerTeam')
 
-
     if (!freeTeam) return
     if (!usedTeam) return
 
-
-    assignment.forEach(({ role, name }) => {
+    assignment.forEach(({ role, name, present }) => {
       if (!name) return
 
       if (role === 'Frei') {
@@ -289,6 +296,7 @@
         var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
+        d.setAttribute('present', present)
         d.innerHTML = name
         freeTeam.appendChild(d)
         return
@@ -300,6 +308,7 @@
         var d = document.createElement('div')
         d.className = 'card'
         d.setAttribute('draggable', !reservedNames.includes(name))
+        d.setAttribute('present', present)
         d.innerHTML = name
         usedTeam.appendChild(d)
         return
@@ -318,7 +327,7 @@
           d.setAttribute('draggable', !reservedNames.includes(name))
           d.innerHTML = name
           d.style.backgroundColor = '#af2a1c'
-          d.style.color = '#ffffff'
+          d.style.color = 'var(--color-text-on-primary)'
           triggerdTeam.appendChild(d)
           return
         }
@@ -327,6 +336,7 @@
       var el = document.querySelector(`.person[data-role="${role}"]`)
       if (!el) return
 
+      el.setAttribute('present', present)
       el.textContent = name
       updatePersonColor(el)
     })
@@ -367,7 +377,7 @@
           var oldPerson = p.textContent.trim()
           var c = document.createElement('div')
 
-          p.style.backgroundColor = '#D1D5DB'
+          p.style.backgroundColor = 'var(--color-card-bg)'
           c.className = 'card'
           p.textContent = p.dataset.default || 'Frei'
           p.draggable = false
@@ -446,6 +456,7 @@
     initDragAndDrop,
     initDeleteButtons,
     logout,
-    importNotWorkingPeople
+    importNotWorkingPeople,
+    setActive
   }
 })()

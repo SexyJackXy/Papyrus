@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
   <meta http-equiv="refresh" content="60" />
-  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
   <title>Papyrus</title>
@@ -16,14 +16,14 @@
   <script src="../scripts/dragAndDrop.js"></script>
   <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
-  <script src="../scripts/alternaivPlan.js"></script>
+  <script src="../scripts/alternativPlan.js"></script>
 </head>
 
 <body>
   <div id="papyrus">
     <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
       <img id="PapyrusLogo" src="../img/Logo_3.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
-      <h1 style="text-decoration: none;color: #FFFFFF;margin: 0;padding: 0;">Papyrus</h1>
+      <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </a>
   </div>
   <header>
@@ -33,7 +33,7 @@
       </a>
     </div>
 
-    <div class="navBar" style="float: right;">
+    <div class="navBar">
       <a href="index.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -47,15 +47,6 @@
   </header>
 
   <main class="container">
-    <a href="shiftSchedule.html" id="showStation">
-      <img src="../img/menschen.png" alt="Mannschaft" id="showStationPic">
-    </a>
-
-    <a id="trash">
-      <img src="../img/trash.png" alt="Löschen" id="trashCan">
-    </a>
-
-
     <h2>Führungsdienste</h2>
 
     <section class="top-duty">
@@ -103,27 +94,27 @@
 
       <div id="second-Row">
         <div class="vehicle" id="ils">
-        <h3 class="close">X</h3>
+          <h3 class="close">X</h3>
           <h3>1. Dispo</h3>
-            <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+        </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
           <h3>2. Dispo</h3>
-            <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+        </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
           <h3>3. Dispo</h3>
-            <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
-          </div>
+          <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
         </div>
+      </div>
     </section>
 
     <h2>Fahrzeuge</h2>
 
     <section class="middle-duty">
-      <div class="side">
+      <div class="splitContainer">
         <div class="vehicle" id="ELW">
           <h3>ELW</h3>
           <h3 class="close">X</h3>
@@ -155,7 +146,7 @@
         <div class="person" data-role="LF 2 WTM" draggable="false">LF 2 WTM</div>
       </div>
 
-      <div class="side">
+      <div class="splitContainer">
 
         <div class="vehicle">
           <h3>DLK/RW</h3>
@@ -172,7 +163,7 @@
         </div>
       </div>
 
-      <div class="side">
+      <div class="splitContainer">
         <div class="vehicle">
           <h3>KEF</h3>
           <h3 class="close">X</h3>
@@ -215,24 +206,44 @@
     </div>
   </main>
 
-  <div id="temporaryDialog" title="Basic dialog">
-    <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
-    </div>
-    <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
-  </div>
+  <section class="sidebar">
+    <a href="shiftSchedule.html" id="showStation">
+      <img src="../img/menschen.png" alt="Mannschaft" id="showStationPic">
+    </a>
 
-  <div id="activityDialog" title="Basic dialog">
-    <div class="activityPlanClose" onclick="closeActivityPlan(this)">
-    </div>
-    <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-  </div>
+    <a id="trash">
+      <img src="../img/trash.png" alt="Löschen" id="trashCan">
+    </a>
 
-  <!-- <div id="futureDialog" title="Basic dialog">
-    <div class="futurePlanClose" onclick="futureActivityPlan(this)">
+    <div class="flyOuts" id="flyOutId">
+      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
+      </div>
+      <div class="activityPlan" onclick="showActivityPlan(this)">
+      </div>
+      <div class="futurePlan" onclick="showFuturePlan(this)">
+      </div>
     </div>
-    <iframe id="futureIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-  </div> -->
+  </section>
 
+  <section class="iFrames">
+    <div id="temporaryDialog" title="Basic dialog">
+      <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
+      </div>
+      <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+    </div>
+
+    <div id="activityDialog" title="Basic dialog">
+      <div class="activityPlanClose" onclick="closeActivityPlan(this)">
+      </div>
+      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    </div>
+
+    <div id="futureDialog" title="Basic dialog">
+      <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+      </div>
+      <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe>
+    </div>
+  </section>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       window.DiensteSettings.initSettingsAdjustment();
@@ -248,6 +259,10 @@
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem(K);
     });
+
+    document.querySelectorAll('.person').forEach(el => {
+      el.addEventListener('click', () => window.Dienste.setActive(el))
+    })
   </script>
 </body>
 
