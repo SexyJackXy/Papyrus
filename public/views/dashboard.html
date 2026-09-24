@@ -243,6 +243,10 @@
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem(K);
     });
+
+    document.querySelectorAll('.person').forEach(el => {
+      el.addEventListener('click', () => window.Dienste.setActive(el))
+    })
   </script>
 </body>
 

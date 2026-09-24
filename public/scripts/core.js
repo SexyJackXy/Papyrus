@@ -119,9 +119,8 @@
     var res
     var path = window.location.pathname
     var pageName = path.split('/').pop()
-
     try {
-      if (pageName === 'index.html' || pageName === 'dasboard.html') {
+      if (pageName === 'index.html' || pageName === 'dashboard.html') {
         res = await fetch('/api/latest-schedule')
       } else if (pageName === 'temporaryPlan.html') {
         res = await fetch('/api/latest-temporary-schedule')

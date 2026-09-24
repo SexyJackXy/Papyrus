@@ -15,18 +15,27 @@ var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
 var UPCOMMING_PLANS_DIR = path.join(__dirname, 'data', 'upcomming-plans')
-if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
-  fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
-}
 var MONATE = "januar,februar,märz,april,mai,juni,juli,august,september,oktober,november,dezember".split(",")
-// Seiten, die ohne Login erreichbar sein müssen (Login-Seite + ihre Assets).
 var PUBLIC_PATHS = new Set([
   '/',
   '/views/dashboard.html',
   '/views/login.html',
   '/views/alternativPlanes/activityPlan.html',
-  '/views/alternativPlanes/temporaryPlan.html'
+  '/views/alternativPlanes/temporaryPlan.html',
+  '/views/alternativPlanes/futurePlans.html'
 ])
+
+function formatDateGerman(timestamp) {
+  var date = new Date(timestamp);
+  var monate = [
+    "Januar", "Februar", "März", "April", "Mai", "Juni",
+    "Juli", "August", "September", "Oktober", "November", "Dezember"
+  ];
+  var tag = String(date.getDate()).padStart(2, '0');
+  var monat = monate[date.getMonth()];
+  var jahr = date.getFullYear();
+  return `${tag} ${monat} ${jahr}`;
+}
 
 function isPublicRequest(req) {
   if (PUBLIC_PATHS.has(req.path)) return true
@@ -136,6 +145,38 @@ function dateFromName(name) {
   return new Date(y, monthIndex, d)
 }
 
+function refreshCheck() {
+  var today = new Date()
+  var dateToDay = formatDateGerman(today)
+  var dir = path.join(__dirname, 'dailySchedule')
+  if (!fs.existsSync(dir)) { return }
+
+  var files = fs
+    .readdirSync(dir)
+    .filter(f => f.endsWith('.json'))
+
+  var upcomingFiles = fs.readdirSync(UPCOMMING_PLANS_DIR)
+
+  files.forEach(file => {
+    if (file.includes(dateToDay)) {
+      console.log(file, 'ist die Aktuelle richtige File')
+      return file
+    }
+    else {
+      upcomingFiles.forEach(upcomingFile => {
+        if (upcomingFile.includes(dateToDay)) {
+          console.log(file, 'ist die Aktuelle richtige File muss aber noch geladen werden')
+        }
+        else{
+          console.log('Der Teil muss noch programmiert werden')
+        }
+      })
+    }
+  })
+
+
+}
+
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
 
 if (!process.env.SESSION_SECRET) {
@@ -163,15 +204,22 @@ var PUBLIC_GET_APIS = new Set([
   '/api/latest-schedule',
   '/api/latest-temporary-schedule',
   '/api/settings',
-  '/api/load-upcoming-plans'
+  '/api/load-upcoming-plans',
+  '/api/import-not-working-persons'
+])
+
+var PUBLIC_POST_APIS = new Set([
+  '/api/reset-schedule',
+  '/api/save-schedule',
+  '/api/create-user'
 ])
 
 app.use((req, res, next) => {
   if (
     isPublicRequest(req) ||
     req.path.startsWith('/api/login') ||
-    (req.path === '/api/create-user' && req.method === 'POST') ||
-    (req.method === 'GET' && PUBLIC_GET_APIS.has(req.path))
+    (req.method === 'GET' && PUBLIC_GET_APIS.has(req.path)) ||
+    (req.method === 'POST' && PUBLIC_POST_APIS.has(req.path))
   ) {
     return next()
   }
@@ -195,6 +243,7 @@ app.get('/', (req, res) => {
 })
 
 var rateLimit = require('express-rate-limit')
+const { FieldAlreadyExistsError } = require('pdf-lib')
 
 var loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 Minuten
@@ -299,8 +348,6 @@ app.post('/api/extract-and-save', async (req, res) => {
     var archiveDir = path.join(outputDir, 'archive')
     if (!fs.existsSync(archiveDir)) fs.mkdirSync(archiveDir)
 
-
-
     // Aktueller Stand
     fs.writeFileSync(
       path.join(outputDir, 'current.json'),
@@ -317,6 +364,10 @@ app.post('/api/extract-and-save', async (req, res) => {
 
 app.post('/api/save-upcoming-plans', async (req, res) => {
   try {
+    if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
+      fs.mkdirSync(UPCOMMING_PLANS_DIR, { recursive: true })
+    }
+
     var { base, filename } = req.body
     var buffer = Buffer.from(base, 'base64')
     var content = await extractShiftFromPdf(buffer)
@@ -516,10 +567,13 @@ app.post('/api/save-temporary-schedule', (req, res) => {
 
 app.get('/api/latest-schedule', (req, res) => {
   try {
+    refreshCheck()
     var dir = path.join(__dirname, 'dailySchedule')
     if (!fs.existsSync(dir)) {
       return res.json({ success: true, data: null })
     }
+
+
 
     var files = fs
       .readdirSync(dir)

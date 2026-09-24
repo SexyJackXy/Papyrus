@@ -234,22 +234,22 @@ async function loadFuturePlans() {
       result.data.forEach((name) => {
         if (i > 3) return;
 
-        console.log(name,dateYesterday,dateToDay,dateTomorow)
+        console.log(name, dateYesterday, dateToDay, dateTomorow)
 
         var datapath = path + name
         var filePath = datapath.replace(/%20/g, " ")
 
-        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath) }
-        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath) }
-        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath) }
-        // else {
-        //   console.log(name)
-        //   var planDiv = document.getElementById('plan' + i);
-        //   var plantitle = document.getElementById('plan' + i + '-title')
+        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath); console.log('Plan von gestern wird geladen'); return }
+        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath); console.log('Plan von heute wird geladen'); return }
+        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath); console.log('Plan von morgen wird geladen'); return }
+        else {
+          console.log(name)
+          var planDiv = document.getElementById('plan' + i);
+          var plantitle = document.getElementById('plan' + i + '-title')
 
-        //   plantitle.textContent = "Plan vom: " + name
-        //   showUpcomingPlans(planDiv, filePath)
-        // }
+          plantitle.textContent = "Plan vom: " + name
+          showUpcomingPlans(planDiv, filePath)
+        }
 
         i++
       })
