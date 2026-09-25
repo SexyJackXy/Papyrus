@@ -103,13 +103,6 @@
   [data-role="SoFzg Ma"] {
     width: 150px !important;
   }
-
-  [data-role="Wäsche"] {
-    width: 150px !important;
-    height: 60px !important;
-  }
-
-
 }
 
 @media (max-width:800px) {
