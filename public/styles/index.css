@@ -27,7 +27,7 @@
 }
 
 [present='false']{
-  /* border: inset 2px#a81309; */
+  /* border: inset 2pxvar(--color-primary-dark); */
   box-shadow: inset 0 0 0 2px var(--color-primary-dark)
 }
 
@@ -91,7 +91,7 @@
 }
 
 .person.drop-hover {
-  outline: 2px dashed #a81309;
+  outline: 2px dashed var(--color-primary-dark);
 }
 
 .vehicle h3 {
@@ -194,7 +194,6 @@
 #ils .person {
   width: 170px;
   height: 20px;
-  margin-bottom: 0.6rem;
 }
 
 #trashCan {

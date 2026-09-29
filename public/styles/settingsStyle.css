@@ -61,7 +61,7 @@
 }
 
 #Save {
-  background-color: #a81309;
+  background-color: var(--color-primary-dark);
   color: var(--color-bg);
   width: fit-content;
   float: right;
@@ -79,7 +79,7 @@
 
 /* From Uiverse.io by TimTrayler */
 .switch {
-  --secondary-container: #a81309;
+  --secondary-container: var(--color-primary-dark);
   --primary: var(--color-primary);
   font-size: 17px;
   position: relative;
