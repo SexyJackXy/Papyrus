@@ -11,6 +11,7 @@ var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
+var IS_RIGHT = false
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
@@ -149,8 +150,9 @@ function refreshCheck() {
   var today = new Date()
   var dateToDay = formatDateGerman(today)
   var dir = path.join(__dirname, 'dailySchedule')
-  if (!fs.existsSync(dir)) { return }
+  var currentFile = path.join(dir, 'current.json')
 
+  if (!fs.existsSync(dir)) { return }
   var files = fs
     .readdirSync(dir)
     .filter(f => f.endsWith('.json'))
@@ -158,23 +160,27 @@ function refreshCheck() {
   var upcomingFiles = fs.readdirSync(UPCOMMING_PLANS_DIR)
 
   files.forEach(file => {
-    if (file.includes(dateToDay)) {
-      console.log(file, 'ist die Aktuelle richtige File')
+    if (file.includes(dateToDay) && IS_RIGHT === false) {
+      IS_RIGHT = true
       return file
     }
-    else {
-      upcomingFiles.forEach(upcomingFile => {
-        if (upcomingFile.includes(dateToDay)) {
-          console.log(file, 'ist die Aktuelle richtige File muss aber noch geladen werden')
-        }
-        else{
-          console.log('Der Teil muss noch programmiert werden')
-        }
-      })
-    }
+
+    if (!upcomingFiles) return
+
+    upcomingFiles.forEach(nexFile => {
+      if (nexFile.includes(dateToDay) && IS_RIGHT === false) {
+        console.log('nächste Datei wird geladen')
+        var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, nexFile))
+
+        IS_RIGHT = true
+
+        return extractShiftFromPdf(buffer).then(shiftJson => {
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir)
+          fs.writeFileSync(currentFile, JSON.stringify(shiftJson, null, 2), 'utf-8')
+        })
+      }
+    })
   })
-
-
 }
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
