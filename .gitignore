@@ -29,6 +29,7 @@ exportedPersons/
 dailySchedule/
 temporarySchedule/
 classifications/
+data/
 
 # npm package
 /npm/dist
