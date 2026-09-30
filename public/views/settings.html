@@ -47,8 +47,7 @@
 
   <main class="container">
     <div class="buttonspace">
-      <input id="inpoutJson" type="file" accept=".json" style="display:none">
-      <input id="inputPdf" type="file" accept=".pdf" style="display:none">
+      <input id="inputPdf" type="file" multiple accept=".pdf" style="display:none">
 
       <div class="btnDiv">
         <button type="button" class="btn" id="btnUpload">
@@ -101,22 +100,12 @@
   </main>
 
   <script>
-    var inputJson = document.getElementById('inpoutJson');
     var inputPdf = document.getElementById("inputPdf");
     var btnReset = document.getElementById('btnReset');
     var btnUpload = document.getElementById("btnUpload");
     var resetResult = document.getElementById('resetResult');
     var importResult = document.getElementById('importResult');
     var pdfResult = document.getElementById('pdfResult')
-
-    inputJson.addEventListener('change', (e) => {
-      var f = e.target.files[0];
-      if (!f) return;
-
-      var res = window.Dienste.readFromFile(f);
-      inputJson.value = "";
-      jsonResult.textContent = res;
-    });
 
     inputPdf.addEventListener('change', async (e) => {
       var file = inputPdf.files[0];
