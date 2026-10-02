@@ -1,0 +1,28 @@
+table {
+    margin: 1rem auto;
+    display: flex;
+    justify-content: center;
+}
+
+tbody {
+    display: grid;
+    width: 30vw;
+    justify-content: space-around;
+}
+
+tr {
+    border: solid 1px var(--color-text);
+}
+
+th,
+td {
+    width: 200px;
+    height: 30px;
+    text-align: left;
+    border: solid 1px lime;
+}
+
+td input,td select{
+    width: 150px;
+    border: none;
+}

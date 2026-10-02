@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="refresh" content="60" /> -->
+    <link rel="stylesheet" href="../styles/frame.css">
+    <link rel="stylesheet" href="../styles/responsiveStyle.css">
+    <link rel="stylesheet" href="../styles/catering.css">
+    <title>Papyrus</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+    <script src="../scripts/dragAndDrop.js"></script>
+    <script src="../scripts/core.js"></script>
+    <script src="../scripts/settings.js" defer></script>
+    <script src="../scripts/alternativPlan.js"></script>
+</head>
+
+<body style="height: 100vh;">
+    <div id="papyrus">
+        <a href="https://de.wikipedia.org/wiki/Pyrotechnik" style="display: contents;">
+            <img id="PapyrusLogo" src="../img/Logo_3.png" alt="Papyrus"
+                style="height: 42px !IMPORTANT;max-height: 42px;">
+            <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
+        </a>
+    </div>
+    <header>
+        <div id="hnLogo">
+            <a href="https://feuerwehr.heilbronn.de/startseite.html">
+                <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+            </a>
+        </div>
+
+        <div class="navBar">
+            <a href="catering.html">
+                <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
+            </a>
+            <a href="index.html">
+                <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+            </a>
+            <a href="settings.html">
+                <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
+            </a>
+            <a href="login.html" onclick="Dienste.logout(); return false;">
+                <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <table id="mealPlan">
+            <tr>
+                <th>Name:</th>
+                <th>Vorname:</th>
+                <th>Produkt:</th>
+                <th>Anzahl:</th>
+            </tr>
+            <tr>
+                <td><input type="text" id="name"></td>
+                <td><input type="text" id="vorname"></td>
+                <td><select id="dropDown" ></select></td>
+                <td><input type="number" id="amount"></td>
+            </tr>
+
+        </table>
+    </main>
+</body>
+
+<script>
+
+</script>
+
+</html>
