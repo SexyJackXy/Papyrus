@@ -1,28 +1,59 @@
-table {
-    margin: 1rem auto;
-    display: flex;
-    justify-content: center;
+.bestellListe {
+    margin: auto;
+    table-layout: fixed;
+    gap: 0.6rem;
+    background-color: transparent;
+    border-radius: 10px;
+    border: solid var(--color-card-bg) 1px ;
 }
 
-tbody {
-    display: grid;
-    width: 30vw;
-    justify-content: space-around;
+.tableRow td {
+    margin: 0 auto;
+    padding: 0;
 }
 
-tr {
-    border: solid 1px var(--color-text);
+.tableHead {
+    text-align: center;
+    background-color: transparent;
 }
 
-th,
-td {
-    width: 200px;
-    height: 30px;
-    text-align: left;
-    border: solid 1px lime;
-}
-
-td input,td select{
-    width: 150px;
+input[type='text'],
+input[type='number'],
+select {
+    background-color: var(--color-card-bg);
     border: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+}
+
+#food {
+    width: 199px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    text-align: center;
+    font-weight: bold;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+#addTabelRow {
+    margin-top: 0.6rem !IMPORTANT;
+    margin: 0 auto;
+    background-color: var(--color-card-bg);
+    width: 82px;
+    height: 42px;
+    border-radius: 20px;
+    display: flex;
+}
+
+#addTabelRow img{
+    height: 32px;
+    margin: auto;
 }
