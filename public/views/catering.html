@@ -85,6 +85,12 @@
 </body>
 
 <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        var assignments = await window.Dienste.loadContent();
+        if (!assignments || !assignments.length) return;
+
+        loadShift(assignments)
+    });
 </script>
 
 </html>

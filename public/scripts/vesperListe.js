@@ -1,3 +1,5 @@
+var cookies = 'dienste_csv'
+
 function addNewRow() {
     document.addEventListener('DOMContentLoaded', () => {
         var addRowButton = document.getElementById('addTabelRow');
@@ -30,6 +32,27 @@ function addNewRow() {
             lastRow.insertAdjacentHTML('afterend', newTableRow)
         });
     });
+}
+
+function getContent() {
+    var raw = localStorage.getItem(cookies)
+    return raw ? JSON.parse(raw) : []
+}
+
+async function loadShift(data) {
+    var i = 0
+    var originalNames = []
+
+    data.forEach(element => {
+        i ++;
+        var fullName = element.name
+        var formattedName = fullName.split(", ")
+        originalNames.push(formattedName)
+    });
+    originalNames.sort()
+
+    var res = Array.from(new Set(originalNames.map(JSON.stringify))).map(JSON.parse);
+    console.log(res)
 }
 
 addNewRow();
