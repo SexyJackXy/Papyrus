@@ -1,37 +1,37 @@
 var cookies = 'dienste_csv'
 
-function addNewRow() {
-    document.addEventListener('DOMContentLoaded', () => {
-        var addRowButton = document.getElementById('addTabelRow');
-        var newTableRow = `<tr class="tableRow" id='row'>
-                                <td><input type="text" name="forName"></td>
-                                <td><input type="text" name="surrName"></td>
-                                <td>
-                                    <select id="food">
-                                        <option>Brötchen</option>
-                                        <option>Saitenwurst (Paar)</option>
-                                        <option>Rinderwurst (Stück)</option>
-                                        <option>Paprikawurst</option>
-                                        <option>Debreziner</option>
-                                        <option>Weißwurst</option>
-                                        <option>Brezel</option>
-                                        <option>Croissant</option>
-                                        <option>Natur Frischkäse</option>
-                                        <option>Marmelade</option>
-                                        <option>Süßersenf</option>
-                                        <option>Butter</option>
-                                    </select>
-                                </td>
-                                <td><input type="number" name="orderCount"></td>
-                            </tr>`
+function containsNumbers(str) {
+    return /\d/.test(str);
+}
 
-        addRowButton.addEventListener('click', () => {
-            var rows = document.querySelectorAll('.bestellListe .tableRow');
-            var lastRow = rows[rows.length - 1];
+function addNewRow(firstName, lastName) {
+    var tableRow = `<tr class="tableRow">
+        <td><input type="text" name="forName" value="${firstName}"></td>
+        <td><input type="text" name="surrName" value="${lastName}"></td>`
 
-            lastRow.insertAdjacentHTML('afterend', newTableRow)
-        });
-    });
+    var newTableRow = `<td>
+                        <select name="food">
+                            <option>Brötchen</option>
+                            <option>Saitenwurst (Paar)</option>
+                            <option>Rinderwurst (Stück)</option>
+                            <option>Paprikawurst</option>
+                            <option>Debreziner</option>
+                            <option>Weißwurst</option>
+                            <option>Brezel</option>
+                            <option>Croissant</option>
+                            <option>Natur Frischkäse</option>
+                            <option>Marmelade</option>
+                            <option>Süßersenf</option>
+                            <option>Butter</option>
+                        </select>
+                    </td>
+                    <td><input type="number" name="orderCount"></td>
+                </tr>`
+    var finalRow = tableRow + newTableRow
+
+    var rows = document.querySelectorAll('.tableRow');
+    var lastRow = rows[rows.length - 1];
+    lastRow.insertAdjacentHTML('afterend', finalRow)
 }
 
 function getContent() {
@@ -40,19 +40,27 @@ function getContent() {
 }
 
 async function loadShift(data) {
-    var i = 0
     var originalNames = []
+    var shift = []
+    var sortedNames
 
     data.forEach(element => {
-        i ++;
+        if (containsNumbers(element.name)) {
+            return;
+        }
         var fullName = element.name
         var formattedName = fullName.split(", ")
         originalNames.push(formattedName)
+        sortedNames = originalNames.sort()
     });
-    originalNames.sort()
 
-    var res = Array.from(new Set(originalNames.map(JSON.stringify))).map(JSON.parse);
-    console.log(res)
+    var res = Array.from(new Set(sortedNames.map(JSON.stringify))).map(JSON.parse);
+
+    res.forEach(name => {
+        shift.push({ lastName: name[0], firstName: name[1] })
+    })
+
+    shift.forEach(worker => {
+        addNewRow(worker.firstName, worker.lastName)
+    })
 }
-
-addNewRow();

@@ -55,7 +55,7 @@
                 <th>Bestellung</th>
                 <th>Anzahl</th>
             </tr>
-            <tr class="tableRow" id="row">
+            <tr class="tableRow" id="row" style="display: none;">
                 <td><input type="text" id="forName"></td>
                 <td><input type="text" id="surrName"></td>
                 <td>
@@ -85,12 +85,17 @@
 </body>
 
 <script>
+    var addTabelRow = document.getElementById('addTabelRow')
+
     document.addEventListener("DOMContentLoaded", async () => {
         var assignments = await window.Dienste.loadContent();
         if (!assignments || !assignments.length) return;
 
         loadShift(assignments)
     });
+
+    addTabelRow.addEventListener("click", () => addNewRow('',''));
+
 </script>
 
 </html>
