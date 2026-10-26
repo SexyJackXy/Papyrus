@@ -5,10 +5,17 @@
     var passwordInput = document.getElementById('password')
     var errorEl = document.getElementById('loginError')
 
-    function showError(msg) {
-      errorEl.textContent = msg
-      errorEl.style.display = 'block'
-    }
+function showError(msg) {
+  errorEl.textContent = msg
+  errorEl.style.display = 'block'
+  errorEl.removeAttribute('data-state')
+  void errorEl.offsetWidth            // Reflow erzwingen, damit die Animation bei jedem Fehler neu startet
+  errorEl.dataset.state = 'shaking'
+}
+
+errorEl.addEventListener('animationend', () => {
+  errorEl.removeAttribute('data-state')
+})
 
     async function doLogin() {
       var username = usernameInput.value.trim()

@@ -1,0 +1,59 @@
+.bestellListe {
+    margin: auto;
+    table-layout: fixed;
+    gap: 0.6rem;
+    background-color: transparent;
+    border-radius: 10px;
+    border: solid var(--color-card-bg) 1px ;
+}
+
+.tableRow td {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.tableHead {
+    text-align: center;
+    background-color: transparent;
+}
+
+input[type='text'],
+input[type='number'],
+select {
+    background-color: var(--color-card-bg);
+    border: none;
+    padding: 12px 15px;
+    border-radius: 10px;
+}
+
+#food {
+    width: 199px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    text-align: center;
+    font-weight: bold;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+#addTabelRow {
+    margin-top: 0.6rem !IMPORTANT;
+    margin: 0 auto;
+    background-color: var(--color-card-bg);
+    width: 82px;
+    height: 42px;
+    border-radius: 20px;
+    display: flex;
+}
+
+#addTabelRow img{
+    height: 32px;
+    margin: auto;
+}
