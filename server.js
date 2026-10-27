@@ -11,7 +11,7 @@ var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
-var IS_RIGHT = false
+var LAST_LOADED_DAY = null 
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
@@ -146,41 +146,30 @@ function dateFromName(name) {
   return new Date(y, monthIndex, d)
 }
 
-function refreshCheck() {
-  var today = new Date()
-  var dateToDay = formatDateGerman(today)
+async function refreshCheck() {
+  var dateToDay = formatDateGerman(new Date())
+  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay)
+
+  if (LAST_LOADED_DAY === dateToDay) return
+
   var dir = path.join(__dirname, 'dailySchedule')
   var currentFile = path.join(dir, 'current.json')
+  if (!fs.existsSync(UPCOMMING_PLANS_DIR)) return
 
-  if (!fs.existsSync(dir)) { return }
-  var files = fs
-    .readdirSync(dir)
-    .filter(f => f.endsWith('.json'))
+  var nextFile = fs
+    .readdirSync(UPCOMMING_PLANS_DIR)
+    .find(f => f.includes(dateToDay))
 
-  var upcomingFiles = fs.readdirSync(UPCOMMING_PLANS_DIR)
+  if (!nextFile) return   // kein Plan für heute -> beim nächsten Refresh erneut prüfen
 
-  files.forEach(file => {
-    if (file.includes(dateToDay) && IS_RIGHT === false) {
-      IS_RIGHT = true
-      return file
-    }
+  console.log('Plan für heute wird geladen:', nextFile)
+  var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, nextFile))
+  var shiftJson = await extractShiftFromPdf(buffer)
 
-    if (!upcomingFiles) return
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(currentFile, JSON.stringify(shiftJson, null, 2), 'utf-8')
 
-    upcomingFiles.forEach(nexFile => {
-      if (nexFile.includes(dateToDay) && IS_RIGHT === false) {
-        console.log('nächste Datei wird geladen')
-        var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, nexFile))
-
-        IS_RIGHT = true
-
-        return extractShiftFromPdf(buffer).then(shiftJson => {
-          if (!fs.existsSync(dir)) fs.mkdirSync(dir)
-          fs.writeFileSync(currentFile, JSON.stringify(shiftJson, null, 2), 'utf-8')
-        })
-      }
-    })
-  })
+  LAST_LOADED_DAY = dateToDay   // erst nach erfolgreichem Schreiben setzen
 }
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden
@@ -571,15 +560,13 @@ app.post('/api/save-temporary-schedule', (req, res) => {
   }
 })
 
-app.get('/api/latest-schedule', (req, res) => {
+app.get('/api/latest-schedule', async (req, res) => {
   try {
-    refreshCheck()
+    await refreshCheck()
     var dir = path.join(__dirname, 'dailySchedule')
     if (!fs.existsSync(dir)) {
       return res.json({ success: true, data: null })
     }
-
-
 
     var files = fs
       .readdirSync(dir)
