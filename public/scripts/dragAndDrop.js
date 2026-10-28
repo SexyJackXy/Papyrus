@@ -337,8 +337,6 @@
           scheduleSave()
         } else if (pageName === 'temporaryPlan.html') {
           temporaryScheduleSave()
-        } else if (pageName === 'activityPlan.html') {
-          activityPlanScheduleSave()
         }
       })
 

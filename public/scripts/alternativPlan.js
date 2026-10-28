@@ -18,55 +18,30 @@ function formatDateGerman(timestamp) {
 }
 
 function makeShowPlan({ dialogId, iframeId, closeSelector }) {
-  return async function (clickedDiv) {
-    var FlyOuts = clickedDiv.parentElement
+  return function (clickedDiv) {
+    var flyOuts = clickedDiv.parentElement
     var dialogDiv = document.getElementById(dialogId)
     var dialogIframe = dialogDiv.querySelector('#' + iframeId)
     var dialogButton = dialogDiv.querySelector(closeSelector)
-    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
 
     document.body.style.overflow = 'hidden'
-
-    dialogIframe.style.display = 'block'
-    FlyOuts.style.display = 'none'
-    requestAnimationFrame(() => dialogIframe.classList.add('is-open'))
-
-    if (!dialogIframe.src) {
-      await new Promise(resolve => {
-        dialogIframe.addEventListener('load', resolve, { once: true })
-        dialogIframe.src = dialogIframe.dataset.src
-      })
-    }
-
-    await delay(400)
-
-    dialogButton.style.display = 'block'
-    requestAnimationFrame(() => dialogButton.classList.add('is-open'))
+    flyOuts.style.display = 'none'
+    if (!dialogIframe.src) dialogIframe.src = dialogIframe.dataset.src
+    dialogIframe.classList.add('is-open')
+    dialogButton.classList.add('is-open')
   }
 }
 
 function makeClosePlan({ dialogId, iframeId, closeSelector }) {
-  return async function () {
-    var FlyOuts = document.getElementById('flyOutId')
+  return function () {
     var dialogDiv = document.getElementById(dialogId)
     var dialogIframe = dialogDiv.querySelector('#' + iframeId)
     var dialogButton = dialogDiv.querySelector(closeSelector)
-    var delay = millis => new Promise(resolve => setTimeout(resolve, millis))
 
     dialogButton.classList.remove('is-open')
-    dialogButton.addEventListener('transitionend', () => {
-      dialogButton.style.display = 'none'
-    }, { once: true })
-
-    await delay(1100)
-
     dialogIframe.classList.remove('is-open')
-    dialogIframe.addEventListener('transitionend', () => {
-      dialogIframe.style.display = 'none'
-      document.body.style.overflow = ''
-    }, { once: true })
-
-    FlyOuts.style.display = 'flex'
+    document.body.style.overflow = ''
+    document.getElementById('flyOutId').style.display = 'flex'
   }
 }
 

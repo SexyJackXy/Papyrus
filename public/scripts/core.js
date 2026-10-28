@@ -110,8 +110,6 @@
       postion.setAttribute('present', 'true')
     })
 
-    var data = serializeAssignments()
-
     scheduleSave()
   }
 

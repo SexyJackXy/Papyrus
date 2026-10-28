@@ -47,7 +47,7 @@
   background-color: var(--color-text-on-primary);
   border-radius: 10px;
   width: clamp(110px, 8vw, 200px);
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
   padding-top: 2rem;
   min-width: 180px;
   font-size: 1.6ch;
@@ -281,14 +281,11 @@
   width: 15px;
   right: 0;
   border-radius: 10px 0px 0px 10px;
-  transition: width 0.3s ease-out;
-  box-shadow: -10px 22px 25px -8px #000000;
 }
 
 .futurePlan:hover,
 .temporaryPlan:hover,
 .activityPlan:hover {
-  display: block;
   width: 30px;
   box-shadow: none;
 }
@@ -309,15 +306,12 @@
   border-left: solid 3px var(--color-text-on-primary);
   border-bottom: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
-  box-shadow: -10px 1px 17px 10px rgba(0, 0, 0, 0.7);
-  transform: translateX(100%);
-  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
 
 #futureDialog iframe.is-open,
 #temporaryDialog iframe.is-open,
 #activityDialog iframe.is-open {
-  transform: translateX(0);
+  display: block;
 }
 
 /* Close-Buttons */
@@ -343,6 +337,5 @@
 #futureDialog .futurePlanClose.is-open,
 #temporaryDialog .temporaryPlanClose.is-open,
 #activityDialog .activityPlanClose.is-open {
-  transform: translateX(0);
-  opacity: 1;
+  display: block;
 }
