@@ -11,7 +11,7 @@ var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
-var LAST_LOADED_DAY = null 
+var LAST_LOADED_DAY = null
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
@@ -23,7 +23,9 @@ var PUBLIC_PATHS = new Set([
   '/views/login.html',
   '/views/alternativPlanes/activityPlan.html',
   '/views/alternativPlanes/temporaryPlan.html',
-  '/views/alternativPlanes/futurePlans.html'
+  '/views/alternativPlanes/futurePlans.html',
+  '/views/shiftSchedule.html',
+  '/views/catering.html'
 ])
 
 function formatDateGerman(timestamp) {
@@ -45,7 +47,8 @@ function isPublicRequest(req) {
   if (
     req.path.startsWith('/styles/') ||
     req.path.startsWith('/img/') ||
-    req.path.startsWith('/scripts/')
+    req.path.startsWith('/scripts/') ||
+    req.path.startsWith('/upcoming-plans/')
   ) {
     return true
   }

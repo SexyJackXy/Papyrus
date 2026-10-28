@@ -34,7 +34,10 @@
     </div>
 
     <div class="navBar">
-      <a href="settings.html">
+      <a href="catering.html">
+        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
+      </a>
+      <a href="login.html">
         <img src="../img/einloggen.png" alt="Einstellungen" class="navLogo">
       </a>
     </div>
@@ -210,23 +213,23 @@
   </section>
 
   <section class="iFrames">
-  <div id="temporaryDialog" title="Basic dialog">
-    <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
+    <div id="temporaryDialog" title="Basic dialog">
+      <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
+      </div>
+      <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
     </div>
-    <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
-  </div>
 
-  <div id="activityDialog" title="Basic dialog">
-    <div class="activityPlanClose" onclick="closeActivityPlan(this)">
+    <div id="activityDialog" title="Basic dialog">
+      <div class="activityPlanClose" onclick="closeActivityPlan(this)">
+      </div>
+      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
     </div>
-    <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-  </div>
 
-  <div id="futureDialog" title="Basic dialog">
-    <div class="futurePlanClose" onclick="closeFuturePlan(this)">
-    </div>
+    <div id="futureDialog" title="Basic dialog">
+      <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+      </div>
       <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe>
-  </div>
+    </div>
   </section>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
