@@ -334,9 +334,6 @@
   border-bottom: solid 3px var(--color-text-on-primary);
   border-left: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
-  opacity: 0;
-  transform: translateX(100%);
-  transition: transform 1s ease-out, opacity 1s ease-out;
 }
 
 #futureDialog .futurePlanClose.is-open,
