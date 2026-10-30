@@ -417,12 +417,16 @@
         body: JSON.stringify(data)
       })
       var result = await res.json()
+      if (!res.ok || !result.success) {
+        console.error('Export abgelehnt:', result.error || res.status)
+      }
     } catch (e) {
       console.error('Export fehlgeschlagen:', e)
     }
   }
 
   async function importNotWorkingPeople() {
+    console.log("import not working persons")
     var res = await fetch('/api/import-not-working-persons', {
       credentials: 'include' // oder 'same-origin'
     })
@@ -446,6 +450,36 @@
     }
   }
 
+  // Blendet alle Elemente mit data-auth="required" nur für eingeloggte Nutzer ein
+  async function applyAuthVisibility() {
+    var required = document.querySelectorAll('[data-auth="required"]')
+    var guestOnly = document.querySelectorAll('[data-auth="guest"]')
+    if (!required.length && !guestOnly.length) return
+
+    var loggedIn = false
+    try {
+      var res = await fetch('/api/me', {
+        credentials: 'same-origin',
+        cache: 'no-store'
+      })
+      if (res.ok) {
+        var data = await res.json()
+        loggedIn = !!data.success
+      }
+    } catch (e) {
+      return // Netzwerkfehler -> Ausgangszustand lassen
+    }
+
+    required.forEach(el => { el.hidden = !loggedIn })
+    guestOnly.forEach(el => { el.hidden = loggedIn })
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyAuthVisibility)
+  } else {
+    applyAuthVisibility()
+  }
+
   window.Dienste = {
     readFromFile,
     getContent,
@@ -456,7 +490,6 @@
     initDragAndDrop,
     initDeleteButtons,
     logout,
-    importNotWorkingPeople,
     setActive
   }
 })()

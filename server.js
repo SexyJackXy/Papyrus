@@ -209,7 +209,9 @@ var PUBLIC_GET_APIS = new Set([
 var PUBLIC_POST_APIS = new Set([
   '/api/reset-schedule',
   '/api/save-schedule',
-  '/api/create-user'
+  '/api/create-user',
+  '/api/export-not-working-person',
+  '/api/delete-schedule-entry'
 ])
 
 app.use((req, res, next) => {
@@ -235,7 +237,7 @@ app.use('/upcoming-plans', express.static(UPCOMMING_PLANS_DIR))
 
 app.get('/', (req, res) => {
   if (req.session && req.session.userId) {
-    return res.redirect('/views/index.html')
+    return res.redirect('/views/dashboard.html')
   }
   return res.redirect('/views/dashboard.html')
 })
@@ -285,7 +287,7 @@ app.post('/api/login', loginLimiter, async (req, res) => {
   req.session.userId = user.id
   req.session.username = user.username
 
-  res.json({ success: true, redirect: '/views/index.html' })
+  res.json({ success: true, redirect: '/views/dashboard.html' })
 })
 
 app.post('/api/logout', (req, res) => {
@@ -671,33 +673,22 @@ app.get('/api/settings', (req, res) => {
 })
 
 app.post('/api/export-not-working-person', (req, res) => {
-  var data = req.body
+  try {
+    var outputDir = path.join(__dirname, 'exportedPersons')
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir)
 
-  var outputDir = path.join(__dirname, 'exportedPersons')
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir)
+    var filePath = path.join(outputDir, 'exportedPersons.json')
+    var json = fs.existsSync(filePath)
+      ? JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+      : []
+    json.push(req.body)
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2), 'utf-8')
+
+    res.json({ success: true, filePath })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
   }
-
-  var filePath = path.join(outputDir, `exportedPersons.json`)
-  if (fs.existsSync(filePath)) {
-    fs.readFile(filePath, 'utf-8', function (err, fileData) {
-      if (err) {
-        console.error('Konnte Datei nicht lesen:', err)
-        return
-      }
-
-      var json = JSON.parse(fileData)
-      json.push(data)
-
-      fs.writeFile(filePath, JSON.stringify(json, null, 2), 'utf-8', err => {
-        if (err) console.error('Konnte Datei nicht schreiben:', err)
-      })
-    })
-  } else {
-    fs.writeFileSync(filePath, JSON.stringify([data], null, 2), 'utf-8')
-  }
-
-  res.json({ success: true, filePath })
 })
 
 app.get('/api/import-not-working-persons', (req, res) => {

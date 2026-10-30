@@ -37,8 +37,17 @@
       <a href="catering.html">
         <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
       </a>
-      <a href="login.html">
-        <img src="../img/einloggen.png" alt="Einstellungen" class="navLogo">
+      <a href="dashboard.html">
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+      </a>
+      <a href="settings.html" hidden data-auth="required">
+        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
+      </a>
+      <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      </a>
+      <a href="login.html" data-auth="guest">
+        <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
       </a>
     </div>
   </header>
@@ -236,9 +245,11 @@
       window.DiensteSettings.initSettingsAdjustment();
 
       var assignments = await window.Dienste.loadContent();
-      if (!assignments || !assignments.length) return;
 
-      window.Dienste.renderAssignments(assignments);
+      if (assignments && assignments.length) {
+        window.Dienste.renderAssignments(assignments);
+      }
+
       window.Dienste.initDragAndDrop();
       window.Dienste.initDeleteButtons();
     });

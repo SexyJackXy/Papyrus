@@ -35,16 +35,19 @@
 
     <div class="navBar">
       <a href="catering.html">
-        <img  src="../img/restaurant.png" alt="Versperliste" class="navLogo">
+        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
       </a>
-      <a href="index.html">
+      <a href="dashboard.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
-      <a href="settings.html">
+      <a href="settings.html" hidden data-auth="required">
         <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
       </a>
-      <a href="login.html" onclick="Dienste.logout(); return false;">
+      <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
         <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      </a>
+      <a href="login.html" data-auth="guest">
+        <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
       </a>
     </div>
   </header>

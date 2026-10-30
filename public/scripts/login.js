@@ -35,7 +35,7 @@ errorEl.addEventListener('animationend', () => {
         var data = await res.json()
 
         if (data.success) {
-          window.location.href = data.redirect || 'index.html'
+          window.location.href = data.redirect || 'dashboard.html'
         } else {
           showError(data.error || 'Login fehlgeschlagen.')
         }
