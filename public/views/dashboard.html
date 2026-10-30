@@ -219,6 +219,10 @@
       <div class="futurePlan" onclick="showFuturePlan(this)">
       </div>
     </div>
+
+    <a id="undo">
+      <img src="../img/undo.png" alt="Zurück" id="undoPic">
+    </a>
   </section>
 
   <section class="iFrames">
@@ -261,6 +265,9 @@
     document.querySelectorAll('.person').forEach(el => {
       el.addEventListener('click', () => window.Dienste.setActive(el))
     })
+
+    var undoDiv = document.getElementById('undo')
+    undoDiv.addEventListener('click', () => reversePreviousStep())
   </script>
 </body>
 

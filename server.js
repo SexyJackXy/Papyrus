@@ -163,7 +163,16 @@ async function refreshCheck() {
     .readdirSync(UPCOMMING_PLANS_DIR)
     .find(f => f.includes(dateToDay))
 
-  if (!nextFile) return   // kein Plan für heute -> beim nächsten Refresh erneut prüfen
+  if (!nextFile) {
+    var archivedFiles = fs.readdirSync(UPCOMMING_PLANS_DIR)
+      .map(file => ({
+        filename: file,
+        lastEdit: fs.statSync(path.join(UPCOMMING_PLANS_DIR, file)).mtime
+      }))
+      .sort((a, b) => b.lastEdit - a.lastEdit)
+
+    var nextFile = archivedFiles[0].filename
+  }
 
   console.log('Plan für heute wird geladen:', nextFile)
   var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, nextFile))
@@ -243,7 +252,7 @@ app.get('/', (req, res) => {
 })
 
 var rateLimit = require('express-rate-limit')
-const { FieldAlreadyExistsError } = require('pdf-lib')
+var { FieldAlreadyExistsError } = require('pdf-lib')
 
 var loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 Minuten
@@ -412,6 +421,7 @@ app.get('/api/load-upcoming-plans', (req, res) => {
 
 app.post('/api/reset-schedule', (req, res) => {
   try {
+    LAST_LOADED_DAY = null
     var dir = path.join(__dirname, 'dailySchedule')
     var notWorkingPeople = path.join(
       __dirname,

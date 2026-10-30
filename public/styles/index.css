@@ -2,8 +2,15 @@
   display: none;
 }
 
+#undoPic{
+  height: 32px;
+  position: absolute;
+  right: 97.5vw;
+  padding: 0.6rem;
+}
+
 #addPerson,
-#showStationPic {
+#showStationPic{
   height: 32px;
   position: absolute;
   right: 0;
