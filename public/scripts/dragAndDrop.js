@@ -80,6 +80,10 @@
             innerFreePool.appendChild(newCard)
           }
 
+          if(draggedEl.role === null){
+            removeFromSchedule(draggedEl)
+          }
+
           personTarget.textContent = draggedEl.textContent
           updatePersonColor(personTarget)
 
