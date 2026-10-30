@@ -1,0 +1,42 @@
+.parkingSpace {
+    display: grid;
+    background-image: url(../img/parkingSpace.PNG);
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: center;
+    width: 1800px;
+    height: 950px;
+}
+
+.halle {
+    display: grid;
+    place-items: center;
+    grid-auto-columns: 1fr;
+}
+
+.gate {
+    display: grid;
+    background-color: pink;
+    height: 98%;
+    width: 98%;
+    margin: auto;
+    grid-auto-columns: 1fr;
+}
+
+.port {
+    height: 98%;
+    width: 98%;
+    background-color: magenta;
+    margin: auto;
+    border-radius: 10px;
+}
+
+#halle1 {
+    grid-auto-flow: column;
+    width: 654px;
+    height: 222px;
+    position: absolute;
+    left: 534px;
+    top: 130px;
+    background-color: aqua;
+}
