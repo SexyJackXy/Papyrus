@@ -102,9 +102,8 @@ img {
 }
 
 .planCanvas {
-    position: static;
-    flex: none;         /* Größe kommt aus dem JS */
-    border-radius: 6px;
+    max-width: 100%;
+    border-radius: 10px;
 }
 
 body {
