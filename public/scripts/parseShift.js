@@ -190,10 +190,26 @@ function parseShiftArray(lines) {
   }
 
   var ld1Entry = result.find(r => r.role === 'LD 1')
+  var kefFueEntry = result.find(person => person.role === 'WTF')
+  var kefMaEntry = result.find(person => person.role === 'WTM')
   if (ld1Entry) {
     result.forEach(r => {
       if (r.role === 'ELW') {
         r.name = ld1Entry.name
+      }
+    })
+  }
+    if (kefFueEntry) {
+    result.forEach(r => {
+      if (r.role === 'ELW') {
+        r.name = kefFueEntry.name
+      }
+    })
+  }
+    if (kefMaEntry) {
+    result.forEach(r => {
+      if (r.role === 'ELW') {
+        r.name = kefMaEntry.name
       }
     })
   }

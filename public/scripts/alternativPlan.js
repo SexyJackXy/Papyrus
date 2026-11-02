@@ -11,7 +11,7 @@ function formatDateGerman(timestamp) {
     "Januar", "Februar", "März", "April", "Mai", "Juni",
     "Juli", "August", "September", "Oktober", "November", "Dezember"
   ];
-  var tag = String(date.getDate()).padStart(2, '0');
+  var tag = String(date.getDate());
   var monat = monate[date.getMonth()];
   var jahr = date.getFullYear();
   return `${tag} ${monat} ${jahr}`;
@@ -216,7 +216,6 @@ async function loadFuturePlans() {
   var result = await res.json()
 
   console.log(result)
-
   var today = new Date()
   var tomorrow = (d => new Date(d.setDate(d.getDate() + 1)))(new Date)
   var yesterday = (d => new Date(d.setDate(d.getDate() - 1)))(new Date)
@@ -230,14 +229,12 @@ async function loadFuturePlans() {
 
   if (result.data) {
 
-    console.log(result.data)
+    console.log(dateYesterday,dateToDay,dateTomorow)
 
     if (result.data.length > 0) {
       result.data.forEach((name) => {
         var datapath = path + name
         var filePath = datapath.replace(/%20/g, " ")
-
-        console.log("Datei: ",name, " wird geladen")
 
         if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath); console.log('Plan von gestern wird geladen'); return }
         else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath); console.log('Plan von heute wird geladen'); return }

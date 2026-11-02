@@ -12,6 +12,7 @@ var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require(
 
 var app = express()
 var LAST_LOADED_DAY = null
+var LAST_LOADED_FILE = null
 var SETTINGS_PATH = path.join(__dirname, 'public', 'globalVariables', 'settings.json')
 var MULTI_ROLES = ['Frei', 'Used']
 var IGNORE_ROLES = ['Wäsche', 'Getränke', 'ZAW', 'ZSW', 'KFZ', 'Abrufschicht', 'Kantine2', 'Kantine1', 'BvD', 'Schichtführer']
@@ -146,42 +147,52 @@ function dateFromName(name) {
   }
 
   var monthIndex = MONATE.indexOf(m.toLowerCase())
+  if (monthIndex === -1) return new Date(0)
   return new Date(y, monthIndex, d)
+}
+
+function pickPlanFile(today) {
+  var start = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+
+  var plans = fs
+    .readdirSync(UPCOMMING_PLANS_DIR)
+    .filter(f => f.toLowerCase().endsWith('.pdf'))
+    .map(f => ({ file: f, date: dateFromName(f) }))
+    .filter(p => p.date.getTime() > 0) // nicht lesbare Dateinamen ignorieren
+
+  var exact = plans.find(p => p.date.getTime() === start.getTime())
+  if (exact) return { file: exact.file, isToday: true }
+
+  var past = plans
+    .filter(p => p.date <= start)
+    .sort((a, b) => b.date - a.date)[0]
+
+  return past ? { file: past.file, isToday: false } : null
 }
 
 async function refreshCheck() {
   var dateToDay = formatDateGerman(new Date())
-  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay)
 
   if (LAST_LOADED_DAY === dateToDay) return
+
+
+  var pick = pickPlanFile(new Date())
+  if (!pick) return
+
+  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay)
 
   var dir = path.join(__dirname, 'dailySchedule')
   var currentFile = path.join(dir, 'current.json')
   if (!fs.existsSync(UPCOMMING_PLANS_DIR)) return
 
-  var nextFile = fs
-    .readdirSync(UPCOMMING_PLANS_DIR)
-    .find(f => f.includes(dateToDay))
-
-  if (!nextFile) {
-    var archivedFiles = fs.readdirSync(UPCOMMING_PLANS_DIR)
-      .map(file => ({
-        filename: file,
-        lastEdit: fs.statSync(path.join(UPCOMMING_PLANS_DIR, file)).mtime
-      }))
-      .sort((a, b) => b.lastEdit - a.lastEdit)
-
-    var nextFile = archivedFiles[0].filename
-  }
-
-  console.log('Plan für heute wird geladen:', nextFile)
-  var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, nextFile))
+  var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, pick.file))
   var shiftJson = await extractShiftFromPdf(buffer)
 
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(currentFile, JSON.stringify(shiftJson, null, 2), 'utf-8')
 
   LAST_LOADED_DAY = dateToDay   // erst nach erfolgreichem Schreiben setzen
+  LAST_LOADED_FILE = pick.file
 }
 
 app.use(express.json({ limit: '25mb' })) // PDFs kommen als Base64 → können groß werden

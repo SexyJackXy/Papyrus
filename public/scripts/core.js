@@ -427,7 +427,6 @@ async function exportNotWorkingPeople(movedEl) {
 }
 
 async function importNotWorkingPeople() {
-  console.log("import not working persons")
   var res = await fetch('/api/import-not-working-persons', {
     credentials: 'include' // oder 'same-origin'
   })
