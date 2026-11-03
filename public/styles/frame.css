@@ -1,6 +1,6 @@
 :root {
---color-primary: #ff2a1c;
---color-primary-dark: #bb0c00;
+  --color-primary: #ff2a1c;
+  --color-primary-dark: #bb0c00;
   --color-text: #0a0a0a;
   --color-text-on-primary: #ffffff;
   --color-card-bg: #d1d5db;
@@ -60,16 +60,12 @@ body {
 }
 
 header {
+  display: -webkit-flex;
   display: flex;
-  width: 100%;
-  background: var(--color-primary);
-  color: var(--color-text-on-primary);
-  text-align: center;
-  gap: 0.6rem;
+  -webkit-align-items: center;
   align-items: center;
+  -webkit-justify-content: space-between;
   justify-content: space-between;
-  flex: 0 0 auto;
-  height: 59px;
 }
 
 header img {
@@ -97,9 +93,23 @@ header img {
 }
 
 .navLogo {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-right: 0.6rem;
+  display: block;
+  height: 48px;
+  /* Wert nach Bedarf anpassen */
+  width: auto;
+}
+
+.navBar {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  float: right;
+}
+
+.navBar a {
+  margin-left: 12px;
+  /* statt gap */
 }
 
 .text {
@@ -158,19 +168,35 @@ header img {
 }
 
 #papyrus {
-  display: inline-flex;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
   align-items: center;
-  position: absolute;
-  left: 0;
-  right: 42px;
-  margin-inline: auto;
-  width: fit-content;
-  height: 59px;
+}
+
+.papyrusLink {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  text-decoration: none;
 }
 
 #PapyrusLogo {
+  height: 42px;
+  max-height: 42px;
+  width: auto;
+  margin-right: 12px;
+  /* statt gap */
+}
+
+.papyrusLink h1 {
   margin: 0;
   padding: 0;
+  text-decoration: none;
+  color: #fff;
+  /* Fallback */
+  color: var(--color-text-on-primary);
 }
 
 .card#WA1,
