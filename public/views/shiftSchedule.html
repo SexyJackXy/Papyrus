@@ -16,34 +16,36 @@
     <script src="../scripts/core.js"></script>
 </head>
 
-<body>
-    <div id="papyrus">
-        <a style="display: contents;">
-            <img id="PapyrusLogo" src="../img/Logo_3.png" alt="Papyrus"
-                style="height: 42px !IMPORTANT;max-height: 42px;">
-            <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
-        </a>
-    </div>
-    <header>
+<body style="height: 100vh;">
 
-        <div class="navBar">
-            <a href="catering.html">
-                <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
-            </a>
-            <a href="dashboard.html">
-                <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
-            </a>
-            <a href="settings.html" hidden data-auth="required">
-                <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
-            </a>
-            <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
-                <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
-            </a>
-            <a href="login.html" data-auth="guest">
-                <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
-            </a>
-        </div>
-    </header>
+  <header>
+    <div id="hnLogo">
+      <a href="https://feuerwehr.heilbronn.de/startseite.html">
+        <img src="../img/HN_Logo_mit_Adler_Master_sRGB_w205.png" alt="LogoHN">
+      </a>
+    </div>
+    <div id="papyrus">
+      <img id="PapyrusLogo" src="../img/Logo_3.png" alt="Papyrus" style="height: 42px !IMPORTANT;max-height: 42px;">
+      <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
+    </div>
+    <div class="navBar">
+      <a href="catering.html">
+        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
+      </a>
+      <a href="dashboard.html">
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+      </a>
+      <a href="settings.html" hidden data-auth="required">
+        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
+      </a>
+      <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      </a>
+      <a href="login.html" data-auth="guest">
+        <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
+      </a>
+    </div>
+  </header>
 
     <main class="container" style="width: 100%;">
         <a id="addPersonText">
