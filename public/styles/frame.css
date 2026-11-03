@@ -160,12 +160,8 @@ header img {
 #papyrus {
   display: inline-flex;
   align-items: center;
-  /* position: absolute; */
   left: 0;
   right: 42px;
-  /* margin-inline: auto; */
-  /* width: fit-content; */
-  /* height: 59px;
 }
 
 #PapyrusLogo {
@@ -206,4 +202,29 @@ header img {
 .card#GAL,
 #GAL .card {
   background-color: #b6d5fb;
+}
+
+#flyingImage {
+  position: fixed;
+  bottom: 0;
+  /* Höhe anpassen */
+  left: 0;
+  height: 250px;
+  width: auto;
+  z-index: 9999;
+  pointer-events: none;
+  -webkit-transform: translate3d(100vw, 0, 0);
+  /* Startposition: rechts außerhalb */
+  transform: translate3d(100vw, 0, 0);
+  -webkit-animation: slideRightToLeft 6s linear 1 forwards;
+  animation: slideRightToLeft 6s linear 1 forwards;
+}
+
+@-webkit-keyframes slideRightToLeft {
+    from { -webkit-transform: translate3d(100vw, 0, 0); }
+    to   { -webkit-transform: translate3d(-300px, 0, 0); }
+}
+@keyframes slideRightToLeft {
+    from { transform: translate3d(100vw, 0, 0); }
+    to   { transform: translate3d(-300px, 0, 0); }
 }

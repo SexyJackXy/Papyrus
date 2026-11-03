@@ -118,6 +118,20 @@ async function loadContent() {
   var res
   var path = window.location.pathname
   var pageName = path.split('/').pop()
+
+    var fly = document.createElement('img');
+    fly.id = 'flyingImage';
+    fly.src = '../img/Thomas.png';
+    fly.alt = '';
+
+    function removeFly() {
+        if (fly.parentNode) fly.parentNode.removeChild(fly);
+    }
+    fly.addEventListener('animationend', removeFly);
+    fly.addEventListener('webkitAnimationEnd', removeFly);
+
+    document.body.appendChild(fly);   // Animation startet beim Einfügen
+
   try {
     if (pageName === 'index.html' || pageName === 'dashboard.html') {
       res = await fetch('/api/latest-schedule')

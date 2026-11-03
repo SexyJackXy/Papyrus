@@ -320,12 +320,6 @@
   transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
 
-#futureDialog iframe.is-open,
-#temporaryDialog iframe.is-open,
-#activityDialog iframe.is-open {
-  transform: translateX(0);
-}
-
 /* Close-Buttons */
 #futureDialog .futurePlanClose,
 #temporaryDialog .temporaryPlanClose,
