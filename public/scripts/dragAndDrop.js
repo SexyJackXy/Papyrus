@@ -80,7 +80,7 @@
             innerFreePool.appendChild(newCard)
           }
 
-          if(draggedEl.role === null){
+          if (draggedEl.role === null) {
             removeFromSchedule(draggedEl)
           }
 
@@ -190,6 +190,7 @@
           draggedEl.remove()
         }
 
+
         //FREEPOOL <-> USED POOL
         else if (draggedEl.classList.contains('person') && usedPoolTarget) {
           var name = draggedEl.textContent.trim()
@@ -209,6 +210,14 @@
         } else if (draggedEl.classList.contains('card') && trashTarget) {
           draggedEl.remove()
           removeFromSchedule(draggedEl)
+        } else if (draggedEl.classList.contains('person') && trashTarget) {
+          var role = draggedEl.getAttribute('data-role');
+
+          draggedEl.textContent = role
+          draggedEl.setAttribute = ('draggable' , 'false')
+          draggedEl.setAttribute = ('present' , 'true')
+
+          updatePersonColor(draggedEl)
         } else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html'
         ) {
           draggedEl.style.opacity = '0.6'
