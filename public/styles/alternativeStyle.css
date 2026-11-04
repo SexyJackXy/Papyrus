@@ -2,10 +2,9 @@ h3.text {
     color: var(--color-text);
     font-weight: 500;
     text-shadow: none;
-    font-size: 2ch;
+    font-size: 1.3vw; /* 25 px bei Full HD, 50 px bei 4K */
     margin: 0;
 }
-
 .work-duty {
     display: flex;
     flex-direction: column;
@@ -45,7 +44,6 @@ h3.text {
 .planTitles {
     display: flex;
     justify-content: space-evenly;
-    margin-top: auto;
     text-align: center;
 }
 
@@ -53,27 +51,33 @@ h3.text {
     width: 33%;
     color: var(--color-text);
     text-shadow: none;
+    font-size: 1.2vw;
 }
 
 .upcommingPlans {
     display: flex;
-    width: 1800px;
+    flex: 1;            /* nimmt die Resthöhe unter den Überschriften */
+    min-height: 0;
+    width: 98%;
     justify-content: space-evenly;
-    gap: 0.6rem;
+    gap: 0.6vw;
     margin-top: 0 !important;
-    margin: auto;
-    padding: 0.6rem 0;
+    margin: 0 auto;
+    padding: 0.4vw 0;
 }
 
 .plan {
     display: flex;
+    box-sizing: border-box;
     background-color: var(--color-card-bg);
-    width: 33%;
-    height: 816px;
-    border: solid 7px var(--color-text-on-primary);
-    border-radius: 10px;
+    flex: 1;
+    min-width: 0;
+    height: 100%;       /* füllt die Höhe von .upcommingPlans */
+    border: solid 0.2vw var(--color-text-on-primary);
+    border-radius: 0.5vw;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
 }
 
@@ -93,15 +97,19 @@ img {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     background-color: #fff;
 }
 
 .planCanvas {
-    max-width: 100%;
+    position: static;
+    flex: none;         /* Größe kommt aus dem JS */
     border-radius: 6px;
 }
 
-body{
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
     overflow: hidden;
 }

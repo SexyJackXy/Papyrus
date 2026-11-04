@@ -199,16 +199,28 @@ async function showUpcomingPlans(container, url) {
   var pdf = await pdfjsLib.getDocument(url).promise
   var page = await pdf.getPage(1)
 
-  var containerWidth = wrapper.clientWidth
-  var unscaledViewport = page.getViewport({ scale: 1 })
-  var scale = containerWidth / unscaledViewport.width
-  var viewport = page.getViewport({ scale })
+  console.log(page)
+
+  var maxWidth = wrapper.clientWidth
+  var maxHeight = wrapper.clientHeight
+  var baseViewport = page.getViewport({ scale: 1 })
+
+  // Das PDF so skalieren, dass es komplett in den Plan-Rahmen passt
+  var cssScale = Math.min(maxWidth / baseViewport.width, maxHeight / baseViewport.height)
+
+  var outputScale = Math.max(window.devicePixelRatio || 1, 2)
+
+  var viewport = page.getViewport({ scale: cssScale * outputScale })
 
   var ctx = canvas.getContext('2d')
-  canvas.width = viewport.width
-  canvas.height = viewport.height
+  canvas.width = Math.floor(viewport.width)
+  canvas.height = Math.floor(viewport.height)
 
-  await page.render({ canvasContext: ctx, viewport }).promise
+  // Anzeigegröße in CSS-Pixeln, das Bitmap ist 2x größer und wird dadurch scharf
+  canvas.style.width = Math.floor(viewport.width / outputScale) + 'px'
+  canvas.style.height = Math.floor(viewport.height / outputScale) + 'px'
+
+  await page.render({ canvasContext: ctx, viewport, intent: 'print' }).promise
 }
 
 async function loadFuturePlans() {
@@ -229,16 +241,14 @@ async function loadFuturePlans() {
 
   if (result.data) {
 
-    console.log(dateYesterday,dateToDay,dateTomorow)
-
     if (result.data.length > 0) {
       result.data.forEach((name) => {
         var datapath = path + name
         var filePath = datapath.replace(/%20/g, " ")
 
-        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath); console.log('Plan von gestern wird geladen'); return }
-        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath); console.log('Plan von heute wird geladen'); return }
-        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath); console.log('Plan von morgen wird geladen'); return }
+        if (name === dateYesterday + '.pdf') { showUpcomingPlans(document.getElementById('plan1'), filePath); return }
+        else if (name === dateToDay + '.pdf') { showUpcomingPlans(document.getElementById('plan2'), filePath); return }
+        else if (name === dateTomorow + '.pdf') { showUpcomingPlans(document.getElementById('plan3'), filePath); return }
       })
     }
     else { }
