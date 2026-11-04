@@ -2,7 +2,7 @@
   display: none;
 }
 
-#undoPic{
+#undoPic {
   height: 32px;
   position: absolute;
   right: 97.5vw;
@@ -10,7 +10,7 @@
 }
 
 #addPerson,
-#showStationPic{
+#showStationPic {
   height: 32px;
   position: absolute;
   right: 0;
@@ -33,7 +33,7 @@
   touch-action: none;
 }
 
-[present='false']{
+[present='false'] {
   /* border: inset 2pxvar(--color-primary-dark); */
   box-shadow: inset 0 0 0 2px var(--color-primary-dark)
 }
@@ -287,7 +287,6 @@
   width: 15px;
   right: 0;
   border-radius: 10px 0px 0px 10px;
-  transition: width 0.3s ease-out;
   box-shadow: -10px 22px 25px -8px #000000;
 }
 
@@ -315,9 +314,14 @@
   border-left: solid 3px var(--color-text-on-primary);
   border-bottom: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
-  box-shadow: -10px 1px 17px 10px rgba(0, 0, 0, 0.7);
+  box-shadow: none;
   transform: translateX(100%);
-  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+}
+
+#futureDialog iframe.is-open,
+#temporaryDialog iframe.is-open,
+#activityDialog iframe.is-open {
+  transform: translateX(0);
 }
 
 /* Close-Buttons */
@@ -335,6 +339,8 @@
   border-bottom: solid 3px var(--color-text-on-primary);
   border-left: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
+  opacity: 0;
+  transform: translateX(100%);
 }
 
 #futureDialog .futurePlanClose.is-open,
