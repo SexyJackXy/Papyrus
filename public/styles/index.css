@@ -66,14 +66,28 @@
   left: 0.6rem;
 }
 
+.title {
+  grid-column: 1;
+  grid-row: 1;
+  padding-left: 0.6rem;
+}
+
 .close {
-  right: 0.6rem;
-  max-height: 18px;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  max-width: 20px;
+  text-align: center;
   color: var(--color-text);
+  padding-right: 0.6rem;
 }
 
 .close:hover {
   cursor: pointer;
+}
+
+.vehicle > h3.close {
+  right: 0.6rem !important;
 }
 
 .vehicle .person:last-child {

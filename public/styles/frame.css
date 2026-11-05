@@ -31,14 +31,6 @@ h3 {
   font-size: 1.5ch;
 }
 
-.close {
-  display: flex;
-  float: right;
-  justify-content: flex-end;
-  padding-right: 0.6rem;
-  padding-top: 0.3rem;
-}
-
 hr {
   color: var(--color-text);
   /*Darkmode => */
@@ -158,10 +150,10 @@ header img {
 }
 
 #papyrus {
-  display: inline-flex;
-  align-items: center;
-  left: 0;
-  right: 42px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding-right: 75px;
 }
 
 #PapyrusLogo {
@@ -207,14 +199,12 @@ header img {
 #flyingImage {
   position: fixed;
   bottom: 0;
-  /* Höhe anpassen */
   left: 0;
   height: 250px;
   width: auto;
   z-index: 9999;
   pointer-events: none;
   -webkit-transform: translate3d(100vw, 0, 0);
-  /* Startposition: rechts außerhalb */
   transform: translate3d(100vw, 0, 0);
   -webkit-animation: slideRightToLeft 6s linear 1 forwards;
   animation: slideRightToLeft 6s linear 1 forwards;

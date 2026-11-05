@@ -102,16 +102,22 @@ function getContent() {
 function setActive(clickedElement) {
   var allPersons = Array.from(document.querySelectorAll('.person'))
   var clickedName = clickedElement.textContent
-
   var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
 
   selectedPostions.forEach(postion => {
     postion.setAttribute('present', 'true')
   })
 
-  var data = serializeAssignments()
-
   scheduleSave()
+}
+
+function reActived(clickedElement) {
+  var postion = clickedElement.getAttribute('present')
+
+  if (postion === 'true') {
+    clickedElement.setAttribute('present', 'false')
+  }
+  console.log(postion)
 }
 
 async function loadContent() {
@@ -372,7 +378,7 @@ function initDeleteButtons() {
 
   deleteBtns.forEach(btn => {
     btn.addEventListener('click', event => {
-      var parent = event.target.parentElement
+      var parent = event.currentTarget.closest('.vehicle')
       var persons = parent.querySelectorAll('.person')
 
       persons.forEach(p => {
@@ -496,14 +502,15 @@ if (document.readyState === 'loading') {
 }
 
 window.Dienste = {
+  initDragAndDrop,
   readFromFile,
   getContent,
   loadContent,
   clearCookies,
   parseContent,
   renderAssignments,
-  initDragAndDrop,
   initDeleteButtons,
   logout,
-  setActive
+  setActive,
+  reActived
 }
