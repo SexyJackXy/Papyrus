@@ -1,10 +1,10 @@
 .bestellListe {
+    background-color: var(--color-text-on-primary);
     margin: auto;
     table-layout: fixed;
     gap: 0.6rem;
-    background-color: transparent;
     border-radius: 10px;
-    border: solid var(--color-card-bg) 1px ;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
 }
 
 .tableRow td {
@@ -14,20 +14,15 @@
 
 .tableHead {
     text-align: center;
-    background-color: transparent;
 }
 
 input[type='text'],
-input[type='number'],
-select {
+input[type='number'] {
     background-color: var(--color-card-bg);
     border: none;
-    padding: 12px 15px;
+    padding: 0.8rem;
     border-radius: 10px;
-}
 
-#food {
-    width: 199px;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -53,7 +48,81 @@ input[type="number"] {
     display: flex;
 }
 
-#addTabelRow img{
+#addTabelRow img {
     height: 32px;
     margin: auto;
+}
+
+/* Side Style */
+.sidebarLeft {
+    background-color: var(--color-text-on-primary);
+    position: fixed;
+    left: 0.3rem;
+    top: 125px;
+    width: 15vw;
+    padding: 0.6rem;
+    z-index: 3;
+    border-radius: 10px;
+
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+}
+
+.sidebarLeft h2,
+.sidebarRight h2 {
+    margin: 0;
+}
+
+.sidebarRight {
+    text-align: center;
+    position: relative;
+    width: 3vw;
+    background-color: var(--color-text-on-primary);
+    float: right;
+    padding: 0.6rem;
+    margin-bottom: 0.3rem;
+    margin-right: 0.3rem;
+    z-index: 300;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+}
+
+.sidebarRight:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-dark);
+    color: var(--color-text-on-primary) !important;
+}
+
+/* Print Logic */
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    input[type='text'],
+    input[type='number'] {
+        border-radius: 0.2px;
+    }
+
+    .bestellListe {
+        border-collapse: collapse;
+        box-shadow: none;
+    }
+
+    .bestellListe tr {
+        border-bottom: 1px solid #000;
+        border-radius: 0;
+    }
+
+    .bestellListe th,
+    .bestellListe td {
+        border-bottom: 1px solid #000;
+        border-radius: 0;
+    }
+
+    .bestellListe,
+    .bestellListe * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 }

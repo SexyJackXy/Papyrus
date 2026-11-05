@@ -9,22 +9,7 @@ function addNewRow(firstName, lastName) {
         <td><input type="text" name="forName" value="${firstName}"></td>
         <td><input type="text" name="surrName" value="${lastName}"></td>`
 
-    var newTableRow = `<td>
-                        <select name="food">
-                            <option>Brötchen</option>
-                            <option>Saitenwurst (Paar)</option>
-                            <option>Rinderwurst (Stück)</option>
-                            <option>Paprikawurst</option>
-                            <option>Debreziner</option>
-                            <option>Weißwurst</option>
-                            <option>Brezel</option>
-                            <option>Croissant</option>
-                            <option>Natur Frischkäse</option>
-                            <option>Marmelade</option>
-                            <option>Süßersenf</option>
-                            <option>Butter</option>
-                        </select>
-                    </td>
+    var newTableRow = `<td><input type="text" name="food"></td>
                     <td><input type="number" name="orderCount"></td>
                 </tr>`
     var finalRow = tableRow + newTableRow
