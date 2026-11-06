@@ -15,28 +15,75 @@
 }
 
 .gate {
-    display: grid;
-    background-color: pink;
-    height: 98%;
-    width: 98%;
+    display: flex;
+    height: 99%;
+    gap: 0.3rem;
+    width: 99%;
     margin: auto;
-    grid-auto-columns: 1fr;
+    border-left: dotted 1px #9aadc2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .port {
-    height: 98%;
-    width: 98%;
-    background-color: magenta;
-    margin: auto;
+    height: 90%;
+    width: 76%;
+    background-color: transparent;
+    border: solid 2px blue;
     border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.port[tier="tier1"] {
+    height: 25% !important;
+}
+
+.port[tier="tier2"] {
+    height: 50% !important;
+}
+
+.port[tier="tier3"] {
+    height: 75% !important;
+}
+
+.port [tier="tier4"] {
+    height: 50% !important;
+}
+
+.port[draggable="true"]:hover {
+    cursor: pointer;
+}
+
+.car {
+    transform: rotate(270deg);
+    font-size: small;
 }
 
 #halle1 {
     grid-auto-flow: column;
-    width: 654px;
-    height: 222px;
+    width: 648px;
+    height: 218px;
     position: absolute;
-    left: 534px;
+    left: 529px;
     top: 130px;
-    background-color: aqua;
+    direction: rtl;
+    background-color: #b6cbe2;
+    border: solid 2px #9aadc2;
+}
+
+#halle2 {
+    grid-auto-flow: row;
+    width: 164px;
+    height: 529px;
+    position: absolute;
+    left: 316px;
+    top: 536px;
+    /* background-color: turquoise; */
+}
+
+#halle2 .gate {
+    grid-auto-flow: column;
 }
