@@ -1,8 +1,4 @@
 ; (function () {
-  // Eigenständiges Drag-and-Drop-Modul, ausgelagert aus core.js.
-  // Wird über window.DragAndDrop.createDragAndDrop({...}) mit den
-  // benötigten Abhängigkeiten aus core.js "verdrahtet" und liefert
-  // { initDragAndDrop, updatePersonColor } zurück.
   function createDragAndDrop(deps) {
     var reservedNames = deps.reservedNames
     var scheduleSave = deps.scheduleSave
@@ -53,8 +49,6 @@
           .forEach(el => el.classList.remove('drop-target'))
       }
 
-      // Gemeinsame Drop-Logik, wird sowohl von der Maus-basierten (Desktop)
-      // als auch von der Touch-basierten (Handy/Tablet) Variante genutzt.
       function performDrop(draggedEl, dropElement) {
         if (!draggedEl || !dropElement) return
 
@@ -66,6 +60,8 @@
         var trashTarget = dropElement.closest('#trash')
         var draggedRole = draggedEl.dataset.role
         var addPerson = dropElement.closest('#addPerson')
+        var portTarget = dropElement.closest('.port')
+        var gateTarget = dropElement.closest('.gate')
 
         // CARD -> PERSON
         if (draggedEl.classList.contains('card') && personTarget) {
@@ -150,7 +146,6 @@
         else if (draggedEl.classList.contains('person') && triggerPoolTarget) {
           var name = draggedEl.textContent.trim()
 
-
           if (!reservedNames.includes(name)) {
             var newCard = document.createElement('div')
 
@@ -205,19 +200,63 @@
         } else if (draggedEl.classList.contains('card') && trashTarget) {
           draggedEl.remove()
           removeFromSchedule(draggedEl)
-        } else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html'
-        ) {
+        } else if (draggedEl.classList.contains('card') && addPerson && pageName === 'shiftSchedule.html') {
           draggedEl.style.opacity = '0.6'
           draggedEl.classList.add('moved')
 
           exportNotWorkingPeople(draggedEl)
         }
+
+
+        // In beiden der Port und Gate tausches muss nocht die Logik mit den Stellplatz(Port) größe geschreiben werden
+
+        //PORT <-> PORT
+        else if (draggedEl.classList.contains('port') && portTarget) {
+          var originCallSign = draggedEl.textContent.trim()
+          var sourceCallSign = portTarget.textContent.trim()
+          var originTier = draggedEl.getAttribute('tier')
+          var sourceTier = portTarget.getAttribute('tier')
+          var originVehicle = draggedEl.querySelector('.car')
+          var sourceVehicle = portTarget.querySelector('.car')
+
+          sourceVehicle.textContent = originCallSign
+          originVehicle.textContent = sourceCallSign
+
+          portTarget.setAttribute('tier', originTier)
+          draggedEl.setAttribute('tier', sourceTier)
+        }
+
+        //PORT <-> GATE
+        else if ((draggedEl.classList.contains('port') && gateTarget)) {
+          console.log(gateTarget)
+
+          var originCallSign = draggedEl.textContent.trim()
+          var originTier = draggedEl.getAttribute('tier')
+          draggedEl.remove()
+
+          var newPort = document.createElement('div')
+          newPort.className = 'port'
+          newPort.draggable = true
+          newPort.setAttribute('tier', originTier)
+
+          var newCar = document.createElement('div')
+          newCar.className = 'car'
+          newCar.textContent = originCallSign
+          newPort.appendChild(newCar)
+
+          console.log(newPort)
+
+          gateTarget.appendChild(newPort)
+        }
+
         if (pageName === 'index.html' || pageName === 'dashboard.html') {
           scheduleSave()
         } else if (pageName === 'temporaryPlan.html') {
           temporaryScheduleSave()
         } else if (pageName === 'activityPlan.html') {
           activityScheduleSave()
+        } else if (pageName === 'vehicleOverview.html') {
+          // Hier muss eine Logik Implementiert werden die dann die ganze einteilung speichert
         }
       }
 
@@ -226,7 +265,7 @@
       document.addEventListener(
         'dragstart',
         e => {
-          var element = e.target.closest('.card, .person')
+          var element = e.target.closest('.card, .person, .port')
 
           if (!element) return
 
@@ -255,7 +294,7 @@
       )
 
       document.addEventListener('dragend', e => {
-        var element = e.target.closest('.card, .person')
+        var element = e.target.closest('.card, .person, .port')
 
         if (!element) return
 
@@ -266,7 +305,7 @@
 
       document.addEventListener('dragover', e => {
         var target = e.target.closest(
-          '.person, .abteilungspersonal, #innerTeam, #trashCan, #addPerson'
+          '.person, .abteilungspersonal, .port,.gate , #innerTeam, #trashCan, #addPerson'
         )
 
         if (!target) return
