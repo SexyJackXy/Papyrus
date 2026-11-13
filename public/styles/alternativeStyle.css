@@ -77,8 +77,7 @@ h3.text {
     border-radius: 0.5vw;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.08) 0px 2px 8px;
+    box-shadow:  0px 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .plan a {

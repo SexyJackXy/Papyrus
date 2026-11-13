@@ -17,6 +17,32 @@
   padding: 0.6rem;
 }
 
+.shifts {
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+  margin: 0.6rem;
+  width: min(90vw, 2560px);
+  flex-wrap: nowrap;
+  justify-content: center;
+  max-width: 1728px;
+}
+
+.splitshift {
+  border-radius: 10px;
+  background-color: #e5e7eb;
+  width: 45vw;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+}
+
+.shiftTile {
+  text-align: left;
+  padding-left: 0.6rem;
+  font-weight: 100;
+  font-size: 2ch;
+  text-decoration: underline rebeccapurple;
+}
+
 .top-duty {
   display: flex;
   flex-direction: row;
@@ -34,7 +60,7 @@
 }
 
 [present='false'] {
-  /* border: inset 2pxvar(--color-primary-dark); */
+  /* border: inset 2px#a81309; */
   box-shadow: inset 0 0 0 2px var(--color-primary-dark)
 }
 
@@ -54,9 +80,8 @@
   background-color: var(--color-text-on-primary);
   border-radius: 10px;
   width: clamp(110px, 8vw, 200px);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
   padding-top: 2rem;
-  min-width: 180px;
   font-size: 1.6ch;
 }
 
@@ -168,14 +193,10 @@
   border-radius: 10px;
 }
 
-#teamFree {
+.team {
   display: block;
-  width: clamp(300px, 70vw, 2160px);
-}
-
-#teamUsed {
-  display: none;
-  width: clamp(300px, 45vw, 1440px);
+  width: clamp(300px, 20vw, 2160px);
+  margin-bottom: 1.6rem;
 }
 
 #teamUsed #innerTeam .card {
@@ -191,14 +212,6 @@
   display: none;
 }
 
-#ils {
-  align-items: center;
-}
-
-#ils2 {
-  width: 29vw;
-}
-
 #dispos {
   display: flex;
   flex-direction: row;
@@ -209,11 +222,6 @@
 #disponennt {
   text-align: center;
   width: 30vw;
-}
-
-#ils .person {
-  width: 170px;
-  height: 20px;
 }
 
 #trashCan {
@@ -306,7 +314,6 @@
 .temporaryPlan:hover,
 .activityPlan:hover {
   width: 30px;
-  box-shadow: none;
 }
 
 /* Iframes der Dialoge */

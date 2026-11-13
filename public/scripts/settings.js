@@ -35,24 +35,31 @@
   }
 
   async function initSettingsAdjustment() {
-    var settings = await fetch('/api/settings').then(r => r.json())
-    var showWachabteilung = settings.showWachabteilung
-    var dutyTakeout = settings.showDuty
+    // var settings = await fetch('/api/settings').then(r => r.json())
+    // var showWachabteilung = settings.showWachabteilung
+    // var dutyTakeout = settings.showDuty
+    // var path = window.location.pathname
+    // var pageName = path.split('/').pop()
 
-    if (dutyTakeout === true) {
-      var showInnerTeamUsed = document.getElementById('teamUsed')
-      var showteamFree = document.getElementById('teamFree')
-      showInnerTeamUsed.style.display = 'block'
-      showteamFree.style.width = 'clamp(300px, 45vw, 1440px)'
-    }
-    else {
-      var showteamFree = document.getElementById('teamFree')
-      showteamFree.style.maxWidth = 'min(90vw, 2560px)'
-    }
-    if (showWachabteilung === true) {
-      var showStation = document.getElementById('showStation')
-      showStation.style.display = 'block'
-    }
+    // if (dutyTakeout === true) {
+    //   var showInnerTeamUsed = document.getElementById('teamUsed')
+    //   var showteamFree = document.getElementById('teamFree')
+    //   showInnerTeamUsed.style.display = 'block'
+    //   if (pageName === 'index.html') {
+    //     showteamFree.style.width = 'clamp(300px, 15vw, 1440px)'
+    //   }
+    //   else {
+    //     showteamFree.style.width = 'clamp(300px, 45vw, 1440px)'
+    //   }
+    // }
+    // else {
+    //   var showteamFree = document.getElementById('teamFree')
+    //   showteamFree.style.maxWidth = 'min(90vw, 2560px)'
+    // }
+    // if (showWachabteilung === true) {
+    //   var showStation = document.getElementById('showStation')
+    //   showStation.style.display = 'block'
+    // }
 
 
     return settings

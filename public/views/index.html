@@ -4,12 +4,13 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="60" />
+  <!-- <meta http-equiv="refresh" content="60" /> -->
   <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
   <title>Papyrus</title>
   <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
+
   <script src="../scripts/dragAndDrop.js"></script>
   <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
@@ -29,17 +30,8 @@
       <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </div>
     <div class="navBar">
-      <!-- <a href="catering.html">
-        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
-      </a> -->
-      <a href="dashboard.html">
-        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
-      </a>
-      <a href="settings.html" hidden data-auth="required">
-        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
-      </a>
-      <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
-        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
+      <a href="settings.html">
+        <img src="../img/einloggen.png" alt="Einstellungen" class="navLogo">
       </a>
       <a href="login.html" data-auth="guest">
         <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
@@ -48,154 +40,310 @@
   </header>
 
   <main class="container">
-    <h2>Führungsdienste</h2>
+    <section class="shifts">
+      <div class="oldShift splitshift">
+        <h2 class="shiftTile">Gehende Schicht</h2>
+        <h2>Führungsdienste</h2>
 
-    <section class="top-duty">
-      <div class="vehicle">
-        <h3>ALvD</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="ALvD" draggable="false">Frei</div>
-      </div>
+        <section class="top-duty">
+          <div class="vehicle">
+            <h3>ALvD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="ALvD" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>DD</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="DD" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>DD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="DD" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>LD1</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="LD 1" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>LD1</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LD 1" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>LD2</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="LD 2" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>LD2</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LD 2" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>HLD</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="HLD" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>HLD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="HLD" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>EAL</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="EAL" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>EAL</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="EAL" draggable="false">Frei</div>
+          </div>
 
-      <div class="vehicle">
-        <h3>LFüGr</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="LFüGr" draggable="false">Frei</div>
-      </div>
+          <div class="vehicle">
+            <h3>LFüGr</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LFüGr" draggable="false">Frei</div>
+          </div>
 
-      <div id="second-Row">
-        <div class="vehicle" id="ils">
-          <h3 class="close">X</h3>
-          <h3>1. Dispo</h3>
-          <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
-        </div>
-        <div class="vehicle" id="ils">
-          <h3 class="close">X</h3>
-          <h3>2. Dispo</h3>
-          <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
-        </div>
-        <div class="vehicle" id="ils">
-          <h3 class="close">X</h3>
-          <h3>3. Dispo</h3>
-          <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
-        </div>
-      </div>
-    </section>
-
-    <h2>Fahrzeuge</h2>
-
-    <section class="middle-duty">
-      <div class="splitContainer">
-        <div class="vehicle" id="ELW">
-          <h3>ELW</h3>
-          <h3 class="close">X</h3>
-          <div class="person" data-role="ELW" draggable="false">LD 1</div>
-          <div class="person" data-role="FüAss" draggable="false">FüAss</div>
-          <div class="person" data-role="Schw.Retter" draggable="false">3. Dispo</div>
-        </div>
-      </div>
-
-      <div class="vehicle">
-        <h3>LF1</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="LF 1 Fü" draggable="false">LF 1 Fü</div>
-        <div class="person" data-role="LF 1 Ma" draggable="false">LF 1 Ma</div>
-        <div class="person" data-role="LF 1 ATF" draggable="false">LF 1 ATF</div>
-        <div class="person" data-role="LF 1 ATM" draggable="false">LF 1 ATM</div>
-        <div class="person" data-role="LF 1 WTF" draggable="false">LF 1 WTF</div>
-        <div class="person" data-role="LF 1 WTM" draggable="false">LF 1 WTM</div>
-      </div>
-
-      <div class="vehicle">
-        <h3>LF2</h3>
-        <h3 class="close">X</h3>
-        <div class="person" data-role="LF 2 Fü" draggable="false">LF 2 Fü</div>
-        <div class="person" data-role="LF 2 Ma" draggable="false">LF 2 Ma</div>
-        <div class="person" data-role="LF 2 ATF" draggable="false">LF 2 ATF</div>
-        <div class="person" data-role="LF 2 ATM" draggable="false">LF 2 ATM</div>
-        <div class="person" data-role="LF 2 WTF" draggable="false">LF 2 WTF</div>
-        <div class="person" data-role="LF 2 WTM" draggable="false">LF 2 WTM</div>
-      </div>
-
-      <div class="splitContainer">
-
-        <div class="vehicle">
-          <h3>DLK/RW</h3>
-          <h3 class="close">X</h3>
-          <div class="person" data-role="DLK1 Fü" draggable="false">Fahrzeugführer</div>
-          <div class="person" data-role="DLK1 Ma" draggable="false">Maschinist</div>
-        </div>
-
-        <div class="vehicle">
-          <h3>Sonderfahrzeug</h3>
-          <h3 class="close">X</h3>
-          <div class="person" data-role="SoFzg Fü" draggable="false">Fahrzeugführer</div>
-          <div class="person" data-role="SoFzg Ma" draggable="false">Maschinist</div>
-        </div>
-      </div>
-
-      <div class="splitContainer">
-        <div class="vehicle">
-          <h3>KEF</h3>
-          <h3 class="close">X</h3>
-          <div class="person" data-role="KEF Fü" draggable="false">Fahrzeugführer</div>
-          <div class="person" data-role="KEF Ma" draggable="false">Maschinist</div>
-        </div>
-
-        <div class="vehicle">
-          <h3>FwK/GW-Rüst</h3>
-          <h3 class="close">X</h3>
-          <div class="person" data-role="Fwk Fü" draggable="false">Fahrzeugführer</div>
-          <div class="person" data-role="Fwk Ma" draggable="false">Maschinist</div>
-        </div>
-
-      </div>
-    </section>
-
-    <div class="freeTeamSpace">
-      <div class="team" id="teamFree">
-        <h2>Frei auf Wache</h2>
-        <section id="innerTeam">
+          <div id="second-Row">
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>1. Dispo</h3>
+              <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+            </div>
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>2. Dispo</h3>
+              <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+            </div>
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>3. Dispo</h3>
+              <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
+            </div>
+          </div>
         </section>
-      </div>
 
-      <div class="team" id="teamUsed">
-        <h2>außer Haus</h2>
-        <section id="innerTeam">
+        <h2>Fahrzeuge</h2>
+
+        <section class="middle-duty">
+          <div class="splitContainer">
+            <div class="vehicle" id="ELW">
+              <h3>ELW</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="ELW" draggable="false">LD 1</div>
+              <div class="person" data-role="FüAss" draggable="false">FüAss</div>
+              <div class="person" data-role="Schw.Retter" draggable="false">3. Dispo</div>
+            </div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LF1</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LF 1 Fü" draggable="false">LF 1 Fü</div>
+            <div class="person" data-role="LF 1 Ma" draggable="false">LF 1 Ma</div>
+            <div class="person" data-role="LF 1 ATF" draggable="false">LF 1 ATF</div>
+            <div class="person" data-role="LF 1 ATM" draggable="false">LF 1 ATM</div>
+            <div class="person" data-role="LF 1 WTF" draggable="false">LF 1 WTF</div>
+            <div class="person" data-role="LF 1 WTM" draggable="false">LF 1 WTM</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LF2</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LF 2 Fü" draggable="false">LF 2 Fü</div>
+            <div class="person" data-role="LF 2 Ma" draggable="false">LF 2 Ma</div>
+            <div class="person" data-role="LF 2 ATF" draggable="false">LF 2 ATF</div>
+            <div class="person" data-role="LF 2 ATM" draggable="false">LF 2 ATM</div>
+            <div class="person" data-role="LF 2 WTF" draggable="false">LF 2 WTF</div>
+            <div class="person" data-role="LF 2 WTM" draggable="false">LF 2 WTM</div>
+          </div>
+
+          <div class="splitContainer">
+
+            <div class="vehicle">
+              <h3>DLK/RW</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="DLK1 Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="DLK1 Ma" draggable="false">Maschinist</div>
+            </div>
+
+            <div class="vehicle">
+              <h3>Sonderfahrzeug</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="SoFzg Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="SoFzg Ma" draggable="false">Maschinist</div>
+            </div>
+          </div>
+
+          <div class="splitContainer">
+            <div class="vehicle">
+              <h3>KEF</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="KEF Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="KEF Ma" draggable="false">Maschinist</div>
+            </div>
+
+            <div class="vehicle">
+              <h3>FwK/GW-Rüst</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="Fwk Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="Fwk Ma" draggable="false">Maschinist</div>
+            </div>
+
+          </div>
         </section>
+
+        <div class="freeTeamSpace">
+          <div class="team" id="teamFree">
+            <h2>Frei auf Wache</h2>
+            <section id="innerTeam">
+            </section>
+          </div>
+
+          <div class="team" id="teamUsed">
+            <h2>außer Haus</h2>
+            <section id="innerTeam">
+            </section>
+          </div>
+        </div>
       </div>
-    </div>
+      <div class="newShift splitshift">
+                <h2 class="shiftTile">Kommende Schicht</h2>
+        <h2>Führungsdienste</h2>
+
+        <section class="top-duty">
+          <div class="vehicle">
+            <h3>ALvD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="ALvD" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>DD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="DD" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LD1</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LD 1" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LD2</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LD 2" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>HLD</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="HLD" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>EAL</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="EAL" draggable="false">Frei</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LFüGr</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LFüGr" draggable="false">Frei</div>
+          </div>
+
+          <div id="second-Row">
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>1. Dispo</h3>
+              <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
+            </div>
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>2. Dispo</h3>
+              <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
+            </div>
+            <div class="vehicle" id="ils">
+              <h3 class="close">X</h3>
+              <h3>3. Dispo</h3>
+              <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
+            </div>
+          </div>
+        </section>
+
+        <h2>Fahrzeuge</h2>
+
+        <section class="middle-duty">
+          <div class="splitContainer">
+            <div class="vehicle" id="ELW">
+              <h3>ELW</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="ELW" draggable="false">LD 1</div>
+              <div class="person" data-role="FüAss" draggable="false">FüAss</div>
+              <div class="person" data-role="Schw.Retter" draggable="false">3. Dispo</div>
+            </div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LF1</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LF 1 Fü" draggable="false">LF 1 Fü</div>
+            <div class="person" data-role="LF 1 Ma" draggable="false">LF 1 Ma</div>
+            <div class="person" data-role="LF 1 ATF" draggable="false">LF 1 ATF</div>
+            <div class="person" data-role="LF 1 ATM" draggable="false">LF 1 ATM</div>
+            <div class="person" data-role="LF 1 WTF" draggable="false">LF 1 WTF</div>
+            <div class="person" data-role="LF 1 WTM" draggable="false">LF 1 WTM</div>
+          </div>
+
+          <div class="vehicle">
+            <h3>LF2</h3>
+            <h3 class="close">X</h3>
+            <div class="person" data-role="LF 2 Fü" draggable="false">LF 2 Fü</div>
+            <div class="person" data-role="LF 2 Ma" draggable="false">LF 2 Ma</div>
+            <div class="person" data-role="LF 2 ATF" draggable="false">LF 2 ATF</div>
+            <div class="person" data-role="LF 2 ATM" draggable="false">LF 2 ATM</div>
+            <div class="person" data-role="LF 2 WTF" draggable="false">LF 2 WTF</div>
+            <div class="person" data-role="LF 2 WTM" draggable="false">LF 2 WTM</div>
+          </div>
+
+          <div class="splitContainer">
+
+            <div class="vehicle">
+              <h3>DLK/RW</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="DLK1 Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="DLK1 Ma" draggable="false">Maschinist</div>
+            </div>
+
+            <div class="vehicle">
+              <h3>Sonderfahrzeug</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="SoFzg Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="SoFzg Ma" draggable="false">Maschinist</div>
+            </div>
+          </div>
+
+          <div class="splitContainer">
+            <div class="vehicle">
+              <h3>KEF</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="KEF Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="KEF Ma" draggable="false">Maschinist</div>
+            </div>
+
+            <div class="vehicle">
+              <h3>FwK/GW-Rüst</h3>
+              <h3 class="close">X</h3>
+              <div class="person" data-role="Fwk Fü" draggable="false">Fahrzeugführer</div>
+              <div class="person" data-role="Fwk Ma" draggable="false">Maschinist</div>
+            </div>
+
+          </div>
+        </section>
+
+        <div class="freeTeamSpace">
+          <div class="team" id="teamFree">
+            <h2>Frei auf Wache</h2>
+            <section id="innerTeam">
+            </section>
+          </div>
+
+          <div class="team" id="teamUsed">
+            <h2>außer Haus</h2>
+            <section id="innerTeam">
+            </section>
+          </div>
+        </div>
   </main>
+  </div>
+  </section>
+
 
   <section class="sidebar">
     <a href="shiftSchedule.html" id="showStation">
@@ -248,7 +396,7 @@
     });
 
     window.addEventListener("beforeunload", () => {
-      localStorage.removeItem('dienste_csv');
+      localStorage.removeItem(K);
     });
 
     document.querySelectorAll('.person').forEach(el => {
