@@ -30,14 +30,24 @@
       <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </div>
     <div class="navBar">
-      <a href="settings.html">
-        <img src="../img/einloggen.png" alt="Einstellungen" class="navLogo">
+      <a href="catering.html">
+        <!-- <img src="../img/restaurant.png" alt="Versperliste" class="navLogo"> -->
+      </a>
+      <a href="dashboard.html">
+        <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
+      </a>
+      <a href="settings.html" hidden data-auth="required">
+        <img src="../img/einstellungen.png" alt="Einstellungen" class="navLogo">
+      </a>
+      <a href="login.html" hidden data-auth="required" onclick="Dienste.logout(); return false;">
+        <img src="../img/ausloggen.png" alt="Logut" class="navLogo">
       </a>
       <a href="login.html" data-auth="guest">
         <img src="../img/einloggen.png" alt="Einloggen" class="navLogo">
       </a>
     </div>
   </header>
+
 
   <main class="container">
     <section class="shifts">
@@ -263,7 +273,7 @@
               <h3 class="close">X</h3>
               <div class="person" data-role="ELW" draggable="false">LD 1</div>
               <div class="person" data-role="FüAss" draggable="false">FüAss</div>
-              <div class="person" data-role="Schw.Retter" draggable="false">3. Dispo</div>
+              <div class="person" data-role="Schw.Retter" draggable="false">Schw.Retter</div>
             </div>
           </div>
 
@@ -350,31 +360,11 @@
     <a id="trash">
       <img src="../img/trash.png" alt="Löschen" id="trashCan">
     </a>
-
-    <div class="flyOuts" id="flyOutId">
-      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
-      </div>
-      <div class="activityPlan" onclick="showActivityPlan(this)">
-      </div>
-    </div>
-  </section>
-
-  <section class="iFrames">
-    <div id="temporaryDialog" title="Basic dialog">
-      <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
-      </div>
-      <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
-    </div>
-
-    <div id="activityDialog" title="Basic dialog">
-      <div class="activityPlanClose" onclick="closeActivityPlan(this)">
-      </div>
-      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-    </div>
-  </section>
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       window.DiensteSettings.initSettingsAdjustment();
+
+      window.Dienste.loadYesterdayContent().then(window.Dienste.renderOldShift);
 
       var assignments = await window.Dienste.loadContent();
       if (!assignments || !assignments.length) return;

@@ -223,6 +223,7 @@ var PUBLIC_GET_APIS = new Set([
   '/api/latest-temporary-schedule',
   '/api/settings',
   '/api/load-upcoming-plans',
+  '/api/yesterday-schedule',
   '/api/import-not-working-persons'
 ])
 
@@ -612,6 +613,38 @@ app.get('/api/latest-schedule', async (req, res) => {
     )
 
     res.json({ success: true, fileName: latest.name, data })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+var YESTERDAY_CACHE = { file: null, data: null }
+
+app.get('/api/yesterday-schedule', async (req, res) => {
+  try {
+    if (!fs.existsSync(UPCOMMING_PLANS_DIR)) {
+      return res.json({ success: true, data: null })
+    }
+
+    var now = new Date()
+    var yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+
+    var match = fs
+      .readdirSync(UPCOMMING_PLANS_DIR)
+      .filter(f => f.toLowerCase().endsWith('.pdf'))
+      .find(f => dateFromName(f).getTime() === yesterday.getTime())
+
+    if (!match) {
+      return res.json({ success: true, data: null })
+    }
+
+    if (YESTERDAY_CACHE.file !== match) {
+      var buffer = fs.readFileSync(path.join(UPCOMMING_PLANS_DIR, match))
+      YESTERDAY_CACHE = { file: match, data: await extractShiftFromPdf(buffer) }
+    }
+
+    res.json({ success: true, fileName: match, data: YESTERDAY_CACHE.data })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })

@@ -18,11 +18,15 @@ function formatDateGerman(timestamp) {
 }
 
 function makeShowPlan({ dialogId, iframeId, closeSelector }) {
+
   return function (clickedDiv) {
+
     var flyOuts = clickedDiv.parentElement
     var dialogDiv = document.getElementById(dialogId)
     var dialogIframe = dialogDiv.querySelector('#' + iframeId)
     var dialogButton = dialogDiv.querySelector(closeSelector)
+
+    dialogButton.style.opacity = '100'
 
     document.body.style.overflow = 'hidden'
     flyOuts.style.display = 'none'

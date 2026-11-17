@@ -46,7 +46,8 @@ var reservedNames = [
   'KFZ',
   'Kleiderkammer',
   'Kantine1',
-  'Kantine2'
+  'Kantine2',
+  'Fahrzeugführer'
 ]
 
 function readFromFile(file) {
@@ -103,70 +104,76 @@ function setActive(clickedElement) {
   var allPersons = Array.from(document.querySelectorAll('.person'))
   var clickedName = clickedElement.textContent
   var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
+  var notAllowedName = reservedNames.includes(clickedName) ? '' : clickedName
 
   selectedPostions.forEach(postion => {
-    postion.setAttribute('present', 'true')
+    if (!notAllowedName) {
+      console.log(notAllowedName, 'darf nicht aktiv oder nicht gesetzt werden.')
+      return;
+    }
+
+    var present = postion.getAttribute('present')
+
+    if (present === 'true') {
+      postion.setAttribute('present', 'false')
+    }
+    else {
+      postion.setAttribute('present', 'true')
+    }
   })
 
   scheduleSave()
 }
 
-function reActived(clickedElement) {
-  var postion = clickedElement.getAttribute('present')
+function setOutOfHouse(clickedElement) {
+  console.log(clickedElement)
 
-  if (postion === 'true') {
-    clickedElement.setAttribute('present', 'false')
-  }
-  console.log(postion)
+  var persons = clickedElement.querySelectorAll('.person')
+
+  persons.forEach(pers => {
+    var backgroundColor = pers.style.backgroundColor
+    if (backgroundColor !== 'rgb(255, 42, 28)') {
+      pers.style.backgroundColor = "#ff2a1c"
+    }
+    else {
+      pers.style.backgroundColor = 'rgb(182, 213, 251)'
+    }
+  });
 }
 
 async function loadContent() {
   var res
   var path = window.location.pathname
   var pageName = path.split('/').pop()
-
-    var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
-
-    selectedPostions.forEach(postion => {
-      postion.setAttribute('present', 'true')
-    })
-
-    scheduleSave()
-  }
-
-  async function loadContent() {
-    var res
-    var path = window.location.pathname
-    var pageName = path.split('/').pop()
-    try {
-      if (pageName === 'index.html' || pageName === 'dashboard.html') {
-        res = await fetch('/api/latest-schedule')
-      } else if (pageName === 'temporaryPlan.html') {
-        res = await fetch('/api/latest-temporary-schedule')
-      } else if (pageName === 'activityPlan.html') {
-        res = await fetch('/api/latest-schedule')
-      }
-      if (res && res.ok) {
-        var json = await res.json()
-        if (json.success) {
-          if (json.data) {
-            localStorage.setItem(cookies, JSON.stringify(json.data))
-            return json.data
-          } else if (json.fixedData) {
-            return json.fixedData
-          }
-          // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
-          // lokalen Cache leeren statt auf alten Stand zurückzufallen.
-          localStorage.removeItem(cookies)
-          return []
+  try {
+    if (pageName === 'index.html' || pageName === 'dashboard.html') {
+      res = await fetch('/api/latest-schedule')
+    } else if (pageName === 'temporaryPlan.html') {
+      res = await fetch('/api/latest-temporary-schedule')
+    } else if (pageName === 'activityPlan.html') {
+      res = await fetch('/api/latest-schedule')
+    }
+    if (res && res.ok) {
+      var json = await res.json()
+      if (json.success) {
+        if (json.data) {
+          localStorage.setItem(cookies, JSON.stringify(json.data))
+          return json.data
+        } else if (json.fixedData) {
+          return json.fixedData
         }
         // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
         // lokalen Cache leeren statt auf alten Stand zurückzufallen.
         localStorage.removeItem(cookies)
         return []
       }
+      // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
+      // lokalen Cache leeren statt auf alten Stand zurückzufallen.
+      localStorage.removeItem(cookies)
+      return []
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.warn(
       'Konnte Einteilung nicht vom Server laden, nutze lokalen Zwischenspeicher:',
       e
@@ -175,6 +182,33 @@ async function loadContent() {
   }
 
   return getContent()
+}
+
+async function loadYesterdayContent() {
+  try {
+    var res = await fetch('/api/yesterday-schedule')
+    if (!res.ok) return []
+    var json = await res.json()
+    return json.success && Array.isArray(json.data) ? json.data : []
+  } catch (e) {
+    console.warn('Gestriger Plan konnte nicht geladen werden:', e)
+    return []
+  }
+}
+
+function renderOldShift(assignment) {
+  var root = document.querySelector('.oldShift')
+  if (!root || !assignment) return
+
+  assignment.forEach(({ role, name }) => {
+    if (!name) return
+
+    var el = root.querySelector(`.person[data-role="${role}"]`)
+    if (!el) return // Frei, Date usw. gibt es in der gehenden Schicht nicht
+
+    el.textContent = name
+    updatePersonColor(el)
+  })
 }
 
 function clearCookies() {
@@ -186,8 +220,9 @@ function clearCookies() {
 
 function serializeAssignments() {
   var result = []
+  var scope = document.querySelector('.newShift') || document
 
-  document.querySelectorAll('.person[data-role]').forEach(el => {
+  scope.querySelectorAll('.person[data-role]').forEach(el => {
     var role = el.dataset.role
     var text = el.textContent.trim()
     var name = reservedNames.includes(text) ? '' : text
@@ -358,7 +393,8 @@ function renderAssignments(assignment) {
       }
     }
 
-    var el = document.querySelector(`.person[data-role="${role}"]`)
+    var scope = document.querySelector('.newShift') || document
+    var el = scope.querySelector(`.person[data-role="${role}"]`)
     if (!el) return
 
     el.setAttribute('present', present)
@@ -433,7 +469,7 @@ async function exportNotWorkingPeople(movedEl) {
   var departmentShort = parent.parentElement.id
   var person = movedEl.textContent.trim()
 
-  var data = { name: person, department: departmentShort, role: null }
+  var data = { name: person, department: departmentShort, role: null, present: "true" }
 
   try {
     var res = await fetch('/api/export-not-working-person', {
@@ -523,11 +559,13 @@ window.Dienste = {
   readFromFile,
   getContent,
   loadContent,
+  loadYesterdayContent,
+  renderOldShift,
   clearCookies,
   parseContent,
   renderAssignments,
   initDeleteButtons,
   logout,
   setActive,
-  reActived
+  setOutOfHouse
 }

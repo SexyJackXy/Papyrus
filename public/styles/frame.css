@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
   font-family: 'Roboto';
   font-weight: 300;
   font-display: swap;
@@ -10,7 +10,7 @@
   font-weight: 400;
   font-display: swap;
   src: url('../fonts/Roboto-Regular.woff2') format('woff2');
-}
+} */
 
 :root {
   --color-primary: #ff2a1c;
@@ -167,6 +167,9 @@ header img {
     flex-direction: row;
     align-items: flex-start;
     padding-right: 75px;
+    z-index: 99;
+    position: absolute;
+    left: 45%;
 }
 
 #PapyrusLogo {
@@ -224,10 +227,21 @@ header img {
 }
 
 @-webkit-keyframes slideRightToLeft {
-    from { -webkit-transform: translate3d(100vw, 0, 0); }
-    to   { -webkit-transform: translate3d(-300px, 0, 0); }
+  from {
+    -webkit-transform: translate3d(100vw, 0, 0);
+  }
+
+  to {
+    -webkit-transform: translate3d(-300px, 0, 0);
+  }
 }
+
 @keyframes slideRightToLeft {
-    from { transform: translate3d(100vw, 0, 0); }
-    to   { transform: translate3d(-300px, 0, 0); }
+  from {
+    transform: translate3d(100vw, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-300px, 0, 0);
+  }
 }

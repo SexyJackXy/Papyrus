@@ -1,5 +1,5 @@
 #showStation {
-  display: none;
+  display: block;
 }
 
 #undoPic {
@@ -29,7 +29,7 @@
 .splitshift {
   border-radius: 10px;
   background-color: #e5e7eb;
-  width: 50vw;
+  width: 49vw;
 }
 
 .shiftTile {
@@ -76,7 +76,7 @@
   flex-direction: column;
   background-color: var(--color-text-on-primary);
   border-radius: 10px;
-  width: clamp(110px, 8vw, 200px);
+  width: 200px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
   padding-top: 2rem;
   font-size: 1.6ch;
@@ -194,7 +194,7 @@
 
 .team {
   display: block;
-  width: clamp(300px, 20vw, 2160px);
+  width: clamp(300px, 45vw, 2160px);
   margin-bottom: 1.6rem;
 }
 
@@ -356,11 +356,45 @@
   border-left: solid 3px var(--color-text-on-primary);
   border-radius: 10px 0px 0px 10px;
   opacity: 0;
-  transform: translateX(100%);
 }
 
 #futureDialog .futurePlanClose.is-open,
 #temporaryDialog .temporaryPlanClose.is-open,
 #activityDialog .activityPlanClose.is-open {
   display: block;
+}
+
+.oldShift .person {
+  pointer-events: none;
+}
+
+.oldShift .close {
+  display: none;
+}
+
+.splitshift .vehicle{
+  max-width: 9vw;
+}
+
+.splitshift .team{
+  max-width: 22vw;
+  margin-bottom: 1rem;
+}
+
+.splitshift #innerTeam{
+  gap: 0.1rem;
+}
+
+#date{
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.vehicle,
+.person {
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }

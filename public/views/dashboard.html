@@ -96,7 +96,7 @@
       </div>
     </section>
 
-            <h2>Leitstelle</h2>
+    <h2>Leitstelle</h2>
 
     <section>
       <div id="second-Row">
@@ -127,7 +127,7 @@
           <h3 class="close">X</h3>
           <div class="person" data-role="ELW" draggable="false">LD 1</div>
           <div class="person" data-role="FüAss" draggable="false">FüAss</div>
-          <div class="person" data-role="Schw.Retter" draggable="false">3. Dispo</div>
+          <div class="person" data-role="Schw.Retter" draggable="false">Schw.Retter</div>
         </div>
       </div>
 
@@ -218,10 +218,6 @@
       <div class="activityPlan" onclick="showActivityPlan(this)">
       </div>
     </div>
-
-    <!-- <a id="undo">
-      <img src="../img/undo.png" alt="Zurück" id="undoPic">
-    </a> -->
   </section>
 
   <section class="iFrames">
@@ -234,9 +230,33 @@
     <div id="activityDialog" title="Basic dialog">
       <div class="activityPlanClose" onclick="closeActivityPlan(this)">
       </div>
+      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    </div>
+
+    <div id="futureDialog" title="Basic dialog">
+      <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+      </div>
+      <!-- <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe> -->
+    </div>
   </section>
 
+  <footer>
+    <h3 id="date"></h3>
+  </footer>
+
   <script>
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedToday = dd + '.' + mm + '.' + yyyy;
+
+    document.getElementById('date').innerHTML = formattedToday;
+
     document.addEventListener("DOMContentLoaded", async () => {
       window.DiensteSettings.initSettingsAdjustment();
 
@@ -254,12 +274,17 @@
       localStorage.removeItem(K);
     });
 
-    document.querySelectorAll('.person').forEach(el => {
-      el.addEventListener('click', () => window.Dienste.setActive(el))
+    document.querySelectorAll('.vehicle').forEach(el => {
+      el.addEventListener('pointerup', (event) => {
+        window.Dienste.setOutOfHouse(el)
+      })
     })
 
     document.querySelectorAll('.person').forEach(el => {
-      el.addEventListener('dblclick', () => window.Dienste.reActived(el))
+      el.addEventListener('pointerup', (event) => {
+        event.stopPropagation()
+        window.Dienste.setActive(el)
+      })
     })
   </script>
 </body>

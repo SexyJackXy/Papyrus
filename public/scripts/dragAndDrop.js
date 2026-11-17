@@ -13,10 +13,7 @@
       var timeStamp = date.toLocaleTimeString('en-US', { hour12: false });
 
       if (!reservedNames.includes(text)) {
-        if (timeStamp < "06:30:00" && el.getAttribute('present') === 'false') {
-          el.style.backgroundColor = '#FFA39C'
-        }
-        else { el.style.backgroundColor = '#B6D5FB' }
+         el.style.backgroundColor = '#B6D5FB'
         el.draggable = true
       } else {
         el.style.backgroundColor = ''
