@@ -73,8 +73,6 @@
 }
 
 .close {
-  grid-column: 2;
-  grid-row: 1;
   justify-self: end;
   max-width: 20px;
   text-align: center;
@@ -87,7 +85,8 @@
 }
 
 .vehicle > h3.close {
-  right: 0.6rem !important;
+  left: auto;
+  right: 0.6rem;
 }
 
 .vehicle .person:last-child {
