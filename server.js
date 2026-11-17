@@ -4,6 +4,7 @@ require('dotenv').config()
 var express = require('express')
 var path = require('path')
 var fs = require('fs')
+var scheduleHelpers = require('./helpers/scheduleHelper.js')
 var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
@@ -766,3 +767,10 @@ var PORT = process.env.PORT || 3000
 app.listen(PORT, '127.0.0.1', () =>
   console.log(`Server läuft auf Port ${PORT}`)
 )
+
+setInterval(() => {
+  try {
+  } catch (e) {
+    console.error('Hintergrundaufgabe fehlgeschlagen:', e)
+  }
+}, 60 * 1000)

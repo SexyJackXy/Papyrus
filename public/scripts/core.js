@@ -101,26 +101,44 @@ function getContent() {
 }
 
 function setActive(clickedElement) {
-  var allPersons = Array.from(document.querySelectorAll('.person'))
-  var clickedName = clickedElement.textContent
-  var selectedPostions = allPersons.filter(name => name.textContent === clickedName)
+  var allPersons = Array.from(document.querySelectorAll('.person'));
+  var clickedName = clickedElement.textContent.trim();
+  var clickedPerson = allPersons.filter(person => person.textContent.trim() === clickedName);
+  var countName = allPersons.filter(person => person.textContent.trim() === clickedName).length
   var notAllowedName = reservedNames.includes(clickedName) ? '' : clickedName
 
-  selectedPostions.forEach(postion => {
-    if (!notAllowedName) {
-      console.log(notAllowedName, 'darf nicht aktiv oder nicht gesetzt werden.')
-      return;
-    }
+  if (!notAllowedName) return;
 
-    var present = postion.getAttribute('present')
+  var clickedPresent = clickedElement.getAttribute('present');
+  var present = clickedElement.getAttribute('present')
 
+  if (countName < 2) {
     if (present === 'true') {
-      postion.setAttribute('present', 'false')
+      clickedElement.setAttribute('present', 'false')
     }
     else {
-      postion.setAttribute('present', 'true')
+      clickedElement.setAttribute('present', 'true')
     }
-  })
+  }
+  else {
+    var matchingPersons = clickedPerson.filter(person =>
+      person !== clickedElement &&
+      person.getAttribute('present') === clickedPresent
+    );
+
+    var elementsToChange = matchingPersons.length > 0
+      ? [clickedElement, ...matchingPersons]
+      : [clickedElement];
+
+    elementsToChange.forEach(person => {
+      var present = person.getAttribute('present');
+
+      person.setAttribute(
+        'present',
+        present === 'true' ? 'false' : 'true'
+      );
+    });
+  }
 
   scheduleSave()
 }
