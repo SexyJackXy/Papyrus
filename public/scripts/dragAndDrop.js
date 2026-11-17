@@ -9,8 +9,6 @@
 
     function updatePersonColor(el) {
       var text = el.textContent.trim()
-      var date = new Date()
-      var timeStamp = date.toLocaleTimeString('en-US', { hour12: false });
 
       if (!reservedNames.includes(text)) {
          el.style.backgroundColor = '#B6D5FB'

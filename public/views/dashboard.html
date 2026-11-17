@@ -258,6 +258,7 @@
     document.getElementById('date').innerHTML = formattedToday;
 
     document.addEventListener("DOMContentLoaded", async () => {
+      window.Dienste.dashboardSwitcher();
       window.DiensteSettings.initSettingsAdjustment();
 
       var assignments = await window.Dienste.loadContent();

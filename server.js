@@ -27,7 +27,8 @@ var PUBLIC_PATHS = new Set([
   '/views/alternativPlanes/temporaryPlan.html',
   '/views/alternativPlanes/futurePlans.html',
   '/views/shiftSchedule.html',
-  '/views/catering.html'
+  '/views/catering.html',
+  '/views/index.html'
 ])
 
 function formatDateGerman(timestamp) {
