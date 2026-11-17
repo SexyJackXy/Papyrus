@@ -53,61 +53,66 @@
 
     <section class="top-duty">
       <div class="vehicle">
-        <h3 class="title">ALvD</h3>
+        <h3>ALvD</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="ALvD" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">DD</h3>
+        <h3>DD</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="DD" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">LD1</h3>
+        <h3>LD1</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="LD 1" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">LD2</h3>
+        <h3>LD2</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="LD 2" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">HLD</h3>
+        <h3>HLD</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="HLD" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">EAL</h3>
+        <h3>EAL</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="EAL" draggable="false">Frei</div>
       </div>
 
       <div class="vehicle">
-        <h3 class="title">LFüGr</h3>
+        <h3>LFüGr</h3>
         <h3 class="close">X</h3>
         <div class="person" data-role="LFüGr" draggable="false">Frei</div>
       </div>
+      </div>
+    </section>
 
+            <h2>Leitstelle</h2>
+
+    <section>
       <div id="second-Row">
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
-          <h3 class="title">1. Dispo</h3>
+          <h3>1. Dispo</h3>
           <div class="person" data-role="1. Dispo" draggable="false">Frei</div>
         </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
-          <h3 class="title">2. Dispo</h3>
+          <h3>2. Dispo</h3>
           <div class="person" data-role="2. Dispo" draggable="false">Frei</div>
         </div>
         <div class="vehicle" id="ils">
           <h3 class="close">X</h3>
-          <h3 class="title">3. Dispo</h3>
+          <h3>3. Dispo</h3>
           <div class="person" data-role="3. Dispo" draggable="false">Frei</div>
         </div>
       </div>
@@ -229,10 +234,6 @@
     <div id="activityDialog" title="Basic dialog">
       <div class="activityPlanClose" onclick="closeActivityPlan(this)">
       </div>
-      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-    </div>
-    <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
-  </div>
   </section>
 
   <script>
@@ -257,7 +258,7 @@
       el.addEventListener('click', () => window.Dienste.setActive(el))
     })
 
-        document.querySelectorAll('.person').forEach(el => {
+    document.querySelectorAll('.person').forEach(el => {
       el.addEventListener('dblclick', () => window.Dienste.reActived(el))
     })
   </script>
