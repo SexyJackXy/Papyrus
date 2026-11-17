@@ -22,17 +22,14 @@
   flex-direction: row;
   gap: 0.6rem;
   margin: 0.6rem;
-  width: min(90vw, 2560px);
   flex-wrap: nowrap;
   justify-content: center;
-  max-width: 1728px;
 }
 
 .splitshift {
   border-radius: 10px;
   background-color: #e5e7eb;
-  width: 45vw;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  width: 50vw;
 }
 
 .shiftTile {
@@ -129,6 +126,7 @@
   border-radius: 10px;
   padding: 0.5rem 0;
   max-height: 80px;
+  font-size: 1.5ch
 }
 
 .person:hover {

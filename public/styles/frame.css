@@ -1,7 +1,16 @@
-@font-face { font-family: 'Roboto'; font-weight: 300; font-display: swap;
-  src: url('../fonts/Roboto-Light.woff2') format('woff2'); }
-@font-face { font-family: 'Roboto'; font-weight: 400; font-display: swap;
-  src: url('../fonts/Roboto-Regular.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/Roboto-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/Roboto-Regular.woff2') format('woff2');
+}
 
 :root {
   --color-primary: #ff2a1c;
@@ -106,8 +115,8 @@ header img {
 }
 
 .container {
-  width: min(90vw, 2560px);
   margin: 0 auto;
+  max-width: 99vw;
 }
 
 .containerFlex {
@@ -121,18 +130,19 @@ header img {
 }
 
 .card {
-  background: var(--color-card-bg);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   color: var(--color-text);
+  background-color: var(--color-card-bg);
   margin: 0.1rem 0.4rem;
   border-radius: 10px;
   padding: 0.5rem 0;
-  max-height: 20px;
-  width: clamp(110px, 10vw, 200px);
-  touch-action: none;
+  max-height: 80px;
+  min-width: 139px;
+  max-width: 140px;
+  font-size: 1.5ch;
 }
 
 .card:hover {
