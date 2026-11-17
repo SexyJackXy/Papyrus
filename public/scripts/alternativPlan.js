@@ -175,8 +175,7 @@ async function showUpcomingPlans(container, url) {
     return
   }
   if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '../../scripts/pdfjs/pdf.worker.min.js?v=2';
   }
 
   var uploadPlan = container.querySelector('#uploadPlan')
@@ -196,7 +195,13 @@ async function showUpcomingPlans(container, url) {
   canvas.className = 'planCanvas'
   wrapper.appendChild(canvas)
 
-  var pdf = await pdfjsLib.getDocument(url).promise
+  var pdf
+  try {
+    pdf = await pdfjsLib.getDocument(url).promise
+  } catch (err) {
+    wrapper.textContent = 'PDF konnte nicht geladen werden: ' + err.message
+    return
+  }
   var page = await pdf.getPage(1)
 
   console.log(page)
@@ -208,7 +213,18 @@ async function showUpcomingPlans(container, url) {
   // Das PDF so skalieren, dass es komplett in den Plan-Rahmen passt
   var cssScale = Math.min(maxWidth / baseViewport.width, maxHeight / baseViewport.height)
 
-  var outputScale = Math.max(window.devicePixelRatio || 1, 2)
+  // Anzeigegröße in CSS-Pixeln
+  var cssWidth = baseViewport.width * cssScale
+  var cssHeight = baseViewport.height * cssScale
+
+  // Höher auflösen als der Bildschirm, damit der Browser sauber herunterskaliert
+  var outputScale = Math.max(window.devicePixelRatio || 1)
+
+  // Speicher des Displays schonen: maximal ca. 12 Megapixel pro Canvas
+  var maxPixels = 120000000
+  if (cssWidth * cssHeight * outputScale * outputScale > maxPixels) {
+    outputScale = Math.sqrt(maxPixels / (cssWidth * cssHeight))
+  }
 
   var viewport = page.getViewport({ scale: cssScale * outputScale })
 

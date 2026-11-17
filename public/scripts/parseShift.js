@@ -62,7 +62,9 @@ var forbiddenLines = new Set([
   'LFüGr',
   'EAL',
   'Abrufschicht',
-  'ELW'
+  'ELW',
+  'Fahrzeugführer',
+  'AB-Bahn'
 ])
 /**
  * Konvertiert das extrahierte Zeilen-Array in das Template-Format.
