@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <!-- <meta http-equiv="refresh" content="60" /> -->
+  <meta http-equiv="refresh" content="30" />
   <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
@@ -245,17 +245,20 @@
   </footer>
 
   <script>
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    let mm = today.getMonth() + 1; // Months start at 0!
-    let dd = today.getDate();
+    function updateDateTime() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
 
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
+      document.getElementById('date').textContent =
+        dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + min;
+    }
 
-    const formattedToday = dd + '.' + mm + '.' + yyyy;
-
-    document.getElementById('date').innerHTML = formattedToday;
+    updateDateTime();
+    setInterval(updateDateTime, 10 * 1000);
 
     document.addEventListener("DOMContentLoaded", async () => {
       window.Dienste.dashboardSwitcher();
