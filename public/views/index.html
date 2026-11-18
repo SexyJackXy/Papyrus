@@ -4,7 +4,6 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="30" />
   <link rel="stylesheet" href="../styles/frame.css">
   <link rel="stylesheet" href="../styles/responsiveStyle.css">
   <link rel="stylesheet" href="../styles/index.css">
@@ -15,6 +14,8 @@
   <script src="../scripts/core.js"></script>
   <script src="../scripts/settings.js" defer></script>
   <script src="../scripts/alternativPlan.js"></script>
+  <script src="../scripts/autoRefresh.js" defer></script>
+</head>
 </head>
 
 <body style="height: 100vh;">
@@ -360,6 +361,39 @@
     <a id="trash">
       <img src="../img/trash.png" alt="Löschen" id="trashCan">
     </a>
+
+    <div class="flyOuts" id="flyOutId">
+      <div class="temporaryPlan" onclick="showAlternativePlan(this)">
+      </div>
+      <div class="activityPlan" onclick="showActivityPlan(this)">
+      </div>
+    </div>
+  </section>
+
+  <section class="iFrames">
+    <div id="temporaryDialog" title="Basic dialog">
+      <div class="temporaryPlanClose" onclick="closeTemporaryPlan(this)">
+      </div>
+      <iframe id="temporaryIframe" data-src="alternativPlanes/temporaryPlan.html"></iframe>
+    </div>
+
+    <div id="activityDialog" title="Basic dialog">
+      <div class="activityPlanClose" onclick="closeActivityPlan(this)">
+      </div>
+      <iframe id="activityIframe" data-src="alternativPlanes/activityPlan.html"></iframe>
+    </div>
+
+    <div id="futureDialog" title="Basic dialog">
+      <div class="futurePlanClose" onclick="closeFuturePlan(this)">
+      </div>
+      <!-- <iframe id="futureIframe" data-src="alternativPlanes/futurePlans.html"></iframe> -->
+    </div>
+  </section>
+
+  <footer>
+    <h3 id="date"></h3>
+  </footer>
+
   <script>
     document.addEventListener("DOMContentLoaded", async () => {
       window.DiensteSettings.initSettingsAdjustment();

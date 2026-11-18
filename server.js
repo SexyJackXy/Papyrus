@@ -255,6 +255,10 @@ app.use((req, res, next) => {
   return res.redirect('/views/login.html')
 })
 
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+})
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/upcoming-plans', express.static(UPCOMMING_PLANS_DIR))
 

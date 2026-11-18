@@ -11,7 +11,7 @@
       var text = el.textContent.trim()
 
       if (!reservedNames.includes(text)) {
-         el.style.backgroundColor = '#B6D5FB'
+        el.style.backgroundColor = '#B6D5FB'
         el.draggable = true
       } else {
         el.style.backgroundColor = ''
@@ -154,6 +154,16 @@
 
             triggerPool.appendChild(newCard)
 
+            draggedEl.textContent = draggedRole
+            updatePersonColor(draggedEl)
+          }
+        }
+
+        // PERSON -> TRASH 
+        else if (draggedEl.classList.contains('person') && trashTarget) {
+          var name = draggedEl.textContent.trim()
+
+          if (!reservedNames.includes(name)) {
             draggedEl.textContent = draggedRole
             updatePersonColor(draggedEl)
           }
@@ -461,7 +471,7 @@
           clearHighlights()
           var under = elementUnderGhost(touch.clientX, touch.clientY)
           var target =
-            under && under.closest('.person, .abteilungspersonal, #innerTeam')
+            under && under.closest('.person, .abteilungspersonal, #innerTeam, #trash, #trashCan')
           if (target) target.classList.add('drop-target')
         },
         { passive: false }

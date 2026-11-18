@@ -163,7 +163,7 @@ function dashboardSwitcher() {
   var now = new Date();
   var currentMinutes = now.getHours() * 60 + now.getMinutes();
   var start = 6 * 60;       // 06:00
-  var end = 7 * 60 + 30;    // 07:30
+  var end = 7 * 60 + 10;    // 07:30
 
   if (currentMinutes >= start && currentMinutes <= end) {
     window.location.replace('../views/index.html')
