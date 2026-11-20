@@ -3,7 +3,7 @@
 // Wird vom Renderer-Script aufgerufen
 
 var pdfParse = require("pdf-parse-fork");
-var { parseShiftArray } = require("./parseShift");
+var { parseShiftArray } = require("../public/scripts/parseShift");
 
 var reservedNames = [
   "ALvD", "DD", "LD 1", "LD2", "HLD", "EAL", "BvD", "LFüGr",
@@ -21,9 +21,20 @@ var reservedNames = [
  * @returns {Promise<object[]>} - Befülltes Template-Array
  */
 async function extractShiftFromPdf(fileBuffer) {
-  var result = await pdfParse(fileBuffer);
-  var extractedText = result.text;
+  // pdf.js (in pdf-parse-fork) meldet harmlose TrueType-Hinting-Warnungen per console.log
+  var originalLog = console.log;
+  console.log = function (...args) {
+    if (typeof args[0] === "string" && args[0].startsWith("Warning: TT:")) return;
+    originalLog.apply(console, args);
+  };
 
+  var result;
+  try {
+    result = await pdfParse(fileBuffer);
+  } finally {
+    console.log = originalLog;
+  }
+  var extractedText = result.text;
   var regex = new RegExp(
     `(${reservedNames.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
     "g"
