@@ -164,9 +164,14 @@ function dashboardSwitcher() {
   var currentMinutes = now.getHours() * 60 + now.getMinutes();
   var start = 6 * 60;       // 06:00
   var end = 7 * 60 + 10;    // 07:30
+  var path = window.location.pathname
+  var pageName = path.split('/').pop()
 
-  if (currentMinutes >= start && currentMinutes <= end) {
+  if (currentMinutes >= start && currentMinutes <= end && pageName === 'dashboard.html') {
     window.location.replace('../views/index.html')
+  }
+  else if(pageName === 'index.html'){
+    window.location.replace('../views/dashboard.html')
   }
 }
 
@@ -174,6 +179,11 @@ async function loadContent() {
   var res
   var path = window.location.pathname
   var pageName = path.split('/').pop()
+
+  if (location.host === 'localhost:3000') {
+    document.documentElement.style.setProperty('--color-primary', '#1c5fff');
+  }
+
   try {
     if (pageName === 'index.html' || pageName === 'dashboard.html') {
       res = await fetch('/api/latest-schedule')
