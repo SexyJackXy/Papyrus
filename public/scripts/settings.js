@@ -65,6 +65,34 @@
     return settings
   }
 
+  async function loadUpcomingPlans() {
+    console.log('test')
+
+    var list = document.getElementById('upcomingPlansList')
+    if (!list) return
+    list.innerHTML = ''
+
+    var res = await fetch('/api/load-upcoming-plans').then(r => r.json())
+
+    if (!res.data || res.data.length === 0) {
+      var empty = document.createElement('li')
+      empty.textContent = 'Keine Pläne vorhanden'
+      list.appendChild(empty)
+      return
+    }
+
+    res.data.forEach(name => {
+      var li = document.createElement('li')
+      var a = document.createElement('a')
+      a.href = '/upcoming-plans/' + encodeURIComponent(name)
+      a.target = '_blank'
+      a.rel = 'noopener'
+      a.textContent = name.replace(/\.pdf$/i, '')
+      li.appendChild(a)
+      list.appendChild(li)
+    })
+  }
+
   function initSettingsPage() {
     loadSettings()
 
@@ -87,6 +115,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    loadUpcomingPlans()
     if (document.getElementById('Save')) {
       initSettingsPage()
     }
@@ -95,6 +124,7 @@
   window.DiensteSettings = {
     loadSettings,
     saveSettings,
-    initSettingsAdjustment
+    initSettingsAdjustment,
+    loadUpcomingPlans
   }
 })()

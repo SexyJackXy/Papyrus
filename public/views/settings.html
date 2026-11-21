@@ -27,9 +27,9 @@
       <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </div>
     <div class="navBar">
-      <!-- <a href="catering.html">
-        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
-      </a> -->
+      <a href="catering.html">
+        <!-- <img src="../img/restaurant.png" alt="Versperliste" class="navLogo"> -->
+      </a>
       <a href="dashboard.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
       </a>
@@ -46,49 +46,61 @@
   </header>
 
   <main class="container">
-    <div class="buttonspace">
-      <input id="inputPdf" type="file" multiple accept=".pdf" style="display:none">
+    <h2></h2>
+    <section class="userSettings">
+      <div class="splitContainer">
+        <div class="uploadedPlans">
+          <h4>Hochgeladene Pläne</h4>
+          <ul id="upcomingPlansList" class="plansList"></ul>
+          <button type="button" class="btn" id="btnUpload">
+            <p>Plan Hochladen</p>
+          </button>
+          <a id="pdfResult"></a>
+        </div>
+        <div class="settingSpace">
+          <h4>Settings</h4>
+          <div class="settingLine">
+            <a>Zeige Wachabteilung in Einteilung</a>
+            <label class="switch">
+              <input type="checkbox" id="showWachabteilung">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settingLine">
+            <a>Zeige Dienst außer Haus</a>
+            <label class="switch">
+              <input type="checkbox" id="showDuty">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settingLine">
+            <a>Arbeitsdienste anzeigen</a>
+            <label class="switch">
+              <input type="checkbox" id="showArbeitsdienste">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settingLine">
+            <a>Wechsel Darstellung zu Dunkel</a>
+            <label class="switch">
+              <input type="checkbox" id="switchAppearance">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button id="Save" class="btn" type="button">
+            <p>Einstellung speichern</p>
+          </button>
+        </div>
+        <div class="userOverview">
+          
+        </div>
+      </div>
+    </section>
 
-      <div class="btnDiv">
-        <button type="button" class="btn" id="btnUpload">
-          <p>PDF Importieren</p>
-        </button>
-        <a id="pdfResult"></a>
-      </div>
-
-      <div class="btnDiv">
-        <button id="btnReset" class="btn" type="button">
-          <p>Reset</p>
-        </button>
-        <a id="resetResult"></a>
-      </div>
-    </div>
-    <hr>
-    <div class="settingSpace">
-      <div class="settingLine">
-        <a>Zeige Wachabteilung in Einteilung</a>
-        <label class="switch">
-          <input type="checkbox" id="showWachabteilung">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="settingLine">
-        <a>Zeige Dienst außer Haus</a>
-        <label class="switch">
-          <input type="checkbox" id="showDuty">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="settingLine">
-        <a>Arbeitsdienste anzeigen</a>
-        <label class="switch">
-          <input type="checkbox" id="showArbeitsdienste">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <button id="Save" class="btn" type="button">
-        <p>Einstellung speichern</p>
+    <div class="buttonspace"> <button id="btnReset" class="btn" type="button">
+        <p>Reset</p>
       </button>
+      <a id="resetResult"></a>
     </div>
   </main>
 
