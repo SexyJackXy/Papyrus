@@ -120,6 +120,7 @@ function setActive(clickedElement) {
       clickedElement.setAttribute('present', 'true')
     }
   }
+
   else {
     var matchingPersons = clickedPerson.filter(person =>
       person !== clickedElement &&
@@ -144,19 +145,21 @@ function setActive(clickedElement) {
 }
 
 function setOutOfHouse(clickedElement) {
-  console.log(clickedElement)
-
   var persons = clickedElement.querySelectorAll('.person')
 
   persons.forEach(pers => {
     var backgroundColor = pers.style.backgroundColor
     if (backgroundColor !== 'rgb(255, 42, 28)') {
       pers.style.backgroundColor = "#ff2a1c"
+      pers.setAttribute('outOfHouse', true)
     }
     else {
       pers.style.backgroundColor = 'rgb(182, 213, 251)'
+      pers.setAttribute('outOfHouse', false)
     }
   });
+
+  scheduleSave()
 }
 
 function dashboardSwitcher() {
@@ -170,7 +173,7 @@ function dashboardSwitcher() {
   if (currentMinutes >= start && currentMinutes <= end && pageName === 'dashboard.html') {
     window.location.replace('../views/index.html')
   }
-  else if(pageName === 'index.html'){
+  else if (pageName === 'index.html') {
     window.location.replace('../views/dasvhboard.html')
   }
 }
@@ -266,7 +269,8 @@ function serializeAssignments() {
     var text = el.textContent.trim()
     var name = reservedNames.includes(text) ? '' : text
     var present = el.getAttribute('present')
-    result.push({ role, name, present })
+    var outOfHouse = el.getAttribute('outOfHouse')
+    result.push({ role, name, present, outOfHouse })
   })
 
   document.querySelectorAll('#teamFree .card').forEach(el => {
@@ -386,7 +390,7 @@ function renderAssignments(assignment) {
   if (!freeTeam) return
   if (!usedTeam) return
 
-  assignment.forEach(({ role, name, present }) => {
+  assignment.forEach(({ role, name, present, outOfHouse }) => {
     if (!name) return
 
     if (role === 'Frei') {
@@ -396,6 +400,7 @@ function renderAssignments(assignment) {
       d.className = 'card'
       d.setAttribute('draggable', !reservedNames.includes(name))
       d.setAttribute('present', present)
+      d.setAttribute('outOfHouse', outOfHouse)
       d.innerHTML = name
       freeTeam.appendChild(d)
       return
@@ -408,6 +413,7 @@ function renderAssignments(assignment) {
       d.className = 'card'
       d.setAttribute('draggable', !reservedNames.includes(name))
       d.setAttribute('present', present)
+      d.setAttribute('outOfHouse', outOfHouse)
       d.innerHTML = name
       usedTeam.appendChild(d)
       return
@@ -437,6 +443,7 @@ function renderAssignments(assignment) {
     if (!el) return
 
     el.setAttribute('present', present)
+    el.setAttribute('outOfHouse', outOfHouse)
     el.textContent = name
     updatePersonColor(el)
   })
