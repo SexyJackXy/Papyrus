@@ -12,6 +12,7 @@
     <script src="../scripts/dragAndDrop.js"></script>
     <script src="../scripts/core.js"></script>
     <script src="../scripts/settings.js" defer></script>
+    <script src="../scripts/vehicleOverview.js" defer></script>
 </head>
 
 <body>
@@ -44,6 +45,7 @@
 
     <main class="container">
         <h2>Fahrzeug Übersicht</h2>
+        <div id="stage">
         <section class="parkingSpace">
             <section class="vehicles">
                 <div class="halle" id="halle1">
@@ -286,6 +288,7 @@
                 </div>
             </section>
         </section>
+        </div>
     </main>
     <script>
         window.Dienste.initDragAndDrop();

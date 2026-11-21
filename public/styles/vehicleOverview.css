@@ -6,6 +6,21 @@
     background-position: center;
     width: 1800px;
     height: 950px;
+    transform-origin: 0 0;
+    position: relative;
+}
+
+#stage {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* Bezugspunkt der Hallen: linke obere Ecke von .parkingSpace */
+.vehicles {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .halle {
@@ -67,8 +82,8 @@
     width: 648px;
     height: 218px;
     position: absolute;
-    left: 493px;
-    top: 130px;
+    left: 440px;
+    top: 7px;
     direction: rtl;
     background-color: #b6cbe2;
     border: solid 2px #9aadc2;
@@ -79,8 +94,8 @@
     width: 159px;
     height: 529px;
     position: absolute;
-    left: 281px;
-    top: 536px;
+    left: 228px;
+    top: 412px;
     border: solid 2px #9aadc2;
 }
 
@@ -127,8 +142,8 @@
     width: 244px;
     height: 160px;
     position: absolute;
-    left: 1338px;
-    top: 847px;
+    left: 1285px;
+    top: 725px;
     background-color: transparent;
     border: solid 2px #9aadc2;
 }
@@ -152,8 +167,8 @@
     width: 211px;
     height: 163px;
     position: absolute;
-    left: 1327px;
-    top: 235px;
+    left: 1276px;
+    top: 113px;
     transform: rotate(-3.5deg);
     background-color: #d6e4bc;
     border: solid 2px #9aadc2;
@@ -173,8 +188,9 @@
     white-space: nowrap;
     width: 30px;
     height: 53px;
-    top: 402px;
-    right: 751px;
+    top: 326px;
+    left: 1070px;
+    z-index: 999;
 }
 
 #hld .port {
@@ -190,8 +206,9 @@
     white-space: nowrap;
     width: 30px;
     height: 53px;
-    top: 972px;
-    right: 704px;
+    top: 833px;
+    left: 1118px;
+    z-index: 999;
 }
 
 #notausfahrt .port {
@@ -207,8 +224,9 @@
     white-space: nowrap;
     height: 30px;
     width: 53px;
-    top: 1036px;
-    right: 816px;
+    top: 911px;
+    left: 1024px;
+    z-index: 999;
 }
 
 #tanke .port {
@@ -216,7 +234,6 @@
     height: 100% !important
 }
 
-#tanke .car{
+#tanke .car {
     transform: rotate(0deg);
 }
-
