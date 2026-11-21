@@ -194,26 +194,7 @@ async function loadContent() {
       res = await fetch('/api/latest-temporary-schedule')
     } else if (pageName === 'activityPlan.html') {
       res = await fetch('/api/latest-schedule')
-    }
-    if (res && res.ok) {
-      var json = await res.json()
-      if (json.success) {
-        if (json.data) {
-          localStorage.setItem(cookies, JSON.stringify(json.data))
-          return json.data
-        } else if (json.fixedData) {
-          return json.fixedData
-        }
-        // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
-        // lokalen Cache leeren statt auf alten Stand zurückzufallen.
-        localStorage.removeItem(cookies)
-        return []
-      }
-      // Server sagt explizit "keine Einteilung vorhanden" (data === null) ->
-      // lokalen Cache leeren statt auf alten Stand zurückzufallen.
-      localStorage.removeItem(cookies)
-      return []
-    }
+    } 
   }
   catch (e) {
     console.warn(

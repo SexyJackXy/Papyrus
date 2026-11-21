@@ -16,7 +16,6 @@
   <script src="../scripts/alternativPlan.js"></script>
   <script src="../scripts/autoRefresh.js" defer></script>
 </head>
-</head>
 
 <body>
 
@@ -31,8 +30,11 @@
       <h1 style="text-decoration: none;color: var(--color-text-on-primary);margin: 0;padding: 0;">Papyrus</h1>
     </div>
     <div class="navBar">
+      <a href="vehicleOverview.html">
+        <img src="../img/car.png" alt="Versperliste" class="navLogo">
+      </a>
       <a href="catering.html">
-        <!-- <img src="../img/restaurant.png" alt="Versperliste" class="navLogo"> -->
+        <img src="../img/restaurant.png" alt="Versperliste" class="navLogo">
       </a>
       <a href="dashboard.html">
         <img src="../img/hauptmenu.png" alt="Hauptmenü" class="navLogo">
@@ -263,7 +265,6 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       window.Dienste.dashboardSwitcher();
-      window.DiensteSettings.initSettingsAdjustment();
 
       var assignments = await window.Dienste.loadContent();
 

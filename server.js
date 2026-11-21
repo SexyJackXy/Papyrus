@@ -8,7 +8,7 @@ var scheduleHelpers = require('./helpers/scheduleHelper.js')
 var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
-var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
+var { extractShiftFromPdf } = require('./helpers/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
