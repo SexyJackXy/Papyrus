@@ -93,6 +93,117 @@
     })
   }
 
+  // ---------- PDF-Import (nur Settings-Seite) ----------
+  function initPdfImport() {
+    var inputPdf = document.getElementById('inputPdf')
+    var btnUpload = document.getElementById('btnUpload')
+    var pdfResult = document.getElementById('pdfResult')
+    if (!inputPdf || !btnUpload) return
+
+    inputPdf.addEventListener('change', async () => {
+      var file = inputPdf.files[0]
+      if (!file) return
+
+      // Datei als Base64 lesen — kein Buffer/Node nötig
+      var base = await new Promise((resolve, reject) => {
+        var reader = new FileReader()
+        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+
+      await fetch('/api/save-upcoming-plans', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base, filename: file.name })
+      }).then(r => r.json())
+
+      var result = await fetch('/api/extract-and-save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ base64: base })
+      }).then(r => r.json())
+
+      localStorage.setItem('dienste_csv', JSON.stringify(result.data))
+
+      if (pdfResult) {
+        pdfResult.textContent = 'Erfolgreich importiert'
+        setTimeout(() => { pdfResult.textContent = '' }, 2000)
+      }
+
+      var p = btnUpload.querySelector('p')
+      if (p) {
+        var originalText = p.textContent
+        p.textContent = 'Gespeichert!'
+        setTimeout(() => { p.textContent = originalText }, 2000)
+      }
+    })
+
+    btnUpload.addEventListener('click', () => inputPdf.click())
+  }
+
+  // ---------- Reset-Button (nur Settings-Seite) ----------
+  function initReset() {
+    var btnReset = document.getElementById('btnReset')
+    var resetResult = document.getElementById('resetResult')
+    if (!btnReset) return
+
+    btnReset.addEventListener('click', async () => {
+      var res = window.Dienste.clearCookies()
+      var response = await fetch('/api/reset-schedule', { method: 'POST' })
+      var responseTemp = await fetch('/api/reset-temporary-schedule', { method: 'POST' })
+
+      if (!response.ok && !responseTemp.ok) {
+        var body = await response.json().catch(() => ({}))
+        throw new Error(body.error || `HTTP ${response.status}`)
+      }
+
+      if (resetResult) {
+        resetResult.textContent = res
+        setTimeout(() => { resetResult.textContent = '' }, 2000)
+      }
+    })
+  }
+
+  // ---------- Benutzer-Übersicht (braucht /api/users im Backend) ----------
+  async function loadUsers() {
+    var box = document.querySelector('.userOverview')
+    if (!box) return
+
+    try {
+      var data = await fetch('/api/users').then(r => r.json())
+      if (!data.success) return
+
+      data.users.forEach(function (u) {
+        var row = document.createElement('div')
+        row.className ='userRow'
+        var names = u.names.map(n => n.first_name + ' ' + n.last_name).join(', ')
+        row.textContent = u.username + (names ? ' (' + names + ')' : '') + ' – Passwort: ••••••••  '
+
+        var btn = document.createElement('button')
+        btn.id = 'reset'
+        btn.type = 'button'
+        btn.textContent = 'Reset'
+        btn.addEventListener('click', async function () {
+          var pw = prompt('Neues Passwort für ' + u.username + ' (min. 8 Zeichen):')
+          if (!pw) return
+          var r = await fetch('/api/users/' + u.id + '/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pw })
+          })
+          var d = await r.json()
+          alert(d.success ? 'Passwort geändert' : d.error)
+        })
+
+        row.appendChild(btn)
+        box.appendChild(row)
+      })
+    } catch (err) {
+      console.error('Benutzer konnten nicht geladen werden:', err)
+    }
+  }
+
   function initSettingsPage() {
     loadSettings()
 
@@ -116,6 +227,9 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     loadUpcomingPlans()
+    initPdfImport()
+    initReset()
+    loadUsers()
     if (document.getElementById('Save')) {
       initSettingsPage()
     }

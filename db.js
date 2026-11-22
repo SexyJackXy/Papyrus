@@ -55,6 +55,20 @@ function addNameToUser(userId, firstName, lastName) {
   ).run(userId, firstName, lastName);
 }
 
+function getAllUsersWithNames() {
+  var users = db
+    .prepare("SELECT id, username, created_at FROM users ORDER BY username")
+    .all();
+  return users.map(function (u) {
+    u.names = getNamesForUser(u.id);
+    return u;
+  });
+}
+
+function updatePasswordHash(userId, passwordHash) {
+  db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(passwordHash, userId);
+}
+
 module.exports = {
   db,
   getUserByUsername,
@@ -62,4 +76,6 @@ module.exports = {
   getNamesForUser,
   createUser,
   addNameToUser,
+  getAllUsersWithNames,
+  updatePasswordHash,
 };

@@ -81,6 +81,37 @@ h4 {
   text-decoration: none;
 }
 
+
+.userOverview {
+  background-color: var(--color-text-on-primary);
+  display: flex;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  align-items: stretch;
+  max-width: 100vw;
+  min-width: 25vw;
+  padding: 0.6rem;
+  border-radius: 10px;
+}
+
+.userRow {
+  max-height: 21px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.3rem;
+  background-color: var(--color-card-bg);
+  border-radius: 10px;
+}
+
+
+
+
+/* ------------------------------------------------------------------------------------------- */
 .switch {
   --secondary-container: var(--color-primary-dark);
   --primary: var(--color-primary);
@@ -188,7 +219,8 @@ input:checked+.slider:before {
   width: 320px;
 }
 
-#Save, #btnUpload {
+#Save,
+#btnUpload {
   background-color: var(--color-primary-dark);
   color: var(--color-bg);
   width: fit-content;
@@ -200,6 +232,18 @@ input:checked+.slider:before {
   font-weight: normal;
   margin-top: 1rem;
   min-width: 10vw;
+}
+
+#reset {
+  background-color: var(--color-primary-dark);
+  color: var(--color-bg);
+  width: 3.8em;
+  height: 2em;
+    font-weight: normal;
+  font-size: 1.5ch;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
 }
 
 #Save p {

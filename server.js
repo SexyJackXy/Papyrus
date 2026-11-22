@@ -9,7 +9,8 @@ var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
 var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
-var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
+var { getUserByUsername, getNamesForUser, createUser, addNameToUser,
+  getAllUsersWithNames, updatePasswordHash } = require('./db')
 
 var app = express()
 var LAST_LOADED_DAY = null
@@ -175,7 +176,7 @@ function pickPlanFile(today) {
 async function refreshCheck() {
   var dateToDay = formatDateGerman(new Date())
 
-  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay,LAST_LOADED_FILE)
+  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay, LAST_LOADED_FILE)
 
   if (LAST_LOADED_DAY === dateToDay) return
 
@@ -369,6 +370,25 @@ app.post('/api/create-user', createUserLimiter, async (req, res) => {
     })
 
     res.json({ success: true, userId })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: err.message })
+  }
+})
+
+app.get('/api/users', (req, res) => {
+  res.json({ success: true, users: getAllUsersWithNames() })
+})
+
+app.post('/api/users/:id/reset-password', async (req, res) => {
+  try {
+    var { password } = req.body || {}
+    if (!password || password.length < 8) {
+      return res.status(400).json({ success: false, error: 'Passwort muss mindestens 8 Zeichen lang sein' })
+    }
+    var hash = await bcrypt.hash(password, 12)
+    updatePasswordHash(Number(req.params.id), hash)
+    res.json({ success: true })
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })
