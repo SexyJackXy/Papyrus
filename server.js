@@ -8,7 +8,7 @@ var scheduleHelpers = require('./helpers/scheduleHelper.js')
 var bcrypt = require('bcrypt')
 var session = require('express-session')
 var SQLiteStore = require('connect-sqlite3')(session)
-var { extractShiftFromPdf } = require('./public/scripts/pdfExtractor')
+var { extractShiftFromPdf } = require('./helpers/pdfExtractor')
 var { getUserByUsername, getNamesForUser, createUser, addNameToUser } = require('./db')
 
 var app = express()
@@ -175,13 +175,17 @@ function pickPlanFile(today) {
 async function refreshCheck() {
   var dateToDay = formatDateGerman(new Date())
 
-  if (LAST_LOADED_DAY === dateToDay) return
+  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay,LAST_LOADED_FILE)
 
+  if (LAST_LOADED_DAY === dateToDay) return
 
   var pick = pickPlanFile(new Date())
   if (!pick) return
 
-  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay)
+  // Gleiche Datei wie beim letzten Mal → nicht neu einlesen
+  if (LAST_LOADED_DAY !== null && pick.file === LAST_LOADED_FILE) return
+
+
 
   var dir = path.join(__dirname, 'dailySchedule')
   var currentFile = path.join(dir, 'current.json')
@@ -193,7 +197,15 @@ async function refreshCheck() {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   fs.writeFileSync(currentFile, JSON.stringify(shiftJson, null, 2), 'utf-8')
 
-  LAST_LOADED_DAY = dateToDay   // erst nach erfolgreichem Schreiben setzen
+  // Datum aus der "Date"-Zeile des PDFs ziehen (z. B. " 1. November 2026"), Fallback: Dateiname
+  var dateEntry = shiftJson.find(e => e.role === 'Date' && e.name)
+  var dateMatch = dateEntry && dateEntry.name.match(/(\d{1,2})\.?\s*([A-Za-zäöüÄÖÜß]+)\s*(\d{4})/)
+  var pdfMonth = dateMatch ? MONATE.indexOf(dateMatch[2].toLowerCase()) : -1
+  var pdfDate = pdfMonth !== -1
+    ? new Date(Number(dateMatch[3]), pdfMonth, Number(dateMatch[1]))
+    : dateFromName(pick.file)
+
+  LAST_LOADED_DAY = formatDateGerman(pdfDate)   // erst nach erfolgreichem Schreiben setzen
   LAST_LOADED_FILE = pick.file
 }
 
@@ -383,6 +395,8 @@ app.post('/api/extract-and-save', async (req, res) => {
     )
 
     res.json({ success: true, data: shiftJson })
+
+    LAST_LOADED_DAY = null
   } catch (err) {
     console.error(err)
     res.status(500).json({ success: false, error: err.message })

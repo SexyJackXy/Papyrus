@@ -6,6 +6,21 @@
     background-position: center;
     width: 1800px;
     height: 950px;
+    transform-origin: 0 0;
+    position: relative;
+}
+
+#stage {
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+/* Bezugspunkt der Hallen: linke obere Ecke von .parkingSpace */
+.vehicles {
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .halle {
@@ -67,8 +82,8 @@
     width: 648px;
     height: 218px;
     position: absolute;
-    left: 529px;
-    top: 130px;
+    left: 440px;
+    top: 7px;
     direction: rtl;
     background-color: #b6cbe2;
     border: solid 2px #9aadc2;
@@ -76,13 +91,149 @@
 
 #halle2 {
     grid-auto-flow: row;
-    width: 164px;
+    width: 159px;
     height: 529px;
     position: absolute;
-    left: 316px;
-    top: 536px;
+    left: 228px;
+    top: 412px;
+    border: solid 2px #9aadc2;
 }
 
 #halle2 .gate {
+    flex-direction: row;
+    justify-content: flex-end;
+    border-left: none;
+    background-color: #e4b7b5;
+    border-top: dotted 1px #9aadc2;
+}
+
+#halle2 .port {
+    width: auto;
+    height: 76%;
+}
+
+#halle2 .port[tier="tier1"] {
+    width: 28% !important;
+    height: 76% !important;
+}
+
+#halle2 .port[tier="tier2"] {
+    width: 50% !important;
+    height: 76% !important;
+}
+
+#halle2 .port[tier="tier3"] {
+    width: 75% !important;
+    height: 76% !important;
+}
+
+#halle2 .port[tier="tier4"] {
+    width: 50% !important;
+    height: 76% !important;
+}
+
+#halle2 .car {
+    transform: none;
+    font-size: 1.3ch;
+}
+
+#halle3 {
     grid-auto-flow: column;
+    width: 244px;
+    height: 160px;
+    position: absolute;
+    left: 1285px;
+    top: 725px;
+    background-color: transparent;
+    border: solid 2px #9aadc2;
+}
+
+#halle3 .gate {
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+}
+
+#halle3 .car {
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+#halle3 .port[tier="tier1"] {
+    height: 33% !important;
+}
+
+#halle4 {
+    grid-auto-flow: column;
+    width: 211px;
+    height: 163px;
+    position: absolute;
+    left: 1276px;
+    top: 113px;
+    transform: rotate(-3.5deg);
+    background-color: #d6e4bc;
+    border: solid 2px #9aadc2;
+}
+
+#gate11,
+#gate12,
+#gate13 {
+    background-color: transparent !important;
+}
+
+#hld {
+    display: block;
+    position: absolute;
+    border: none;
+    align-items: normal;
+    white-space: nowrap;
+    width: 30px;
+    height: 53px;
+    top: 326px;
+    left: 1070px;
+    z-index: 999;
+}
+
+#hld .port {
+    width: 100% !important;
+    height: 100% !important
+}
+
+#notausfahrt {
+    display: block;
+    position: absolute;
+    border: none;
+    align-items: normal;
+    white-space: nowrap;
+    width: 30px;
+    height: 53px;
+    top: 833px;
+    left: 1118px;
+    z-index: 999;
+}
+
+#notausfahrt .port {
+    width: 100% !important;
+    height: 100% !important
+}
+
+#tanke {
+    display: block;
+    position: absolute;
+    border: none;
+    align-items: normal;
+    white-space: nowrap;
+    height: 30px;
+    width: 53px;
+    top: 911px;
+    left: 1024px;
+    z-index: 999;
+}
+
+#tanke .port {
+    width: 100% !important;
+    height: 100% !important
+}
+
+#tanke .car {
+    transform: rotate(0deg);
 }
