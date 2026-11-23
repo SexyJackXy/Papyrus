@@ -170,11 +170,13 @@ function dashboardSwitcher() {
   var path = window.location.pathname
   var pageName = path.split('/').pop()
 
-  if (currentMinutes >= start && currentMinutes <= end && pageName === 'dashboard.html') {
+  var inWindow = currentMinutes >= start && currentMinutes <= end
+
+  if (inWindow && pageName === 'dashboard.html') {
     window.location.replace('../views/index.html')
   }
-  else if (pageName === 'index.html') {
-    window.location.replace('../views/dasvhboard.html')
+  else if (!inWindow && pageName === 'index.html') {
+    window.location.replace('../views/dashboard.html')
   }
 }
 
