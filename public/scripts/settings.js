@@ -68,6 +68,11 @@
   function initSettingsPage() {
     loadSettings()
 
+      if (location.host === 'localhost:3000') {
+    document.documentElement.style.setProperty('--color-primary', '#1c5fff');
+    document.documentElement.style.setProperty('--color-primary-dark','#164ac7')
+  }
+
     var saveBtn = document.getElementById('Save')
     if (saveBtn) {
       saveBtn.addEventListener('click', async () => {
