@@ -5,18 +5,12 @@ function containsNumbers(str) {
 }
 
 function addNewRow(firstName, lastName) {
-    var tableRow = `<tr class="tableRow">
-        <td><input type="text" name="forName" value="${firstName}"></td>
-        <td><input type="text" name="surrName" value="${lastName}"></td>`
+    var member = document.createElement('div')
 
-    var newTableRow = `<td><input type="text" name="food"></td>
-                    <td><input type="number" name="orderCount"></td>
-                </tr>`
-    var finalRow = tableRow + newTableRow
+    member.textContent=`${lastName}, ${firstName}`
 
-    var rows = document.querySelectorAll('.tableRow');
-    var lastRow = rows[rows.length - 1];
-    lastRow.insertAdjacentHTML('afterend', finalRow)
+    var company = document.getElementById('company');
+    company.appendChild(member)
 }
 
 function getContent() {
