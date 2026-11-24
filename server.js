@@ -175,7 +175,7 @@ function pickPlanFile(today) {
 async function refreshCheck() {
   var dateToDay = formatDateGerman(new Date())
 
-  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay,LAST_LOADED_FILE)
+  console.log('refreshCheck läuft', new Date().toLocaleTimeString(), '| zuletzt geladen:', LAST_LOADED_DAY, "Heute haben wir den", dateToDay, LAST_LOADED_FILE)
 
   if (LAST_LOADED_DAY === dateToDay) return
 
@@ -187,7 +187,7 @@ async function refreshCheck() {
 
 
 
-  var dir = path.join(__dirname, 'dailySchedule')
+  var dir = path.join(__dirname, 'schedules', 'dailySchedule')
   var currentFile = path.join(dir, 'current.json')
   if (!fs.existsSync(UPCOMMING_PLANS_DIR)) return
 
@@ -238,7 +238,7 @@ var PUBLIC_GET_APIS = new Set([
   '/api/settings',
   '/api/load-upcoming-plans',
   '/api/yesterday-schedule',
-  '/api/import-not-working-persons'
+  '/api/import-not-working-persons',
 ])
 
 var PUBLIC_POST_APIS = new Set([
@@ -246,7 +246,8 @@ var PUBLIC_POST_APIS = new Set([
   '/api/save-schedule',
   '/api/create-user',
   '/api/export-not-working-person',
-  '/api/delete-schedule-entry'
+  '/api/delete-schedule-entry',
+  '/api/save-temporary-schedule'
 ])
 
 app.use((req, res, next) => {
@@ -381,7 +382,7 @@ app.post('/api/extract-and-save', async (req, res) => {
     var buffer = Buffer.from(base64, 'base64')
     var shiftJson = await extractShiftFromPdf(buffer)
 
-    var outputDir = path.join(__dirname, 'dailySchedule')
+    var outputDir = path.join(__dirname, 'schedules', 'dailySchedule')
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir)
 
     var archiveDir = path.join(outputDir, 'archive')
@@ -454,7 +455,7 @@ app.get('/api/load-upcoming-plans', (req, res) => {
 app.post('/api/reset-schedule', (req, res) => {
   try {
     LAST_LOADED_DAY = null
-    var dir = path.join(__dirname, 'dailySchedule')
+    var dir = path.join(__dirname, 'schedules', 'dailySchedule')
     var notWorkingPeople = path.join(
       __dirname,
       'exportedPersons',
@@ -492,7 +493,7 @@ app.post('/api/save-schedule', (req, res) => {
       return res.status(400).json({ success: false, error: 'data muss ein Array sein' })
     }
 
-    var dir = path.join(__dirname, 'dailySchedule')
+    var dir = path.join(__dirname, 'schedules', 'dailySchedule')
     var currentFile = path.join(dir, 'current.json')
 
     var merged = data
@@ -518,7 +519,7 @@ app.post('/api/save-activity-schedule', (req, res) => {
       return res.status(400).json({ success: false, error: 'data muss ein Array sein' })
     }
 
-    var dir = path.join(__dirname, 'dailySchedule')
+    var dir = path.join(__dirname, 'schedules', 'dailySchedule')
     var currentFile = path.join(dir, 'current.json')
 
     if (!fs.existsSync(dir)) {
@@ -560,7 +561,7 @@ app.post('/api/delete-schedule-entry', (req, res) => {
 
 app.post('/api/reset-temporary-schedule', (req, res) => {
   try {
-    var dir = path.join(__dirname, 'temporarySchedule')
+    var dir = path.join(__dirname, 'schedules', 'temporarySchedule')
     if (!fs.existsSync(dir)) {
       return res.json({ success: true })
     }
@@ -591,7 +592,7 @@ app.post('/api/save-temporary-schedule', (req, res) => {
         .json({ success: false, error: 'data muss ein Array sein' })
     }
 
-    var dir = path.join(__dirname, 'temporarySchedule')
+    var dir = path.join(__dirname, 'schedules', 'temporarySchedule')
     if (!fs.existsSync(dir)) fs.mkdirSync(dir)
 
     fs.writeFileSync(
@@ -610,7 +611,7 @@ app.post('/api/save-temporary-schedule', (req, res) => {
 app.get('/api/latest-schedule', async (req, res) => {
   try {
     await refreshCheck()
-    var dir = path.join(__dirname, 'dailySchedule')
+    var dir = path.join(__dirname, 'schedules', 'dailySchedule')
     if (!fs.existsSync(dir)) {
       return res.json({ success: true, data: null })
     }
@@ -673,10 +674,10 @@ app.get('/api/yesterday-schedule', async (req, res) => {
 
 app.get('/api/latest-temporary-schedule', (req, res) => {
   try {
-    var dir = path.join(__dirname, 'temporarySchedule')
-    var currentFile = path.join(__dirname, 'temporarySchedule', 'current.json')
+    var dir = path.join(__dirname, 'schedules', 'temporarySchedule')
+    var currentFile = path.join(__dirname, 'schedules', 'temporarySchedule', 'current.json')
     if (!fs.existsSync(currentFile)) {
-      var fixSchedule = path.join(__dirname, 'dailySchedule')
+      var fixSchedule = path.join(__dirname, 'schedules', 'dailySchedule')
 
       if (!fs.existsSync(fixSchedule)) {
         console.warn('There is now File odr directory "', fixSchedule, '"')

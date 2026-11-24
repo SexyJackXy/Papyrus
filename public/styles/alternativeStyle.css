@@ -2,35 +2,34 @@ h3.text {
     color: var(--color-text);
     font-weight: 500;
     text-shadow: none;
-    font-size: 2ch;
+    font-size: 20px;
     margin: 0;
 }
+
 .work-duty {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
     margin: 0.6rem;
     align-items: center;
+    justify-content: center;
 }
 
 .work-duty .vehicle {
-    font-size: 15px;
+    font-size: 16px;
     padding-top: 34.5px;
     width: 90%;
 }
 
 #cafeteria {
-    flex-direction: row;
-    width: fit-content;
-    font-size: 15px;
-    padding-top: 34.5px;
-    width: 90%;
+    flex-direction: column;
+    flex-wrap: nowrap;
 }
 
-[data-role='Kantine1'],
-[data-role='Kantine2'] {
-    height: 26px;
-    width: 45%;
+#cafeteria .person {
+    flex: 1;
+    width: auto;
+    height: auto;
 }
 
 #triggeredSpace {
@@ -56,7 +55,7 @@ h3.text {
 
 .upcommingPlans {
     display: flex;
-    flex: 1;            /* nimmt die Resthöhe unter den Überschriften */
+    flex: 1;
     min-height: 0;
     width: 98%;
     justify-content: space-evenly;
@@ -72,12 +71,12 @@ h3.text {
     background-color: var(--color-card-bg);
     flex: 1;
     min-width: 0;
-    height: 100%;       /* füllt die Höhe von .upcommingPlans */
+    height: 100%;
     border: solid 0.2vw var(--color-text-on-primary);
     border-radius: 0.5vw;
     justify-content: center;
     align-items: center;
-    box-shadow:  0px 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .plan a {
