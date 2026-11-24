@@ -486,6 +486,10 @@ function initDeleteButtons() {
         var oldPerson = p.textContent.trim()
         var c = document.createElement('div')
 
+        if (reservedNames.includes(oldPerson)) {
+          return
+        }
+
         p.style.backgroundColor = 'var(--color-card-bg)'
         c.className = 'card'
         p.textContent = p.dataset.default || 'Frei'

@@ -1,0 +1,339 @@
+[
+  {
+    "role": "ALvD",
+    "name": "Zimmermann, Frank",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "DD",
+    "name": "Zimmermann, Frank",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LD 1",
+    "name": "Widmann, Markus",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LD 2",
+    "name": "Lobmüller, Jürgen",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "HLD",
+    "name": "Zürn, Benjamin",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "EAL",
+    "name": "Reber, Alexander",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "BvD",
+    "name": "Wahl, Andreas",
+    "present": "false"
+  },
+  {
+    "role": "LFüGr",
+    "name": "Rocksien, Tim",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "Schichtführer",
+    "name": "Wörz, Oliver",
+    "present": "false"
+  },
+  {
+    "role": "1. Dispo",
+    "name": "Mentzen, Johannes",
+    "present": "true",
+    "outOfHouse": "false"
+  },
+  {
+    "role": "2. Dispo",
+    "name": "Reichert, Michael",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "3. Dispo",
+    "name": "Rifert, Dimitri",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "ELW",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "FüAss",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "Schw.Retter",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 ATF",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 ATM",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 WTF",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 1 WTM",
+    "name": "Rudolph, Kai",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 ATF",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 ATM",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 WTF",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "LF 2 WTM",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "DLK1 Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "DLK1 Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "SoFzg Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "SoFzg Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "KEF Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "KEF Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "Fwk Fü",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "Fwk Ma",
+    "name": "",
+    "present": "false",
+    "outOfHouse": "true"
+  },
+  {
+    "role": "Wäsche",
+    "name": "Weik, Marvin",
+    "present": "false"
+  },
+  {
+    "role": "Getränke",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "ZAW",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "ZSW",
+    "name": "Dunz, Elias",
+    "present": "false"
+  },
+  {
+    "role": "Abrufschicht",
+    "name": "Kaiser, Alexander",
+    "present": "false"
+  },
+  {
+    "role": "Kantine2",
+    "name": "Kull, Simon"
+  },
+  {
+    "role": "Kantine1",
+    "name": "Sprang, Niklas"
+  },
+  {
+    "role": "Frei",
+    "name": "Leimbeck, Johannes"
+  },
+  {
+    "role": "Frei",
+    "name": "Demele, Achim"
+  },
+  {
+    "role": "Frei",
+    "name": "Mattes, Manuel"
+  },
+  {
+    "role": "Frei",
+    "name": "Jochim, Tobias"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Frank"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Fabian"
+  },
+  {
+    "role": "Frei",
+    "name": "Widmann, Markus"
+  },
+  {
+    "role": "Frei",
+    "name": "Irion, René"
+  },
+  {
+    "role": "Frei",
+    "name": "Fried, Marlon"
+  },
+  {
+    "role": "Frei",
+    "name": "Wörz, Oliver"
+  },
+  {
+    "role": "Frei",
+    "name": "Sprang, Niklas"
+  },
+  {
+    "role": "Frei",
+    "name": "Kull, Simon"
+  },
+  {
+    "role": "Frei",
+    "name": "Wahl, Andreas"
+  },
+  {
+    "role": "Frei",
+    "name": "Dunz, Elias"
+  },
+  {
+    "role": "Frei",
+    "name": "Schoch, Timo"
+  },
+  {
+    "role": "Frei",
+    "name": "Braun, Steffen"
+  },
+  {
+    "role": "Frei",
+    "name": "Frank, Marcel"
+  },
+  {
+    "role": "Frei",
+    "name": "Sassmann, Luciano"
+  },
+  {
+    "role": "Frei",
+    "name": "Wolf, Jan"
+  },
+  {
+    "role": "Frei",
+    "name": "Krahmer, Benjamin"
+  },
+  {
+    "role": "Frei",
+    "name": "Seizinger, Jürgen"
+  },
+  {
+    "role": "Frei",
+    "name": "Weik, Marvin"
+  },
+  {
+    "role": "Frei",
+    "name": "Friedle, Daniel"
+  },
+  {
+    "role": "Frei",
+    "name": "Ahrend, Marius"
+  }
+]

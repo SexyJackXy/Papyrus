@@ -1,0 +1,242 @@
+[
+  {
+    "role": "ALvD",
+    "name": "Zimmermann, Frank",
+    "present": "false"
+  },
+  {
+    "role": "DD",
+    "name": "Zimmermann, Frank",
+    "present": "false"
+  },
+  {
+    "role": "LD 1",
+    "name": "Widmann, Markus",
+    "present": "false"
+  },
+  {
+    "role": "LD 2",
+    "name": "Lobmüller, Jürgen",
+    "present": "false"
+  },
+  {
+    "role": "HLD",
+    "name": "Zürn, Benjamin",
+    "present": "false"
+  },
+  {
+    "role": "EAL",
+    "name": "Reber, Alexander",
+    "present": "false"
+  },
+  {
+    "role": "BvD",
+    "name": "Wahl, Andreas",
+    "present": "false"
+  },
+  {
+    "role": "LFüGr",
+    "name": "Rocksien, Tim",
+    "present": "false"
+  },
+  {
+    "role": "Schichtführer",
+    "name": "Wörz, Oliver",
+    "present": "false"
+  },
+  {
+    "role": "1. Dispo",
+    "name": "Mentzen, Johannes",
+    "present": "false"
+  },
+  {
+    "role": "2. Dispo",
+    "name": "Reichert, Michael",
+    "present": "false"
+  },
+  {
+    "role": "3. Dispo",
+    "name": "Rifert, Dimitri",
+    "present": "false"
+  },
+  {
+    "role": "ELW",
+    "name": "Widmann, Markus",
+    "present": "false"
+  },
+  {
+    "role": "FüAss",
+    "name": "Irion, René",
+    "present": "false"
+  },
+  {
+    "role": "Schw.Retter",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 Fü",
+    "name": "Wörz, Oliver",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 Ma",
+    "name": "Sprang, Niklas",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 ATF",
+    "name": "Kull, Simon",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 ATM",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 WTF",
+    "name": "Wahl, Andreas",
+    "present": "false"
+  },
+  {
+    "role": "LF 1 WTM",
+    "name": "Dunz, Elias",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 Fü",
+    "name": "Schoch, Timo",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 Ma",
+    "name": "Braun, Steffen",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 ATF",
+    "name": "Frank, Marcel",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 ATM",
+    "name": "Sassmann, Luciano",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 WTF",
+    "name": "Wolf, Jan",
+    "present": "false"
+  },
+  {
+    "role": "LF 2 WTM",
+    "name": "Krahmer, Benjamin",
+    "present": "false"
+  },
+  {
+    "role": "DLK1 Fü",
+    "name": "Seizinger, Jürgen",
+    "present": "false"
+  },
+  {
+    "role": "DLK1 Ma",
+    "name": "Weik, Marvin",
+    "present": "false"
+  },
+  {
+    "role": "SoFzg Fü",
+    "name": "Friedle, Daniel",
+    "present": "false"
+  },
+  {
+    "role": "SoFzg Ma",
+    "name": "Ahrend, Marius",
+    "present": "false"
+  },
+  {
+    "role": "KEF Fü",
+    "name": "Wahl, Andreas",
+    "present": "false"
+  },
+  {
+    "role": "KEF Ma",
+    "name": "Dunz, Elias",
+    "present": "false"
+  },
+  {
+    "role": "Fwk Fü",
+    "name": "Seizinger, Jürgen",
+    "present": "false"
+  },
+  {
+    "role": "Fwk Ma",
+    "name": "Ahrend, Marius",
+    "present": "false"
+  },
+  {
+    "role": "Wäsche",
+    "name": "Weik, Marvin",
+    "present": "false"
+  },
+  {
+    "role": "Getränke",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "ZAW",
+    "name": "Fried, Marlon",
+    "present": "false"
+  },
+  {
+    "role": "ZSW",
+    "name": "Dunz, Elias",
+    "present": "false"
+  },
+  {
+    "role": "Abrufschicht",
+    "name": "Kaiser, Alexander",
+    "present": "false"
+  },
+  {
+    "role": "Kantine2",
+    "name": "Kull, Simon"
+  },
+  {
+    "role": "Kantine1",
+    "name": "Sprang, Niklas"
+  },
+  {
+    "role": "Frei",
+    "name": "Leimbeck, Johannes"
+  },
+  {
+    "role": "Frei",
+    "name": "Demele, Achim"
+  },
+  {
+    "role": "Frei",
+    "name": "Mattes, Manuel"
+  },
+  {
+    "role": "Frei",
+    "name": "Rudolph, Kai"
+  },
+  {
+    "role": "Frei",
+    "name": "Jochim, Tobias"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Frank"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Fabian"
+  },
+  {
+    "role": "Date",
+    "name": " 23. September 2026"
+  }
+]

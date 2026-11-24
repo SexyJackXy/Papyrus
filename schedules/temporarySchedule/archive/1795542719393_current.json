@@ -1,0 +1,228 @@
+[
+  {
+    "role": "ALvD",
+    "name": "Zimmermann, Frank",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "DD",
+    "name": "Zimmermann, Frank",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LD 1",
+    "name": "Widmann, Markus",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LD 2",
+    "name": "Lobmüller, Jürgen",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "HLD",
+    "name": "Zürn, Benjamin",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "EAL",
+    "name": "Reber, Alexander",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LFüGr",
+    "name": "Rocksien, Tim",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "1. Dispo",
+    "name": "Mentzen, Johannes",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "2. Dispo",
+    "name": "Reichert, Michael",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "3. Dispo",
+    "name": "Rifert, Dimitri",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "ELW",
+    "name": "Irion, René",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "FüAss",
+    "name": "Widmann, Markus",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "Schw.Retter",
+    "name": "Kull, Simon",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 Fü",
+    "name": "Wörz, Oliver",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 Ma",
+    "name": "Sprang, Niklas",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 ATF",
+    "name": "Fried, Marlon",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 ATM",
+    "name": "Fried, Marlon",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 WTF",
+    "name": "Wahl, Andreas",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 1 WTM",
+    "name": "Dunz, Elias",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 Fü",
+    "name": "Schoch, Timo",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 Ma",
+    "name": "Braun, Steffen",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 ATF",
+    "name": "Frank, Marcel",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 ATM",
+    "name": "Sassmann, Luciano",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 WTF",
+    "name": "Wolf, Jan",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "LF 2 WTM",
+    "name": "Krahmer, Benjamin",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "DLK1 Fü",
+    "name": "Seizinger, Jürgen",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "DLK1 Ma",
+    "name": "Weik, Marvin",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "SoFzg Fü",
+    "name": "Friedle, Daniel",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "SoFzg Ma",
+    "name": "Ahrend, Marius",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "KEF Fü",
+    "name": "Wahl, Andreas",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "KEF Ma",
+    "name": "Dunz, Elias",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "Fwk Fü",
+    "name": "Seizinger, Jürgen",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "Fwk Ma",
+    "name": "Ahrend, Marius",
+    "present": "false",
+    "outOfHouse": "undefined"
+  },
+  {
+    "role": "Frei",
+    "name": "Leimbeck, Johannes"
+  },
+  {
+    "role": "Frei",
+    "name": "Demele, Achim"
+  },
+  {
+    "role": "Frei",
+    "name": "Mattes, Manuel"
+  },
+  {
+    "role": "Frei",
+    "name": "Rudolph, Kai"
+  },
+  {
+    "role": "Frei",
+    "name": "Jochim, Tobias"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Frank"
+  },
+  {
+    "role": "Frei",
+    "name": "Hägele, Fabian"
+  }
+]
