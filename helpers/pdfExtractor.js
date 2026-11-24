@@ -3,7 +3,7 @@
 // Wird vom Renderer-Script aufgerufen
 
 var pdfParse = require("pdf-parse-fork");
-var { parseShiftArray } = require("../public/scripts/parseShift");
+var { parseShiftArray } = require("./parseShift");
 
 var reservedNames = [
   "ALvD", "DD", "LD 1", "LD2", "HLD", "EAL", "BvD", "LFüGr",
